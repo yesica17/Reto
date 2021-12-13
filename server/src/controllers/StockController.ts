@@ -24,6 +24,8 @@ class StockController {
     // Controller endpoints
     this.router.post(this.path, this.createStock);
     this.router.get(this.path, this.getAllStock);
+    this.router.get(this.path + "/size", this.getAllSize);
+    this.router.get(this.path + "/color", this.getAllColor);
     this.router.get(this.path + "/:id", this.getStock);
 
     this.router.put(this.path + "/:id", this.updateStock);
@@ -100,6 +102,18 @@ class StockController {
       relations: ["products"],
     });
     return res.send(stock);
+  }
+
+  //--------Get all size--------------
+  public async getAllSize(req: express.Request, res: express.Response) {
+    const sizes = await Size.find();
+    return res.send(sizes);
+  }
+
+  //--------Get all color--------------
+  public async getAllColor(req: express.Request, res: express.Response) {
+    const colors = await Color.find();
+    return res.send(colors);
   }
 
   //---------------Get stock---------------

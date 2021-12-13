@@ -1,0 +1,1 @@
+export const SET_TYPE_DOCUMENT = "SET_TYPE_DOCUMENT";

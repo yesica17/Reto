@@ -3,7 +3,6 @@ import { Product } from "../models/Products";
 import { Category } from "../models/Categories";
 import { Style } from "../models/Styles";
 import { Brand } from "../models/Brands";
-import { Stock } from "../models/Stock";
 import {
   verifyToken,
   verifyTokenAndAuthorization,
@@ -25,6 +24,9 @@ class ProductController {
     // Controller endpoints
     this.router.post(this.path, this.createProduct);
     this.router.get(this.path, this.getAllProduct);
+    this.router.get(this.path + "/category", this.getAllCategory);
+    this.router.get(this.path + "/style", this.getAllStyle);
+    this.router.get(this.path + "/brand", this.getAllBrand);
     this.router.get(this.path + "/:id", this.getProduct);
 
     this.router.put(this.path + "/:id", this.updateProduct);
@@ -71,7 +73,9 @@ class ProductController {
   public async createProduct(req: express.Request, res: express.Response) {
     const productData = req.body;
     const product = new Product();
-    product.title = productData.title;
+    product.desc = productData.desc;
+    product.img = productData.img;
+    product.price = productData.price;
     const categories = await Category.findByIds(
       productData.categories.map((value) => value.id)
     );
@@ -85,11 +89,6 @@ class ProductController {
     );
     product.brands = brands;
 
-    // const stocks = await Stock.findByIds(
-    //   productData.stocks.map((value) => value.id)
-    // );
-    // product.stocks = stocks;
-
     try {
       const savedProduct = await product.save();
       res.status(200).json(savedProduct);
@@ -102,6 +101,24 @@ class ProductController {
   public async getAllProduct(req: express.Request, res: express.Response) {
     const products = await Product.find();
     return res.send(products);
+  }
+
+  //--------Get all category--------------
+  public async getAllCategory(req: express.Request, res: express.Response) {
+    const categorys = await Category.find();
+    return res.send(categorys);
+  }
+
+  //--------Get all style--------------
+  public async getAllStyle(req: express.Request, res: express.Response) {
+    const styles = await Style.find();
+    return res.send(styles);
+  }
+
+  //--------Get all brand--------------
+  public async getAllBrand(req: express.Request, res: express.Response) {
+    const brands = await Brand.find();
+    return res.send(brands);
   }
 
   //---------------Get product---------------

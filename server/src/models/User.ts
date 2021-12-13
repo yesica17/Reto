@@ -8,8 +8,10 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  OneToOne,
 } from "typeorm";
 import { Document } from "./Documents";
+import { UserContact } from "./UserContact";
 
 @Entity()
 export class User extends BaseEntity {

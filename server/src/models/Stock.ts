@@ -20,19 +20,19 @@ export class Stock extends BaseEntity {
 
   @ManyToMany(() => Size, {
     eager: true,
-    cascade: true,
+    //cascade: true,
   })
   @JoinTable()
   sizes: Size[];
 
   @ManyToMany(() => Color, {
     eager: true,
-    cascade: true,
+    //cascade: true,
   })
   @JoinTable()
   colors: Color[];
 
-  @ManyToMany(() => Product, (product) => product.stocks, {
+  @ManyToMany(() => Product, {
     eager: true,
   })
   @JoinTable()

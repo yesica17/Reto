@@ -1,4 +1,5 @@
 import * as express from "express";
+import cors = require("cors");
 import * as dotenv from "dotenv";
 import { createConnection, Connection } from "typeorm";
 
@@ -11,6 +12,7 @@ class App {
   // The constructor receives an array with instances of the controllers for the application and an integer to designate the port number.
   constructor(controllers: any[], port: number) {
     this.app = express();
+
     this.port = port;
     this.initializeModels();
     this.initializeMiddlewares();
@@ -27,8 +29,10 @@ class App {
   }
 
   // Here we can add all the global middlewares for our application. (Those that will work across every contoller)
+
   private initializeMiddlewares() {
     this.app.use(express.json());
+    this.app.use(cors());
   }
 
   private initializeControllers(controllers: any[]) {

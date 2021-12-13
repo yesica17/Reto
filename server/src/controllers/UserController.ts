@@ -1,6 +1,7 @@
 import * as express from "express";
 import { User } from "../models/User";
 import { Document } from "../models/Documents";
+
 import * as bcrypt from "bcrypt";
 import * as jwt from "jsonwebtoken";
 import {
@@ -25,11 +26,12 @@ class UserController {
     this.router.post(this.path + "/login", this.login);
     this.router.post(this.path, this.createUser);
     this.router.get(this.path, this.getAllUsers);
+    this.router.get(this.path + "/document", this.getAllDocument);
     this.router.get(this.path + "/:id", this.getUser);
 
     this.router.put(this.path + "/:id", this.updateUser);
 
-    this.router.delete(this.path + "/:id", verifyToken, this.deleteUser);
+    this.router.delete(this.path + "/:id", this.deleteUser);
   }
 
   public validateInput(
@@ -87,9 +89,10 @@ class UserController {
           id: user.id,
           isAdmin: user.isAdmin,
         },
-        "lacile000",
+        process.env.JWT_SEC,
         { expiresIn: "15d" }
       );
+      console.log(process.env.JWT_SECRET);
       res.status(200).json(accessToken);
     } catch (err) {
       res.status(500).json(err);
@@ -112,6 +115,8 @@ class UserController {
       user.password = await bcrypt.hash(userData.password, 10);
       document.id = userData.type_document.id;
       user.type_document = document;
+
+      //contact.users = user;
     }
 
     try {
@@ -126,6 +131,12 @@ class UserController {
   public async getAllUsers(req: express.Request, res: express.Response) {
     const clients = await User.find();
     return res.send(clients);
+  }
+
+  //--------Get all documents--------------
+  public async getAllDocument(req: express.Request, res: express.Response) {
+    const documents = await Document.find();
+    return res.send(documents);
   }
 
   //---------------Get user---------------
