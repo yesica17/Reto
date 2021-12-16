@@ -3,8 +3,8 @@ import { mobile } from "../responsive";
 
 // --------------------------Announcement------------------------
 export const ContainerAnnouncement = styled.div`
-  height: 30px;
-  background-color: teal;
+  height: 35px;
+  background-color: black;
   color: white;
   display: flex;
   align-items: center;
@@ -307,10 +307,10 @@ export const WrapperLogin = styled.div`
 
 export const TitleLogin = styled.h1`
   font-size: 24px;
-  font-weight: 300;
+  font-weight: bold;
 `;
 
-export const FormLogin = styled.form`
+export const FormLogin = styled.div`
   display: flex;
   flex-direction: column;
 `;
@@ -323,10 +323,10 @@ export const InputLogin = styled.input`
 `;
 
 export const ButtonLogin = styled.button`
-  width: 40%;
+  width: 100%;
   border: none;
   padding: 15px 20px;
-  background-color: teal;
+  background-color: black;
   color: white;
   cursor: pointer;
   margin-bottom: 10px;
@@ -367,7 +367,7 @@ export const TitleRegister = styled.h1`
   font-weight: bold;
 `;
 
-export const FormRegister = styled.form`
+export const FormRegister = styled.div`
   display: flex;
   flex-wrap: wrap;
 `;
@@ -394,7 +394,7 @@ export const AgreementRegister = styled.span`
 `;
 
 export const ButtonRegister = styled.button`
-  width: 40%;
+  width: 100%;
   border: none;
   padding: 15px 20px;
   background-color: teal;
@@ -502,7 +502,7 @@ export const ProductAmountContainer = styled.div`
 
 export const ProductAmount = styled.div`
   font-size: 24px;
-  margin: 5px;
+  margin: 10px;
   ${mobile({ margin: "5px 15px" })}
 `;
 
@@ -527,7 +527,8 @@ export const Summary = styled.div`
 `;
 
 export const SummaryTitle = styled.h1`
-  font-weight: 200;
+  font-weight: bold;
+  font-size: 24px;
 `;
 
 export const SummaryItem = styled.div`
@@ -577,7 +578,7 @@ export const InfoContainer = styled.div`
 `;
 
 export const TitleProd = styled.h1`
-  font-weight: 200;
+  font-weight: bold;
 `;
 
 export const DescProd = styled.p`
@@ -598,28 +599,28 @@ export const FilterContainer = styled.div`
 `;
 
 export const Filter = styled.div`
-  display: flex;
-  align-items: center;
+  flex: 1;
+  min-width: 40%;
+  margin: 20px 10px 0px 0px;
+  padding: 10px;
 `;
 
 export const FilterTitle = styled.span`
   font-size: 20px;
-  font-weight: 200;
+  font-weight: bold;
 `;
 
-export const FilterColor = styled.div`
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background-color: ${(props) => props.color};
-  margin: 0px 5px;
-  cursor: pointer;
+export const FilterColor = styled.select`
+  margin-left: 10px;
+  padding: 5px;
 `;
 
 export const FilterSize = styled.select`
   margin-left: 10px;
   padding: 5px;
 `;
+
+export const FilterColorOption = styled.option``;
 
 export const FilterSizeOption = styled.option``;
 
@@ -650,11 +651,11 @@ export const Amount = styled.span`
 
 export const ButtonProd = styled.button`
   padding: 15px;
-  border: 2px solid teal;
-  background-color: white;
+  background-color: black;
+  color: white;
   cursor: pointer;
   font-weight: 500;
   &:hover {
-    background-color: #f8f4f4;
+    background-color: gray;
   }
 `;

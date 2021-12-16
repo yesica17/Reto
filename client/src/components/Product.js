@@ -12,17 +12,17 @@ import {
 } from "./Styled_components";
 import { Link } from "react-router-dom";
 
-const Product = ({ item }) => {
+const Product = ({ value }) => {
   return (
     <ContainerProduct>
       <CircleProduct />
-      <ImageProduct src={item.img} />
+      <ImageProduct src={value.img} />
       <InfoProduct>
         <IconProduct>
           <ShoppingCartOutlined />
         </IconProduct>
         <IconProduct>
-          <Link to={`/product/${item._id}`}>
+          <Link to={`/product/${value.id}`}>
             <SearchOutlined />
           </Link>
         </IconProduct>

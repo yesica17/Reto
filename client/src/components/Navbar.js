@@ -13,6 +13,7 @@ import {
   MenuItemNavbar,
 } from "./Styled_components";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
   return (
@@ -31,8 +32,6 @@ const Navbar = () => {
           </Link>
         </CenterNavbar>
         <RightNavbar>
-          <MenuItemNavbar>REGISTER</MenuItemNavbar>
-          <MenuItemNavbar>SIGN IN</MenuItemNavbar>
           <Link to="/cart">
             <MenuItemNavbar>
               <Badge badgeContent={2} color="primary">

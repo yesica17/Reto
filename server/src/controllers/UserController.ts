@@ -84,16 +84,15 @@ class UserController {
       );
       !isPasswordMatching && res.status(401).json("Wrong Password");
 
-      const accessToken = jwt.sign(
-        {
-          id: user.id,
-          isAdmin: user.isAdmin,
-        },
-        process.env.JWT_SEC,
-        { expiresIn: "15d" }
-      );
-      console.log(process.env.JWT_SECRET);
-      res.status(200).json(accessToken);
+      // const accessToken = jwt.sign(
+      //   {
+      //     id: user.id,
+      //     isAdmin: user.isAdmin,
+      //   },
+      //   process.env.JWT_SEC,
+      //   { expiresIn: "15d" }
+      // );
+      res.status(200).json(user);
     } catch (err) {
       res.status(500).json(err);
     }

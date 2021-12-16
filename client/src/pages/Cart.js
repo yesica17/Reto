@@ -33,63 +33,91 @@ import {
   ButtonCart,
 } from "../components/Styled_components";
 
-const Cart = () => {
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+
+import * as cartActions from "../store/actions/cart";
+
+const Cart = (props) => {
+  useEffect(() => {
+    props.loadCart();
+  }, []);
+
   return (
     <ContainerCart>
       <Navbar />
       <Announcement />
-      <WrapperCart>
-        <TitleCart>YOUR BAG</TitleCart>
-        <TopCart>
-          <TopButtonCart>CONTINUE SHOPPING</TopButtonCart>
-          <TopTexts>
-            <TopText>Shopping Bag(2)</TopText>
-          </TopTexts>
-          <TopButtonCart type="filled">CHECKOUT NOW</TopButtonCart>
-        </TopCart>
-        <BottomCart>
-          <InfoCart>
-            <ProductCart>
-              <ProductDetail>
-                <ImageCart src="https://hips.hearstapps.com/vader-prod.s3.amazonaws.com/1614188818-TD1MTHU_SHOE_ANGLE_GLOBAL_MENS_TREE_DASHERS_THUNDER_b01b1013-cd8d-48e7-bed9-52db26515dc4.png?crop=1xw:1.00xh;center,top&resize=480%3A%2A" />
-                <DetailsCart>
-                  <ProductName>
-                    <b>Product:</b> JESSIE THUNDER SHOES
-                  </ProductName>
-                  <ProductId>
-                    <b>ID:</b> 93813718293
-                  </ProductId>
-                  <ProductColor color="black" />
-                  <ProductSize>
-                    <b>Size:</b> 37.5
-                  </ProductSize>
-                  <TopButtonCart>Eliminar producto</TopButtonCart>
-                </DetailsCart>
-              </ProductDetail>
-              <PriceDetail>
-                <ProductAmountContainer>
-                  <Add />
-                  <ProductAmount>2</ProductAmount>
-                  <Remove />
-                </ProductAmountContainer>
-                <ProductPrice>$ 30</ProductPrice>
-              </PriceDetail>
-            </ProductCart>
-            <HrCart />
-          </InfoCart>
-          <Summary>
-            <SummaryTitle>ORDER SUMMARY</SummaryTitle>
-            <SummaryItem type="total">
-              <SummaryItemText>Total</SummaryItemText>
-              <SummaryItemPrice>$ 80</SummaryItemPrice>
-            </SummaryItem>
-            <ButtonCart>CHECKOUT NOW</ButtonCart>
-          </Summary>
-        </BottomCart>
-      </WrapperCart>
+      {props.cart ? (
+        <WrapperCart>
+          <TitleCart>Carrito de Compras</TitleCart>
+          <TopCart>
+            <TopButtonCart>Continuar Comprando</TopButtonCart>
+            <TopButtonCart type="filled">COMPRAR AHORA</TopButtonCart>
+          </TopCart>
+          <BottomCart>
+            <InfoCart>
+              {props.cart.map((value) => (
+                <ProductCart>
+                  <ProductDetail>
+                    <ImageCart src={value.stocks[0].product.img} />
+                    <DetailsCart>
+                      <ProductName>
+                        <b>Producto:</b>{" "}
+                        {value.stocks[0].product.styles[0].name}{" "}
+                        {value.stocks[0].product.brands[0].name}{" "}
+                        {value.stocks[0].product.categories[0].name}
+                      </ProductName>
+                      <ProductId>
+                        <b>ID:</b> {value.stocks[0].product.id}
+                      </ProductId>
+                      <ProductColor color={value.stocks[0].color.color} />
+                      <ProductSize>
+                        <b>Talla:</b> {value.stocks[0].size.size}
+                      </ProductSize>
+                      <TopButtonCart>Eliminar producto</TopButtonCart>
+                    </DetailsCart>
+                  </ProductDetail>
+                  <PriceDetail>
+                    <ProductAmountContainer>
+                      <Add />
+                      <ProductAmount>{value.req_quantity}</ProductAmount>
+                      <Remove />
+                    </ProductAmountContainer>
+                    <ProductPrice>
+                      $ {value.stocks[0].product.price}{" "}
+                    </ProductPrice>
+                  </PriceDetail>
+                </ProductCart>
+              ))}
+              <HrCart />
+            </InfoCart>
+            <Summary>
+              <SummaryTitle>RESUMEN ORDEN</SummaryTitle>
+              <SummaryItem type="total">
+                <SummaryItemText>Total</SummaryItemText>
+                <SummaryItemPrice>$ 80</SummaryItemPrice>
+              </SummaryItem>
+              <Link to="/contact">
+                <ButtonCart>COMPRAR AHORA</ButtonCart>
+              </Link>
+            </Summary>
+          </BottomCart>
+        </WrapperCart>
+      ) : null}
       <Footer />
     </ContainerCart>
   );
 };
 
-export default Cart;
+//leer estados
+const mapStateToProps = (state) => ({
+  cart: state.cart.cart,
+});
+
+//ejecutar acciones
+const mapDispatchToProps = (dispatch) => ({
+  loadCart: () => dispatch(cartActions.loadCart()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Cart);

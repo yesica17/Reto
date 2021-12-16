@@ -19,7 +19,8 @@ const Products = (props) => {
         ? //popularProducts.map((item) => <Product item={item} key={item.id} />)
           props.products.map((value) => (
             // <h1 key={value.id}>{value.styles[0].name}</h1>
-            <h1 key={value.id}>{value.img}</h1>
+            //<h1 key={value.id}>{value.img}</h1>
+            <Product value={value} key={value.id} />
           ))
         : null}
     </ContainerProducts>

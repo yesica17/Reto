@@ -5,6 +5,8 @@ import {
   BaseEntity,
   ManyToMany,
   JoinTable,
+  ManyToOne,
+  JoinColumn,
 } from "typeorm";
 import { Size } from "./Sizes";
 import { Color } from "./Colors";
@@ -18,23 +20,24 @@ export class Stock extends BaseEntity {
   @Column({ type: "int", nullable: false })
   available_quantity: number;
 
-  @ManyToMany(() => Size, {
-    eager: true,
-    //cascade: true,
-  })
-  @JoinTable()
-  sizes: Size[];
+  @Column({ name: "size_id" })
+  sizeId: number;
 
-  @ManyToMany(() => Color, {
-    eager: true,
-    //cascade: true,
-  })
-  @JoinTable()
-  colors: Color[];
+  @Column({ name: "color_id" })
+  colorId: number;
 
-  @ManyToMany(() => Product, {
-    eager: true,
-  })
-  @JoinTable()
-  products: Product[];
+  @Column({ name: "product_id" })
+  productId: number;
+
+  @ManyToOne(() => Size, { nullable: false, eager: true })
+  @JoinColumn({ name: "size_id" })
+  size: Size;
+
+  @ManyToOne(() => Color, { nullable: false, eager: true })
+  @JoinColumn({ name: "color_id" })
+  color: Color;
+
+  @ManyToOne(() => Product, { nullable: false, eager: true })
+  @JoinColumn({ name: "product_id" })
+  product: Product;
 }

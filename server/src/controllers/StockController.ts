@@ -73,20 +73,12 @@ class StockController {
     const stockData = req.body;
     const stock = new Stock();
     stock.available_quantity = stockData.available_quantity;
-    const sizes = await Size.findByIds(
-      stockData.sizes.map((value) => value.id)
-    );
-    stock.sizes = sizes;
-
-    const colors = await Color.findByIds(
-      stockData.colors.map((value) => value.id)
-    );
-    stock.colors = colors;
-
-    const products = await Product.findByIds(
-      stockData.products.map((value) => value.id)
-    );
-    stock.products = products;
+    const size = await Size.findOne(stockData.size.id);
+    stock.size = size;
+    const color = await Color.findOne(stockData.color.id);
+    stock.color = color;
+    const product = await Product.findOne(stockData.product.id);
+    stock.product = product;
 
     try {
       const savedStock = await stock.save();

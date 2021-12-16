@@ -31,3 +31,41 @@ export const createUser = (payload) => {
       .catch((response) => console.error(response));
   };
 };
+
+export const setColor = (payload) => {
+  return {
+    type: creators.SET_COLOR,
+    payload,
+  };
+};
+
+export const loadColor = () => {
+  return async (dispatch, getState) => {
+    await GETData(`stock/color`, "GET")
+      .then((response) => {
+        if (response !== null) {
+          dispatch(setColor(response));
+        }
+      })
+      .catch((response) => console.error(response));
+  };
+};
+
+export const setSize = (payload) => {
+  return {
+    type: creators.SET_SIZE,
+    payload,
+  };
+};
+
+export const loadSize = () => {
+  return async (dispatch, getState) => {
+    await GETData(`stock/size`, "GET")
+      .then((response) => {
+        if (response !== null) {
+          dispatch(setSize(response));
+        }
+      })
+      .catch((response) => console.error(response));
+  };
+};

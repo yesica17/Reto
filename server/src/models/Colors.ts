@@ -6,5 +6,5 @@ export class Color extends BaseEntity {
   id: number;
 
   @Column()
-  name: string;
+  color: string;
 }

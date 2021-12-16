@@ -39,7 +39,7 @@ const Register = (props) => {
     <ContainerRegister>
       <WrapperRegister>
         <TitleRegister>CREAR UNA CUENTA</TitleRegister>
-        <div>
+        <FormRegister>
           <FilterID
             onChange={(value) =>
               setUser({ ...user, type_document: { id: value.target.value } })
@@ -48,6 +48,7 @@ const Register = (props) => {
             <FilterIDOption value={0} disabled selected>
               Tipo de documento
             </FilterIDOption>
+
             {props.typeDocument.length
               ? props.typeDocument.map((value) => (
                   <FilterIDOption value={value.id} key={value.id}>
@@ -95,7 +96,7 @@ const Register = (props) => {
               CREAR
             </ButtonRegister>
           </Link>
-        </div>
+        </FormRegister>
       </WrapperRegister>
     </ContainerRegister>
   );

@@ -25,7 +25,7 @@ class CartController {
 
     // Controller endpoints
     this.router.post(this.path, this.createCart);
-    this.router.get(this.path, this.getAllCart);
+    this.router.post(this.path + "/load", this.getAllCart);
     this.router.get(this.path + "/:id", this.getCart);
 
     this.router.put(this.path + "/:id", this.updateCart);
@@ -74,10 +74,22 @@ class CartController {
     const cart = new Cart();
     cart.req_quantity = cartData.req_quantity;
     cart.state_cart = cartData.state_cart;
-    const stocks = await Stock.findByIds(
-      cartData.stocks.map((value) => value.id)
-    );
+
+    // const stocks = await Stock.findByIds(
+    //   cartData.stocks.map((value) => value.id)
+    // );
+    const stocks = await Stock.find({
+      select: ["id"],
+      where: [
+        {
+          sizeId: cartData.size.id,
+          colorId: cartData.color.id,
+          productId: cartData.product.id,
+        },
+      ],
+    });
     cart.stocks = stocks;
+
     const user = await User.findOne(cartData.user.id);
     cart.user = user;
 
@@ -92,9 +104,18 @@ class CartController {
     }
   }
 
-  //--------Get all cart--------------
+  //--------Get all cart by id_user and state:true--------------
   public async getAllCart(req: express.Request, res: express.Response) {
-    const cart = await Cart.find();
+    const cartData = req.body;
+    const cart = await Cart.find({
+      relations: ["stocks"],
+      where: [
+        {
+          userId: cartData.user.id,
+          state_cart: true,
+        },
+      ],
+    });
     return res.send(cart);
   }
 

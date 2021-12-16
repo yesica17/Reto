@@ -4,12 +4,17 @@ import Product from "./pages/Product";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Cart from "./pages/Cart";
+import Contact from "./pages/Contact";
+import Order from "./pages/Order";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 const App = () => {
   return (
     <Router>
       <Switch>
+        <Route path="/login">
+          <Login />
+        </Route>
         <Route exact path="/">
           <Home />
         </Route>
@@ -25,8 +30,11 @@ const App = () => {
         <Route path="/register">
           <Register />
         </Route>
-        <Route path="/login">
-          <Login />
+        <Route path="/contact">
+          <Contact />
+        </Route>
+        <Route path="/order">
+          <Order />
         </Route>
       </Switch>
     </Router>

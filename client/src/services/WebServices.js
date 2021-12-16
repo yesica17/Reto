@@ -12,7 +12,6 @@ const SETData = async (url, method, params, endpoint = current) => {
     },
     body: JSON.stringify(params),
   });
-
   if (response.ok) {
     const body = await response.text().then(response);
 

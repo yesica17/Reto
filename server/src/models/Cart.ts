@@ -7,6 +7,7 @@ import {
   JoinTable,
   JoinColumn,
   ManyToOne,
+  RelationId,
 } from "typeorm";
 import { Stock } from "./Stock";
 import { User } from "./User";
@@ -30,7 +31,17 @@ export class Cart extends BaseEntity {
     eager: true,
     //cascade: true,
   })
-  @JoinTable()
+  @JoinTable({
+    name: "cart_stock", // table name for the junction table of this relation
+    joinColumn: {
+      name: "cart",
+      referencedColumnName: "id",
+    },
+    inverseJoinColumn: {
+      name: "stock",
+      referencedColumnName: "id",
+    },
+  })
   stocks: Stock[];
 
   @ManyToOne(() => User, { nullable: false })
