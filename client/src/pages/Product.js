@@ -98,12 +98,12 @@ const Product = (props) => {
               <Filter>
                 <FilterTitle>Color</FilterTitle>
                 <FilterColor
-                  onChange={(value) =>
+                  onClick={(value) => {
                     setCart({
                       ...cart,
                       color: { id: value.target.value },
-                    })
-                  }
+                    });
+                  }}
                 >
                   {props.colors.length
                     ? props.colors.map((value) => (
@@ -115,12 +115,12 @@ const Product = (props) => {
                 </FilterColor>{" "}
                 <FilterTitle>Talla</FilterTitle>
                 <FilterSize
-                  onChange={(value) =>
+                  onClick={(value) => {
                     setCart({
                       ...cart,
                       size: { id: value.target.value },
-                    })
-                  }
+                    });
+                  }}
                 >
                   {props.sizes.length
                     ? props.sizes.map((value) => (
@@ -154,11 +154,10 @@ const Product = (props) => {
                   }}
                 />
               </AmountContainer>
-              <Link to="/cart">
-                <ButtonProd onClick={async () => await props.createCart(cart)}>
-                  Agregar al carro
-                </ButtonProd>
-              </Link>
+
+              <ButtonProd onClick={async () => await props.createCart(cart)}>
+                Agregar al carro
+              </ButtonProd>
             </AddContainer>
           </InfoContainer>
         </WrapperProd>

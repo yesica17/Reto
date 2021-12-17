@@ -48,55 +48,69 @@ const Cart = (props) => {
     <ContainerCart>
       <Navbar />
       <Announcement />
-      {props.cart ? (
+      {props.cart.length ? (
         <WrapperCart>
           <TitleCart>Carrito de Compras</TitleCart>
           <TopCart>
-            <TopButtonCart>Continuar Comprando</TopButtonCart>
+            <Link to="/">
+              <TopButtonCart>Continuar Comprando</TopButtonCart>
+            </Link>
             <TopButtonCart type="filled">COMPRAR AHORA</TopButtonCart>
           </TopCart>
           <BottomCart>
             <InfoCart>
-              {props.cart.map((value) => (
-                <ProductCart>
-                  <ProductDetail>
-                    <ImageCart src={value.stocks[0].product.img} />
-                    <DetailsCart>
-                      <ProductName>
-                        <b>Producto:</b>{" "}
-                        {value.stocks[0].product.styles[0].name}{" "}
-                        {value.stocks[0].product.brands[0].name}{" "}
-                        {value.stocks[0].product.categories[0].name}
-                      </ProductName>
-                      <ProductId>
-                        <b>ID:</b> {value.stocks[0].product.id}
-                      </ProductId>
-                      <ProductColor color={value.stocks[0].color.color} />
-                      <ProductSize>
-                        <b>Talla:</b> {value.stocks[0].size.size}
-                      </ProductSize>
-                      <TopButtonCart>Eliminar producto</TopButtonCart>
-                    </DetailsCart>
-                  </ProductDetail>
-                  <PriceDetail>
-                    <ProductAmountContainer>
-                      <Add />
-                      <ProductAmount>{value.req_quantity}</ProductAmount>
-                      <Remove />
-                    </ProductAmountContainer>
-                    <ProductPrice>
-                      $ {value.stocks[0].product.price}{" "}
-                    </ProductPrice>
-                  </PriceDetail>
-                </ProductCart>
-              ))}
+              {props.cart.map((value) =>
+                value.stocks.length ? (
+                  <ProductCart>
+                    <ProductDetail>
+                      <ImageCart src={value.stocks[0].product.img} />
+                      <DetailsCart>
+                        <ProductName>
+                          <b>Producto:</b>{" "}
+                          {value.stocks[0].product.styles[0].name}{" "}
+                          {value.stocks[0].product.brands[0].name}{" "}
+                          {value.stocks[0].product.categories[0].name}
+                        </ProductName>
+                        <ProductId>
+                          <b>ID:</b> {value.stocks[0].product.id}
+                        </ProductId>
+                        <ProductColor color={value.stocks[0].color.color} />
+                        <ProductSize>
+                          <b>Talla:</b> {value.stocks[0].size.size}
+                        </ProductSize>
+                        <TopButtonCart>Eliminar producto</TopButtonCart>
+                      </DetailsCart>
+                    </ProductDetail>
+                    <PriceDetail>
+                      <ProductAmountContainer>
+                        <Add />
+                        <ProductAmount>{value.req_quantity}</ProductAmount>
+                        <Remove />
+                      </ProductAmountContainer>
+                      <ProductPrice>
+                        $ {value.stocks[0].product.price}{" "}
+                      </ProductPrice>
+                    </PriceDetail>
+                  </ProductCart>
+                ) : null
+              )}
               <HrCart />
             </InfoCart>
             <Summary>
               <SummaryTitle>RESUMEN ORDEN</SummaryTitle>
+
               <SummaryItem type="total">
                 <SummaryItemText>Total</SummaryItemText>
-                <SummaryItemPrice>$ 80</SummaryItemPrice>
+                <SummaryItemPrice>
+                  ${" "}
+                  {props.cart
+                    .map((value) =>
+                      value.stocks.length
+                        ? value.req_quantity * value.stocks[0].product.price
+                        : 0
+                    )
+                    .reduce((a, b) => a + b, 0)}
+                </SummaryItemPrice>
               </SummaryItem>
               <Link to="/contact">
                 <ButtonCart>COMPRAR AHORA</ButtonCart>

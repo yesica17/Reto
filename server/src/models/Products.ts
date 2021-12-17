@@ -7,6 +7,8 @@ import {
   JoinTable,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
+  JoinColumn,
 } from "typeorm";
 import { Category } from "./Categories";
 import { Style } from "./Styles";

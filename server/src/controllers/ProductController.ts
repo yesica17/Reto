@@ -3,6 +3,7 @@ import { Product } from "../models/Products";
 import { Category } from "../models/Categories";
 import { Style } from "../models/Styles";
 import { Brand } from "../models/Brands";
+import { Stock } from "../models/Stock";
 import {
   verifyToken,
   verifyTokenAndAuthorization,
@@ -99,7 +100,9 @@ class ProductController {
 
   //--------Get all products--------------
   public async getAllProduct(req: express.Request, res: express.Response) {
-    const products = await Product.find();
+    const products = await Product.find({
+      relations: ["stock"],
+    });
     return res.send(products);
   }
 

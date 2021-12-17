@@ -31,6 +31,7 @@ export const createCart = (payload) => {
       size: payload.size,
       color: payload.color,
     };
+    console.log("el stock es", stock);
     await SETData(`cart`, "POST", stock)
       .then((response) => {
         if (response !== null) {

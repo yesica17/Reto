@@ -13,9 +13,15 @@ import {
   MenuItemNavbar,
 } from "./Styled_components";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useState, useEffect } from "react";
+import * as cartActions from "../store/actions/cart";
+import { connect } from "react-redux";
 
-const Navbar = () => {
+const Navbar = (props) => {
+  useEffect(() => {
+    props.loadCart();
+  }, []);
+  const len = props.cart.length;
   return (
     <ContainerNavbar>
       <WrapperNavbar>
@@ -34,7 +40,7 @@ const Navbar = () => {
         <RightNavbar>
           <Link to="/cart">
             <MenuItemNavbar>
-              <Badge badgeContent={2} color="primary">
+              <Badge badgeContent={len} color="primary">
                 <ShoppingCartOutlined />
               </Badge>
             </MenuItemNavbar>
@@ -45,4 +51,12 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+//leer estados
+const mapStateToProps = (state) => ({ cart: state.cart.cart });
+
+//ejecutar acciones
+const mapDispatchToProps = (dispatch) => ({
+  loadCart: () => dispatch(cartActions.loadCart()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Navbar);

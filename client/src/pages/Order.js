@@ -18,33 +18,36 @@ const Order = (props) => {
   useEffect(() => {
     props.loadCart();
   }, []);
-  console.log(props.cart);
+  //console.log(props.cart);
   return (
     <ContainerLogin>
-      {props.cart ? (
+      {props.cart.length ? (
         <WrapperLogin>
           <TitleLogin>Resumen Compra</TitleLogin>
           <hr />
-          {props.cart.map((value) => (
-            <div>
-              <b>Id. {value.stocks[0].product.id}</b>{" "}
-              {value.stocks[0].product.styles[0].name}{" "}
-              {value.stocks[0].product.brands[0].name}{" "}
-              {value.stocks[0].product.categories[0].name}
-              <br />
-              <b>Talla:</b>
-              {value.stocks[0].size.size}
-              <br />
-              <ProductColor color={value.stocks[0].color.color} />
-              <br />
-              <hr />
-            </div>
-          ))}
+          {props.cart.map((value) =>
+            value.stocks.length ? (
+              <div>
+                <b>Id. {value.stocks[0].product.id}</b>{" "}
+                {value.stocks[0].product.styles[0].name}{" "}
+                {value.stocks[0].product.brands[0].name}{" "}
+                {value.stocks[0].product.categories[0].name}
+                <br />
+                <b>Talla:</b>
+                {value.stocks[0].size.size}
+                <br />
+                <ProductColor color={value.stocks[0].color.color} />
+                <br />
+                <hr />
+              </div>
+            ) : null
+          )}
           <br />
           <Link to="/">
             <ButtonLogin
               onClick={async () => {
                 await props.createOrder();
+                await props.cart.map((value) => props.updateStock(value.id));
               }}
             >
               Confirmar compra
@@ -63,6 +66,7 @@ const mapStateToProps = (state) => ({ cart: state.cart.cart });
 const mapDispatchToProps = (dispatch) => ({
   createOrder: () => dispatch(orderActions.createOrder()),
   loadCart: () => dispatch(cartActions.loadCart()),
+  updateStock: (payload) => dispatch(orderActions.updateStock(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Order);
