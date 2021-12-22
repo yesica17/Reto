@@ -27,6 +27,9 @@ export class Cart extends BaseEntity {
   @Column({ name: "user_id" })
   userId: number;
 
+  @Column({ type: "float", nullable: true })
+  amount: number;
+
   @ManyToMany(() => Stock, {
     eager: true,
     //cascade: true,

@@ -58,4 +58,8 @@ export class Product extends BaseEntity {
   })
   @JoinTable()
   brands: Brand[];
+
+  @OneToMany(() => Stock, (stock) => stock.product, {})
+  @JoinColumn()
+  stock: Stock[];
 }

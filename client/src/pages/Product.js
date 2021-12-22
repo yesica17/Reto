@@ -41,9 +41,13 @@ const Product = (props) => {
 
   useEffect(() => {
     props.loadProduct(id);
-    props.loadColor();
-    props.loadSize();
   }, []);
+
+  const currency = function (number) {
+    return new Intl.NumberFormat("en-IN", {
+      currency: "USD",
+    }).format(number);
+  };
 
   const handleQuantity = (type) => {
     if (type === "dec") {
@@ -72,7 +76,6 @@ const Product = (props) => {
   };
 
   const [cart, setCart] = useState(cart_init);
-  //console.log(cart);
 
   return (
     <ContainerProd>
@@ -91,7 +94,7 @@ const Product = (props) => {
             </TitleProd>
             <DescProd>{props.product.desc}</DescProd>
             <Price>
-              <b>$</b> {props.product.price}
+              <b>$</b> {currency(props.product.price)}
             </Price>
 
             <FilterContainer>
@@ -105,13 +108,19 @@ const Product = (props) => {
                     });
                   }}
                 >
-                  {props.colors.length
-                    ? props.colors.map((value) => (
-                        <FilterColorOption value={value.id} key={value.id}>
-                          {value.color}
-                        </FilterColorOption>
-                      ))
-                    : null}
+                  {[
+                    ...new Map(
+                      props.product.stock
+                        .map((value) => value.color)
+                        .map((value) => {
+                          return [value.id, value];
+                        })
+                    ).values(),
+                  ].map((value) => (
+                    <FilterColorOption value={value.id} key={value.id}>
+                      {value.color}
+                    </FilterColorOption>
+                  ))}
                 </FilterColor>{" "}
                 <FilterTitle>Talla</FilterTitle>
                 <FilterSize
@@ -122,15 +131,46 @@ const Product = (props) => {
                     });
                   }}
                 >
-                  {props.sizes.length
-                    ? props.sizes.map((value) => (
-                        <FilterSizeOption value={value.id} key={value.id}>
-                          {value.size}
-                        </FilterSizeOption>
-                      ))
-                    : null}
+                  {[
+                    ...new Map(
+                      props.product.stock
+                        .map((value) => value.size)
+                        .map((value) => {
+                          return [value.id, value];
+                        })
+                    ).values(),
+                  ].map((value) => (
+                    <FilterSizeOption value={value.id} key={value.id}>
+                      {value.size}
+                    </FilterSizeOption>
+                  ))}
                 </FilterSize>
               </Filter>
+
+              {cart.size.id !== null && cart.color.id !== null ? (
+                props.product.stock
+                  .filter(
+                    (value) =>
+                      value.sizeId == cart.size.id &&
+                      value.colorId == cart.color.id
+                  )
+                  .map((value) => value.available_quantity)[0] > 0 ? (
+                  <h3>
+                    Disponible{" "}
+                    {
+                      props.product.stock
+                        .filter(
+                          (value) =>
+                            value.sizeId == cart.size.id &&
+                            value.colorId == cart.color.id
+                        )
+                        .map((value) => value.available_quantity)[0]
+                    }
+                  </h3>
+                ) : (
+                  <h3>No disponible</h3>
+                )
+              ) : null}
             </FilterContainer>
             <AddContainer>
               <AmountContainer>
@@ -155,7 +195,23 @@ const Product = (props) => {
                 />
               </AmountContainer>
 
-              <ButtonProd onClick={async () => await props.createCart(cart)}>
+              <ButtonProd
+                onClick={async () => {
+                  if (
+                    props.product.stock
+                      .filter(
+                        (value) =>
+                          value.sizeId == cart.size.id &&
+                          value.colorId == cart.color.id
+                      )
+                      .map((value) => value.available_quantity)[0] !== 0
+                  ) {
+                    await props.createCart(cart);
+                  } else {
+                    alert("El producto no esta disponible!");
+                  }
+                }}
+              >
                 Agregar al carro
               </ButtonProd>
             </AddContainer>
@@ -177,8 +233,6 @@ const mapStateToProps = (state) => ({
 //ejecutar acciones
 const mapDispatchToProps = (dispatch) => ({
   loadProduct: (payload) => dispatch(productActions.loadProduct(payload)),
-  loadColor: () => dispatch(optionsActions.loadColor()),
-  loadSize: () => dispatch(optionsActions.loadSize()),
   createCart: (payload) => dispatch(productActions.createCart(payload)),
 });
 

@@ -126,7 +126,9 @@ class ProductController {
 
   //---------------Get product---------------
   public async getProduct(req: express.Request, res: express.Response) {
-    const client = await Product.findOne(req.params.id);
+    const client = await Product.findOne(req.params.id, {
+      relations: ["stock"],
+    });
     return res.send(client);
   }
 

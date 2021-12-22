@@ -43,6 +43,9 @@ const Cart = (props) => {
   useEffect(() => {
     props.loadCart();
   }, []);
+  const amount = props.cart
+    .map((value) => value.req_quantity * value.stocks[0].product.price)
+    .reduce((a, b) => a + b, 0);
 
   return (
     <ContainerCart>
@@ -64,6 +67,7 @@ const Cart = (props) => {
                   <ProductCart>
                     <ProductDetail>
                       <ImageCart src={value.stocks[0].product.img} />
+
                       <DetailsCart>
                         <ProductName>
                           <b>Producto:</b>{" "}
@@ -88,7 +92,7 @@ const Cart = (props) => {
                         <Remove />
                       </ProductAmountContainer>
                       <ProductPrice>
-                        $ {value.stocks[0].product.price}{" "}
+                        $ {(value.stocks[0].product.price / 1000).toFixed(3)}{" "}
                       </ProductPrice>
                     </PriceDetail>
                   </ProductCart>
@@ -101,15 +105,9 @@ const Cart = (props) => {
 
               <SummaryItem type="total">
                 <SummaryItemText>Total</SummaryItemText>
+
                 <SummaryItemPrice>
-                  ${" "}
-                  {props.cart
-                    .map((value) =>
-                      value.stocks.length
-                        ? value.req_quantity * value.stocks[0].product.price
-                        : 0
-                    )
-                    .reduce((a, b) => a + b, 0)}
+                  $ {(amount / 1000).toFixed(3)}
                 </SummaryItemPrice>
               </SummaryItem>
               <Link to="/contact">

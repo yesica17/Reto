@@ -7,6 +7,7 @@ import Cart from "./pages/Cart";
 import Contact from "./pages/Contact";
 import Order from "./pages/Order";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Prueba from "./pages/prueba";
 
 const App = () => {
   return (
@@ -35,6 +36,9 @@ const App = () => {
         </Route>
         <Route path="/order">
           <Order />
+        </Route>
+        <Route path="/prueba">
+          <Prueba />
         </Route>
       </Switch>
     </Router>

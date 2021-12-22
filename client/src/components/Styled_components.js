@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { mobile } from "../responsive";
 
 // --------------------------Announcement------------------------
@@ -343,7 +343,7 @@ export const LinkLogin = styled.a`
 //----------------Register-----------------
 export const ContainerRegister = styled.div`
   width: 100vw;
-  height: 100vh;
+  height: 120vh;
   background: linear-gradient(
       rgba(255, 255, 255, 0.5),
       rgba(255, 255, 255, 0.5)
@@ -356,7 +356,7 @@ export const ContainerRegister = styled.div`
 `;
 
 export const WrapperRegister = styled.div`
-  width: 40%;
+  width: 30%;
   padding: 20px;
   background-color: white;
   ${mobile({ width: "75%" })}
@@ -367,16 +367,19 @@ export const TitleRegister = styled.h1`
   font-weight: bold;
 `;
 
-export const FormRegister = styled.div`
+export const FormRegister = styled.form`
   display: flex;
   flex-wrap: wrap;
 `;
 
 export const InputRegister = styled.input`
   flex: 1;
-  min-width: 40%;
+  min-width: 80%;
   margin: 20px 10px 0px 0px;
   padding: 10px;
+  &:invalid ~ span {
+    display: block;
+  }
 `;
 
 export const FilterID = styled.select`
@@ -400,6 +403,13 @@ export const ButtonRegister = styled.button`
   background-color: teal;
   color: white;
   cursor: pointer;
+`;
+
+export const Error = styled.span`
+  font-size: 12px;
+  padding: 3px;
+  color: red;
+  display: none;
 `;
 
 //---------------Cart--------------------------
@@ -655,7 +665,8 @@ export const ButtonProd = styled.button`
   color: white;
   cursor: pointer;
   font-weight: 500;
-  &:hover {
-    background-color: gray;
+  &:disabled {
+    background-color: gainsboro;
+    color: gray;
   }
 `;

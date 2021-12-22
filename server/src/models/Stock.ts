@@ -37,7 +37,7 @@ export class Stock extends BaseEntity {
   @JoinColumn({ name: "color_id" })
   color: Color;
 
-  @ManyToOne(() => Product, {
+  @ManyToOne(() => Product, (product) => product.stock, {
     nullable: false,
     eager: true,
   })
