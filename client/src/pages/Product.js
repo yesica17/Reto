@@ -38,22 +38,32 @@ const Product = (props) => {
   const location = useLocation();
   const id = location.pathname.split("/")[2];
   const [quantity, setQuantity] = useState(1);
+  const [stock, setStock] = useState(1);
+
+  const updateStock = () => {
+    if (props.product && cart.size.id !== null && cart.color.id !== null) {
+      setStock(
+        props.product.stock
+          .filter(
+            (value) =>
+              value.sizeId == cart.size.id && value.colorId == cart.color.id
+          )
+          .map((value) => value.available_quantity)[0]
+      );
+    }
+  };
 
   useEffect(() => {
     props.loadProduct(id);
   }, []);
 
-  const currency = function (number) {
-    return new Intl.NumberFormat("en-IN", {
-      currency: "USD",
-    }).format(number);
-  };
-
   const handleQuantity = (type) => {
-    if (type === "dec") {
-      quantity > 1 && setQuantity(quantity - 1);
+    if (type === "inc") {
+      if (quantity < stock) {
+        setQuantity(quantity + 1);
+      }
     } else {
-      setQuantity(quantity + 1);
+      quantity > 1 && setQuantity(quantity - 1);
     }
   };
 
@@ -94,7 +104,7 @@ const Product = (props) => {
             </TitleProd>
             <DescProd>{props.product.desc}</DescProd>
             <Price>
-              <b>$</b> {currency(props.product.price)}
+              <b>$</b> {(props.product.price / 1000).toFixed(3)}
             </Price>
 
             <FilterContainer>
@@ -129,6 +139,7 @@ const Product = (props) => {
                       ...cart,
                       size: { id: value.target.value },
                     });
+                    updateStock();
                   }}
                 >
                   {[
@@ -148,67 +159,50 @@ const Product = (props) => {
               </Filter>
 
               {cart.size.id !== null && cart.color.id !== null ? (
-                props.product.stock
-                  .filter(
-                    (value) =>
-                      value.sizeId == cart.size.id &&
-                      value.colorId == cart.color.id
-                  )
-                  .map((value) => value.available_quantity)[0] > 0 ? (
-                  <h3>
-                    Disponible{" "}
-                    {
-                      props.product.stock
-                        .filter(
-                          (value) =>
-                            value.sizeId == cart.size.id &&
-                            value.colorId == cart.color.id
-                        )
-                        .map((value) => value.available_quantity)[0]
-                    }
-                  </h3>
+                stock > 0 ? (
+                  <h3>Disponible {stock}</h3>
                 ) : (
                   <h3>No disponible</h3>
                 )
               ) : null}
             </FilterContainer>
             <AddContainer>
-              <AmountContainer>
-                <Remove
-                  onClick={() => {
-                    handleQuantity("dec");
-                    setCart({
-                      ...cart,
-                      req_quantity: quantity - 1,
-                    });
-                  }}
-                />
-                <Amount>{quantity}</Amount>
-                <Add
-                  onClick={() => {
-                    handleQuantity("inc");
-                    setCart({
-                      ...cart,
-                      req_quantity: quantity + 1,
-                    });
-                  }}
-                />
-              </AmountContainer>
+              {cart.size.id !== null &&
+              cart.color.id !== null &&
+              stock !== 0 ? (
+                <AmountContainer>
+                  <Remove
+                    onClick={() => {
+                      handleQuantity("dec");
+                      setCart({
+                        ...cart,
+                        req_quantity: quantity,
+                      });
+                    }}
+                  />
+                  <Amount>{quantity}</Amount>
+                  <Add
+                    onClick={() => {
+                      handleQuantity("inc");
+                      setCart({
+                        ...cart,
+                        req_quantity: quantity,
+                      });
+                    }}
+                  />
+                </AmountContainer>
+              ) : null}
 
               <ButtonProd
                 onClick={async () => {
-                  if (
-                    props.product.stock
-                      .filter(
-                        (value) =>
-                          value.sizeId == cart.size.id &&
-                          value.colorId == cart.color.id
-                      )
-                      .map((value) => value.available_quantity)[0] !== 0
-                  ) {
-                    await props.createCart(cart);
+                  if (cart.size.id !== null && cart.color.id !== null) {
+                    if (stock !== 0) {
+                      await props.createCart(cart);
+                    } else {
+                      alert("El producto no esta disponible!");
+                    }
                   } else {
-                    alert("El producto no esta disponible!");
+                    alert("Debe seleccionar una talla y color");
                   }
                 }}
               >

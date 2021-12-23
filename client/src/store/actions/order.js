@@ -29,7 +29,6 @@ export const updateStock = (payload) => {
     const data = {
       state_cart: false,
     };
-    console.log(data);
     await SETData(`cart/${payload}`, "PUT", data)
       .then((response) => {
         if (response !== null) {

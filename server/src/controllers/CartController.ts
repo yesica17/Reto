@@ -119,6 +119,8 @@ class CartController {
     return res.send(cart);
   }
 
+  //--------Calculate amount cart--------------
+
   //---------------Get cart---------------
   public async getCart(req: express.Request, res: express.Response) {
     const cart = await Cart.findOne(req.params.id);

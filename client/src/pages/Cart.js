@@ -65,9 +65,20 @@ const Cart = (props) => {
               {props.cart.map((value) =>
                 value.stocks.length ? (
                   <ProductCart>
+                    {props.cart
+                      .filter(
+                        (value) => value.stocks[0].available_quantity == 0
+                      )
+                      .map((value) => value.id).length !== 0
+                      ? props.cart
+                          .filter(
+                            (value) => value.stocks[0].available_quantity == 0
+                          )
+                          .map((value) => value.id)
+                          .map((value) => props.deleteCart(value))
+                      : null}
                     <ProductDetail>
                       <ImageCart src={value.stocks[0].product.img} />
-
                       <DetailsCart>
                         <ProductName>
                           <b>Producto:</b>{" "}
@@ -82,7 +93,11 @@ const Cart = (props) => {
                         <ProductSize>
                           <b>Talla:</b> {value.stocks[0].size.size}
                         </ProductSize>
-                        <TopButtonCart>Eliminar producto</TopButtonCart>
+                        <TopButtonCart
+                          onClick={() => props.deleteCart(value.id)}
+                        >
+                          Eliminar producto
+                        </TopButtonCart>
                       </DetailsCart>
                     </ProductDetail>
                     <PriceDetail>
@@ -130,6 +145,7 @@ const mapStateToProps = (state) => ({
 //ejecutar acciones
 const mapDispatchToProps = (dispatch) => ({
   loadCart: () => dispatch(cartActions.loadCart()),
+  deleteCart: (payload) => dispatch(cartActions.deleteCart(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cart);

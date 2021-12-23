@@ -25,3 +25,15 @@ export const loadCart = () => {
       .catch((response) => console.error(response));
   };
 };
+
+export const deleteCart = (payload) => {
+  return async (dispatch, getState) => {
+    await SETData(`cart/${payload}`, "DELETE")
+      .then((response) => {
+        if (response !== null) {
+          console.log(response);
+        }
+      })
+      .catch((response) => console.error(response));
+  };
+};
