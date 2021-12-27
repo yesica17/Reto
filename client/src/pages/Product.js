@@ -3,27 +3,9 @@ import { useLocation } from "react-router-dom";
 import Announcement from "../components/Announcement";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
-import {
-  ContainerProd,
-  WrapperProd,
-  ImgContainerProd,
-  ImageProd,
-  InfoContainer,
-  TitleProd,
-  DescProd,
-  Price,
-  FilterContainer,
-  Filter,
-  FilterTitle,
-  FilterColor,
-  FilterSize,
-  FilterSizeOption,
-  FilterColorOption,
-  AmountContainer,
-  Amount,
-  AddContainer,
-  ButtonProd,
-} from "../components/Styled_components";
+import { ContainerProd, WrapperProd, ImgContainerProd, ImageProd, InfoContainer,
+  TitleProd, DescProd, Price, FilterContainer, Filter, FilterTitle, FilterColor,
+  FilterSize, FilterSizeOption, FilterColorOption, AmountContainer, Amount,  AddContainer, ButtonProd } from "../components/Styled_components";
 
 import { useState, useEffect } from "react";
 
@@ -67,22 +49,14 @@ const Product = (props) => {
     }
   };
 
-  const cart_init = {
+  const cart_init = { 
     req_quantity: 1,
     state_cart: true,
     order: { id: null },
-    size: {
-      id: null,
-    },
-    color: {
-      id: null,
-    },
-    product: {
-      id: null,
-    },
-    user: {
-      id: null,
-    },
+    size: {id: null },
+    color: {id: null},
+    product: {id: null},
+    user: {id: null},
   };
 
   const [cart, setCart] = useState(cart_init);

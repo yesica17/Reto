@@ -12,6 +12,7 @@ import {
 import { Stock } from "./Stock";
 import { User } from "./User";
 import { Order } from "./Order";
+import StockController from "../controllers/StockController";
 
 @Entity()
 export class Cart extends BaseEntity {
@@ -30,22 +31,12 @@ export class Cart extends BaseEntity {
   @Column({ type: "float", nullable: true })
   amount: number;
 
-  @ManyToMany(() => Stock, {
-    eager: true,
-    //cascade: true,
-  })
-  @JoinTable({
-    name: "cart_stock", // table name for the junction table of this relation
-    joinColumn: {
-      name: "cart",
-      referencedColumnName: "id",
-    },
-    inverseJoinColumn: {
-      name: "stock",
-      referencedColumnName: "id",
-    },
-  })
-  stocks: Stock[];
+  @Column({ name: "stock_id" })
+  stockId: number;
+
+  @ManyToOne(() => Stock, { nullable: true, eager: true })
+  @JoinColumn({ name: "stock_id" })
+  stocks: Stock;
 
   @ManyToOne(() => User, { nullable: false })
   @JoinColumn({ name: "user_id" })

@@ -14,6 +14,7 @@ export const loadProduct = (payload) => {
       .then((response) => {
         if (response !== null) {
           dispatch(setProduct(response));
+          
         }
       })
       .catch((response) => console.error(response));
@@ -31,14 +32,15 @@ export const createCart = (payload) => {
       size: payload.size,
       color: payload.color,
     };
-    console.log("el stock es", stock);
+   
     await SETData(`cart`, "POST", stock)
       .then((response) => {
         if (response !== null) {
           console.log(response);
-        } else {
-          console.log("es nula");
-        }
+          if(response==true){
+            alert("El producto ya fue agregado")
+          }
+        } 
       })
       .catch((response) => console.error(response));
   };

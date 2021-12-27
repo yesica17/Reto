@@ -1,12 +1,4 @@
-import {
-  ContainerLogin,
-  WrapperLogin,
-  TitleLogin,
-  FormLogin,
-  InputLogin,
-  ButtonLogin,
-  LinkLogin,
-} from "../components/Styled_components";
+import { ContainerLogin, WrapperLogin, TitleLogin, FormLogin, InputLogin, ButtonLogin, LinkLogin } from "../components/Styled_components";
 
 import { connect } from "react-redux";
 

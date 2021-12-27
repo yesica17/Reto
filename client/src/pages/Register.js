@@ -1,15 +1,4 @@
-import {
-  ContainerRegister,
-  WrapperRegister,
-  TitleRegister,
-  FormRegister,
-  InputRegister,
-  AgreementRegister,
-  ButtonRegister,
-  FilterID,
-  FilterIDOption,
-  StyledError,
-  Error,
+import { ContainerRegister, WrapperRegister, TitleRegister, FormRegister, InputRegister, AgreementRegister, ButtonRegister, FilterID, FilterIDOption, Error,
 } from "../components/Styled_components";
 
 import { connect } from "react-redux";

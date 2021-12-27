@@ -75,10 +75,7 @@ class CartController {
     cart.req_quantity = cartData.req_quantity;
     cart.state_cart = cartData.state_cart;
 
-    // const stocks = await Stock.findByIds(
-    //   cartData.stocks.map((value) => value.id)
-    // );
-    const stocks = await Stock.find({
+    const stock = await Stock.find({
       select: ["id"],
       where: [
         {
@@ -88,8 +85,18 @@ class CartController {
         },
       ],
     });
-    cart.stocks = stocks;
+    cart.stocks=stock[0];
 
+    const findStock = await Cart.find({where: [{stockId: stock[0] }]});
+
+    
+    
+    // if (findStock.length===0) {
+    //     console.log("no existe")
+    //   }else{
+    //      console.log("existe")
+    //   }
+   
     const user = await User.findOne(cartData.user.id);
     cart.user = user;
 
@@ -97,8 +104,10 @@ class CartController {
     cart.order = order;
 
     try {
-      const savedCart = await cart.save();
-      res.status(200).json(savedCart);
+      if (findStock.length===0){const savedCart = await cart.save();
+      res.status(200).json(savedCart);}else{
+        res.send(true)
+      }
     } catch (err) {
       res.status(500).json(err);
     }
