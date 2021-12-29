@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import Cart from "./pages/Cart";
 import Contact from "./pages/Contact";
 import Order from "./pages/Order";
+import Prueba from "./pages/modal";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 
@@ -36,7 +37,10 @@ const App = () => {
         </Route>
         <Route path="/order">
           <Order />
-        </Route>        
+        </Route>     
+        <Route path="/prueba">
+          <Prueba />
+        </Route>    
       </Switch>
     </Router>
   );

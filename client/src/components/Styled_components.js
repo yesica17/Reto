@@ -442,6 +442,16 @@ export const TopButtonCart = styled.button`
   color: ${(props) => props.type === "filled" && "white"};
 `;
 
+export const EditButton= styled.button`
+  padding: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  color: blue
+`;
+
+
 export const TopTexts = styled.div`
   ${mobile({ display: "none" })}
 `;

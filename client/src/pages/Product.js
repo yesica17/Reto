@@ -194,8 +194,7 @@ const Product = (props) => {
 //leer estados
 const mapStateToProps = (state) => ({
   product: state.product.product,
-  colors: state.options.colors,
-  sizes: state.options.sizes,
+  
 });
 
 //ejecutar acciones
