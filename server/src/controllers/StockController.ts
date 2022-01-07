@@ -80,6 +80,8 @@ class StockController {
     const product = await Product.findOne(stockData.product.id);
     stock.product = product;
 
+    console.log(stockData)
+
     try {
       const savedStock = await stock.save();
       res.status(200).json(savedStock);
@@ -91,7 +93,7 @@ class StockController {
   //--------Get all stock--------------
   public async getAllStock(req: express.Request, res: express.Response) {
     const stock = await Stock.find({
-      relations: ["products"],
+      relations: ["product"],
     });
     return res.send(stock);
   }

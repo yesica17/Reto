@@ -26,3 +26,19 @@ export const createContact = (payload) => {
       .catch((response) => console.error(response));
   };
 };
+
+export const updateAmount = (payload) => {
+  return async (dispatch, getState) => {
+    const data = {      
+      state_cart: true
+    };
+    console.log("payload", payload)
+    await SETData(`cart/amount/${payload}`, "PUT", data)
+      .then((response) => {
+        if (response !== null) {
+          console.log(response);
+        }
+      })
+      .catch((response) => console.error(response));
+  };
+};

@@ -29,6 +29,8 @@ class CartController {
     this.router.get(this.path + "/:id", this.getCart);
 
     this.router.put(this.path + "/:id", this.updateCart);
+    this.router.put(this.path + "/quantity"+"/:id", this.updateQuantity);
+     this.router.put(this.path + "/amount"+"/:id", this.updateAmount);
 
     this.router.delete(this.path + "/:id", this.deleteCart);
   }
@@ -87,15 +89,7 @@ class CartController {
     });
     cart.stocks=stock[0];
 
-    const findStock = await Cart.find({where: [{stockId: stock[0] }]});
-
-    
-    
-    // if (findStock.length===0) {
-    //     console.log("no existe")
-    //   }else{
-    //      console.log("existe")
-    //   }
+    const findStock = await Cart.find({where: [{stockId: stock[0], state_cart: true }]});   
    
     const user = await User.findOne(cartData.user.id);
     cart.user = user;
@@ -128,7 +122,29 @@ class CartController {
     return res.send(cart);
   }
 
-  //--------Calculate amount cart--------------
+  //--------Update quantity cart--------------
+  public async updateQuantity(req: express.Request, res: express.Response) {
+    const cartData = req.body;
+    const cart = await Cart.findOne(req.params.id);
+   if (cart !== undefined) {
+      await Cart.update(req.params.id, cartData);           
+      return res.status(200).send({ message: "Cart updated correctly" });
+    }
+    return res.status(404).send({ message: "Cart not found" });
+  } 
+
+  //--------Update amount cart--------------
+  public async updateAmount(req: express.Request, res: express.Response) {    
+    const cartData = req.body;
+    const cart = await Cart.findOne(req.params.id);
+   if (cart !== undefined) { 
+      await Cart.update(req.params.id, cartData);           
+      await Cart.update(req.params.id, { amount: cart.stocks.product.price*cart.req_quantity});   
+      
+      return res.status(200).send({ message: "Cart updated correctly" });
+    }
+    return res.status(404).send({ message: "Cart not found" });
+  } 
 
   //---------------Get cart---------------
   public async getCart(req: express.Request, res: express.Response) {
@@ -147,13 +163,13 @@ class CartController {
       const require = cart.req_quantity;
       const stock = await Stock.find({
         select: ["available_quantity"],
-        where: [{ id: cart.stocks[0].id }],
+        where: [{ id: cart.stocks.id }],
       });
-      const available = stock[0].available_quantity;
+      const available = stock[0].available_quantity;       
       const newStock = available - require;
-      console.log(newStock);
+     
 
-      await Stock.update(cart.stocks[0].id, { available_quantity: newStock });
+      await Stock.update(cart.stocks.id, { available_quantity: newStock });
 
       return res.status(200).send({ message: "Cart updated correctly" });
     }

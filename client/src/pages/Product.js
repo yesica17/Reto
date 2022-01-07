@@ -1,5 +1,7 @@
 import { Add, Remove } from "@material-ui/icons";
 import { useLocation } from "react-router-dom";
+import { Alert } from 'rsuite';
+import 'rsuite/dist/styles/rsuite-default.css';
 import Announcement from "../components/Announcement";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
@@ -15,12 +17,13 @@ import * as productActions from "../store/actions/product";
 import * as optionsActions from "../store/actions/options";
 
 import { Link } from "react-router-dom";
+import { Button } from "@material-ui/core";
 
 const Product = (props) => {
   const location = useLocation();
   const id = location.pathname.split("/")[2];
   const [quantity, setQuantity] = useState(1);
-  const [stock, setStock] = useState(1);
+  const [stock, setStock] = useState();
 
   const updateStock = () => {
     if (props.product && cart.size.id !== null && cart.color.id !== null) {
@@ -141,9 +144,7 @@ const Product = (props) => {
               ) : null}
             </FilterContainer>
             <AddContainer>
-              {cart.size.id !== null &&
-              cart.color.id !== null &&
-              stock !== 0 ? (
+             
                 <AmountContainer>
                   <Remove
                     onClick={() => {
@@ -165,7 +166,7 @@ const Product = (props) => {
                     }}
                   />
                 </AmountContainer>
-              ) : null}
+             
 
               <ButtonProd
                 onClick={async () => {
@@ -173,15 +174,16 @@ const Product = (props) => {
                     if (stock !== 0) {
                       await props.createCart(cart);
                     } else {
-                      alert("El producto no esta disponible!");
+                      Alert.error("El producto no esta disponible!");
                     }
                   } else {
-                    alert("Debe seleccionar una talla y color");
+                  Alert.warning("Debe seleccionar un color y una talla")
                   }
                 }}
               >
                 Agregar al carro
-              </ButtonProd>
+              </ButtonProd>              
+              
             </AddContainer>
           </InfoContainer>
         </WrapperProd>

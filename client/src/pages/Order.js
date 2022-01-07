@@ -21,17 +21,17 @@ const Order = (props) => {
           <TitleLogin>Resumen Compra</TitleLogin>
           <hr />
           {props.cart.map((value) =>
-            value.stocks.length ? (
+            value.stocks ? (
               <div>
-                <b>Id. {value.stocks[0].product.id}</b>{" "}
-                {value.stocks[0].product.styles[0].name}{" "}
-                {value.stocks[0].product.brands[0].name}{" "}
-                {value.stocks[0].product.categories[0].name}
+                <b>Id. {value.stocks.product.id}</b>{" "}
+                {value.stocks.product.styles[0].name}{" "}
+                {value.stocks.product.brands[0].name}{" "}
+                {value.stocks.product.categories[0].name}
                 <br />
                 <b>Talla:</b>
-                {value.stocks[0].size.size}
+                {value.stocks.size.size}
                 <br />
-                <ProductColor color={value.stocks[0].color.color} />
+                <ProductColor color={value.stocks.color.color} />
                 <br />
                 <hr />
               </div>

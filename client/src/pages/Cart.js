@@ -1,124 +1,100 @@
-import {Add, Remove, Edit} from "@material-ui/icons";
-import { Drawer } from 'rsuite';
+import {Add, Remove, Edit, WarningSharp, AssignmentLateSharp } from "@material-ui/icons";
+import { Drawer} from 'rsuite';
 import 'rsuite/dist/styles/rsuite-default.css';
+
 import Announcement from "../components/Announcement";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
-import {  ContainerCart,  WrapperCart,  TitleCart,  TopCart,  TopButtonCart, BottomCart,InfoCart, ProductCart, ProductDetail, ImageCart, DetailsCart, ProductName, ProductId, ProductColor, ProductSize, PriceDetail, ProductAmountContainer,  ProductAmount, ProductPrice, HrCart, Summary, SummaryTitle, SummaryItem,  SummaryItemText, SummaryItemPrice, ButtonCart, EditButton, ContainerProd, WrapperProd, ImgContainerProd, ImageProd, InfoContainer,
-  TitleProd, DescProd, Price, FilterContainer, Filter, FilterTitle, FilterColor,
-  FilterSize, FilterSizeOption, FilterColorOption, AmountContainer, Amount,  AddContainer, ButtonProd} from "../components/Styled_components";
+import Contact from "./Contact";
+import {  ContainerCart,  WrapperCart,  TitleCart,  TopCart,  TopButtonCart, BottomCart,InfoCart, ProductCart, ProductDetail, ImageCart, DetailsCart, ProductName, ProductId, ProductColor, ProductSize, PriceDetail, ProductAmountContainer,  ProductAmount, ProductPrice, HrCart, Summary, SummaryTitle, SummaryItem,  SummaryItemText, SummaryItemPrice, ButtonCart, EditButton,ImgContainerProd, InfoContainer, AmountContainer, Amount, ButtonProd} from "../components/Styled_components";
 
 import { useState, useEffect, Fragment } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
 import * as cartActions from "../store/actions/cart";
-import * as productActions from "../store/actions/product";
+
 
 const Cart = (props) => {       
 
-    const [cart, setCart] = useState(null);
-    const [open, setOpen] = useState(false); 
-    const [stock, setStock] = useState(1);
-    const [quantity, setQuantity] = useState(1);
+  const [cart, setCart] = useState(null);
+  const [open, setOpen] = useState(false);     
+  const [quantity, setQuantity] = useState(1);
+  const [openModal, setOpenModal] = useState(false);      
+  const [state, setState] = useState(null);
 
-    useEffect(() => {
-      props.loadCart();
-      
-      
-    }, []);    
-if(props.cart){console.log(props.cart.map(value=>value.stocks.available_quantity))}
-  
-
-  const updateStock = () => {
-    if (props.cart){      
-      setStock(
-        props.cart.map(value=>value.stocks.available_quantity
-      ))
-    }
-  };
+  useEffect(() => {
+    props.loadCart();  
     
-const amount = props.cart
-      .map((value) => value.req_quantity * value.stocks.product.price)
-      .reduce((a, b) => a + b, 0);
-
-const handleQuantity = (type) => {
-    if (type === "inc") {
-       if (quantity < stock) {
-        setQuantity(quantity + 1);
-      
-    } else {
-      quantity > 1 && setQuantity(quantity - 1);
-    }
-  }}
+  }, []);    
+  
+  const amount = props.cart.filter(value=>value.stocks.available_quantity!==0 && value.req_quantity<= value.stocks.available_quantity).map((value) => value.req_quantity * value.stocks.product.price)
+        .reduce((a, b) => a + b, 0);
+  
+  const stateCart=props.cart.filter( value=>value.req_quantity > value.stocks.available_quantity);
+ 
+  
 
   return (   
     <Fragment>
-      {cart?
-      <Drawer placement='right' show={open} onHide={() => setOpen(false)}>
+      {cart?      
+      <Drawer 
+        placement='right' size='xs' 
+        onEnter={()=>{
+          if (!(cart.req_quantity<cart.stocks.available_quantity)){            
+            setQuantity(cart.stocks.available_quantity);                      
+            setCart({...cart, req_quantity: cart.stocks.available_quantity});}
+        }}
+        show={open} 
+        onHide={() => setOpen(false)}>
             <Drawer.Header>
-                  <Drawer.Title>{cart.stocks.id}{cart.stocks.product.styles[0].name}{" "}
+                  <Drawer.Title>{cart.stocks.product.styles[0].name}{" "}
                                             {cart.stocks.product.brands[0].name}{" "}
                                             {cart.stocks.product.categories[0].name}
                   </Drawer.Title>
             </Drawer.Header>
             <Drawer.Body>
-                  
-                  <WrapperProd>
-          <ImgContainerProd>
-            <ImageProd src={cart.stocks.product.img}/>
-          </ImgContainerProd>
-          <InfoContainer>         
-            <AddContainer>
-              
-                <AmountContainer>
-                  <Remove
-                    onClick={() => {
-                      handleQuantity("dec");
-                      setCart({
-                        ...cart,
-                        req_quantity: quantity,
-                      });
-                    }}
-                  />
-                  <Amount>{quantity}</Amount>
-                  <Add
-                    onClick={async() => {
-                      await updateStock();
-                      await handleQuantity("inc");
-                      setCart({
-                        ...cart,
-                        req_quantity: quantity,
-                      });
-                    }}
-                  />
-                </AmountContainer>             
+                <ImgContainerProd>
+                      <ImageCart src={cart.stocks.product.img} />
+                </ImgContainerProd>
+                <br/>
+              <InfoContainer>
+                {cart.stocks.available_quantity>0?(
+                  <AmountContainer>
+                      <Remove onClick={async() => {await quantity > 1 && 
+                            setQuantity(quantity - 1);                      
+                            setCart({...cart, req_quantity: quantity-1,}); }}/>
 
-              <ButtonProd
-                onClick={async () => {
-                  if (cart.size.id !== null && cart.color.id !== null) {
-                    if (stock !== 0) {
-                      await props.createCart(cart);
-                    } else {
-                      alert("El producto no esta disponible!");
-                    }
-                  } else {
-                    alert("Debe seleccionar una talla y color");
-                  }
-                }}
-              >
-                Agregar al carro
-              </ButtonProd>
-            </AddContainer>
-          </InfoContainer>
-        </WrapperProd>
+                      {cart.req_quantity<cart.stocks.available_quantity ?( 
+                      <Amount>{quantity}</Amount>):<Amount>{
+                          cart.stocks.available_quantity}</Amount>}
+                      <Add onClick={async() => {
+                            if (quantity < cart.stocks.available_quantity) {
+                              await setQuantity(quantity + 1)};
+                              setCart({
+                                ...cart,
+                                req_quantity: quantity+1, });
+                            }} />
+                  </AmountContainer>):null}            
+                  <br/>
+                  <ProductId>
+                      <b>Cantidad disponible:</b> {cart.stocks.available_quantity}
+                  </ProductId>
+                  <br/><br/>
+                  <ButtonProd onClick={async () => {
+                        await props.updateCart(cart);
+                        }}> Actualizar </ButtonProd>
+              
+              </InfoContainer>
+        
             </Drawer.Body>
-      </Drawer> : null}        
+      </Drawer> : null}  
+      
       <ContainerCart>
         <Navbar />
         <Announcement />
         {props.cart.length ? (
-          <WrapperCart>
+          <WrapperCart >
             <TitleCart>Carrito de Compras</TitleCart>
             <TopCart>
               <Link to="/">
@@ -126,13 +102,11 @@ const handleQuantity = (type) => {
               </Link>
               <TopButtonCart type="filled">COMPRAR AHORA</TopButtonCart>
             </TopCart>
-            <BottomCart>
-              <InfoCart>
-                  {props.cart.map((value) =>
-                      
+            <BottomCart>              
+                  <InfoCart>
+                      { props.cart.map((value) =>                     
                           <ProductCart >
-                              <ProductDetail>
-                              
+                              <ProductDetail>                              
                                   <ImageCart src={value.stocks.product.img} />
                                   <DetailsCart>
                                       <ProductName>
@@ -148,58 +122,82 @@ const handleQuantity = (type) => {
                                       <ProductSize>
                                           <b>Talla:</b> {value.stocks.size.size}
                                       </ProductSize>
-                                      <TopButtonCart 
-                                          onClick={async () => {
+                                      <TopButtonCart onClick={async () => {
                                             await props.deleteCart(value.id);
                                             await props.loadCart();
-                                          }}
-                                      >
-                                        Eliminar producto
+                                          }}>Eliminar producto
                                       </TopButtonCart>
                                   </DetailsCart>
-                                </ProductDetail>
-                                <PriceDetail>
-                                  
-                                  <EditButton onClick={()=>{
-                                    setCart(value);
-                                    setOpen(true);
-                                    }
-                                }>Edit this product{" "}<Edit style={{ color: "blue", fontSize: 16 }} ></Edit></EditButton>
+                                  </ProductDetail>
+                                      {value.req_quantity<= value.stocks.available_quantity ?(<PriceDetail>                                 
+                                          <ProductAmountContainer>                  
+                                              <ProductAmount> <b>Cantidad: 
+                                                {value.req_quantity}</b>
+                                              </ProductAmount><br/>
+                                              <EditButton onClick={()=>{
+                                                    setCart(value);
+                                                    setQuantity(value.req_quantity)
+                                                    setOpen(true);
+                                                    }}>Cambiar{" "}<Edit style={{ fontSize: 16 }} ></Edit>
+                                                    </EditButton>
+                                            </ProductAmountContainer>             
+                                            <ProductPrice> <b>Precio por unidad: 
+                                                  $ {(value.stocks.product.price/ 1000).toFixed(3)}{" "}</b>
+                                            </ProductPrice>
+                                            <ProductPrice> <b>Subtotal: 
+                                                  $ {(value.req_quantity*value.stocks.product.price/ 1000).toFixed(3)}{" "}</b>
+                                              </ProductPrice>
+                                        </PriceDetail>):
+                                        <PriceDetail>                                 
+                                          {value.stocks.available_quantity!==0 ?(
+                                            <ProductAmountContainer>                   
+                                                <ProductAmount style={{ color: "gainsboro" }} >Cantidad: {value.req_quantity}
+                                                <EditButton onClick={()=>{
+                                                      setCart(value);
+                                                      setQuantity(value.req_quantity)
+                                                      setOpen(true);
+                                                      }}>Cambiar{" "}
+                                                  <Edit style={{fontSize: 16 }} ></Edit>
+                                                </EditButton>
+                                                </ProductAmount>
+                                              </ProductAmountContainer>): 
+                                                  <ProductAmount style={{fontSize: 25, fontWeight: "bold" }} ><AssignmentLateSharp style={{color: "black", fontSize: 20}} /> Agotado  
+                                                  </ProductAmount>}
+                                                  <ProductAmount>La cantidad requerida ya no se encuentra disponible. Actualice la cantidad solicitada o descarte este producto.  <WarningSharp style={{color: "gold", fontSize: 18 }} /> </ProductAmount>                       
+                                        </PriceDetail>}
+                            </ProductCart>)}
+                    <HrCart/>       
+                  </InfoCart>
+           
+            <Summary>
+              <SummaryTitle>RESUMEN ORDEN</SummaryTitle>
 
-                                                        
-                                  
-                                  <ProductAmountContainer>                             
-                                    <ProductAmount>{value.req_quantity}</ProductAmount>
-                                    </ProductAmountContainer>
-                                  <ProductPrice>
-                                    $ {(value.stocks.product.price / 1000).toFixed(3)}{" "}
-                                  </ProductPrice>
-                              </PriceDetail>
-                          </ProductCart>
-                      
-                      )}
-                <HrCart />
-              </InfoCart>
-              <Summary>
-                <SummaryTitle>RESUMEN ORDEN</SummaryTitle>
+              <SummaryItem type="total">
+                <SummaryItemText>Total</SummaryItemText>
 
-                <SummaryItem type="total">
-                  <SummaryItemText>Total</SummaryItemText>
-
-                  <SummaryItemPrice>
-                    $ {(amount / 1000).toFixed(3)}
-                  </SummaryItemPrice>
-                </SummaryItem>
-                <Link to="/contact">
-                  <ButtonCart>COMPRAR AHORA</ButtonCart>
-                </Link>
-              </Summary>
+                <SummaryItemPrice>
+                  $ {(amount / 1000).toFixed(3)}
+                </SummaryItemPrice>
+              </SummaryItem>
+              
+                <ButtonCart onClick={async()=>{setOpenModal(true);                    
+                    await stateCart.map(value=>setState(value));
+                    console.log("estado",state);        
+                    if(state){setState({...state, state_cart: false});
+                    console.log(state);
+                    await props.updateCart(state);
+                   }}}>COMPRAR AHORA
+                </ButtonCart>
+              
+            </Summary>
             </BottomCart>
           </WrapperCart>
         ) : null}
         <Footer />
       </ContainerCart>
-      </Fragment>
+       
+      <Contact open={openModal} setOpen={setOpenModal}></Contact>
+    </Fragment>
       
   );
 };
@@ -207,15 +205,14 @@ const handleQuantity = (type) => {
 //leer estados
 const mapStateToProps = (state) => ({
   cart: state.cart.cart,
-   product: state.product.product,
+   
 });
 
 //ejecutar acciones
 const mapDispatchToProps = (dispatch) => ({
-  loadCart: () => dispatch(cartActions.loadCart()),
-  loadProduct: (payload) => dispatch(productActions.loadProduct(payload)),
-  deleteCart: (payload) => dispatch(cartActions.deleteCart(payload)),
-  setCart: (payload) => dispatch(cartActions.setCart(payload)),
+  loadCart: () => dispatch(cartActions.loadCart()), 
+  deleteCart: (payload) => dispatch(cartActions.deleteCart(payload)),  
+  updateCart: (payload) => dispatch(cartActions.updateCart(payload)),  
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cart);

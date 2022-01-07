@@ -70,16 +70,24 @@ class OrderController {
   public async createOrder(req: express.Request, res: express.Response) {
     const orderData = req.body;
     const order = new Order();
-    order.amount = orderData.amount;
-    const contact = await UserContact.findOne(orderData.contact.id);
 
-    order.contact = contact;
-    //const state_cart = await Cart.find({ select: ["state_cart"] });
+    const prueba=await UserContact.find({where: { userId: orderData.user.id},});
+    
+    const contact = prueba.map(value=>value)[0]
+    order.contact = contact;  
+
+    
+
+    //console.log(contact.users.id)
+
+    console.log(prueba)
 
     const orders = await Cart.find({
-      where: { userId: contact.users.id, state_cart: true },
+      where: { userId: orderData.user.id, state_cart: true },
     });
     order.carts = orders;
+    order.amount = orders.map((value) => value.amount)
+      .reduce((a, b) => a + b, 0);    
 
     try {
       const savedOrder = await order.save();
@@ -106,10 +114,10 @@ class OrderController {
     const order = await Order.findOne(req.params.id);
     if (order !== undefined) {
       await Order.update(req.params.id, req.body);
-      return res.status(200).send({ message: "Cart updated correctly" });
+      return res.status(200).send({ message: "Order updated correctly" });
     }
 
-    return res.status(404).send({ message: "Cart not found" });
+    return res.status(404).send({ message: "Order not found" });
   }
 
   //-------------------Delete order---------------------

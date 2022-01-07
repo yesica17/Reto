@@ -1,4 +1,3 @@
-import { popularProducts } from "../data";
 import Product from "./Product";
 import { ContainerProducts } from "./Styled_components";
 
@@ -9,17 +8,17 @@ import { connect } from "react-redux";
 import * as homeActions from "../store/actions/home";
 
 const Products = (props) => {
+
+   const [filteredProducts, setFilteredProducts] = useState();
+  
   useEffect(() => {
     props.loadProducts();
-  }, []);
+  }, []); 
 
   return (
     <ContainerProducts>
       {props.products.length
-        ? //popularProducts.map((item) => <Product item={item} key={item.id} />)
-          props.products.map((value) => (
-            // <h1 key={value.id}>{value.styles[0].name}</h1>
-            //<h1 key={value.id}>{value.img}</h1>
+        ?  props.products.map((value) => (            
             <Product value={value} key={value.id} />
           ))
         : null}

@@ -40,7 +40,10 @@ const App = () => {
         </Route>     
         <Route path="/prueba">
           <Prueba />
-        </Route>    
+        </Route>  
+        <Route path="/products/:category">
+          <ProductList />
+        </Route>  
       </Switch>
     </Router>
   );

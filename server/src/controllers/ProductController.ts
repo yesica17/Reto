@@ -99,12 +99,13 @@ class ProductController {
   }
 
   //--------Get all products--------------
-  public async getAllProduct(req: express.Request, res: express.Response) {
+  public async getAllProduct(req: express.Request, res: express.Response) {     
     const products = await Product.find({
-      relations: ["stock"],
-    });
+      relations: ["stock"],      
+    });    
     return res.send(products);
   }
+  
 
   //--------Get all category--------------
   public async getAllCategory(req: express.Request, res: express.Response) {

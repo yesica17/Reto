@@ -22,9 +22,12 @@ export class UserContact extends BaseEntity {
   @Column({ type: "varchar", length: 100 })
   adress: string;
 
+  @Column({ name: "user_id" })
+  userId: number;
+
   @OneToOne(() => User, {
     eager: true,
   })
-  @JoinColumn()
+  @JoinColumn({ name: "user_id" })
   users: User;
 }

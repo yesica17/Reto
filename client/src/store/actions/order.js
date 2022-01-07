@@ -11,8 +11,7 @@ export const setOrder = (payload) => {
 export const createOrder = () => {
   return async (dispatch, getState) => {
     const data = {
-      contact: { id: 4 },
-      amount: 100,
+      user: { id: 4 }      
     };
     await SETData(`order`, "POST", data)
       .then((response) => {
@@ -29,6 +28,7 @@ export const updateStock = (payload) => {
     const data = {
       state_cart: false,
     };
+    
     await SETData(`cart/${payload}`, "PUT", data)
       .then((response) => {
         if (response !== null) {

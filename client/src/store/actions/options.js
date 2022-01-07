@@ -69,3 +69,43 @@ export const loadSize = () => {
       .catch((response) => console.error(response));
   };
 };
+
+export const setBrand = (payload) => {
+  return {
+    type: creators.SET_BRAND,
+    payload,
+  };
+};
+
+export const loadBrand = () => {
+  return async (dispatch, getState) => {
+    await GETData(`product/brand`, "GET")
+      .then((response) => {
+        if (response !== null) {
+          dispatch(setBrand(response));   
+               
+        }
+      })
+      .catch((response) => console.error(response));
+  };
+};
+
+export const setStyle = (payload) => {
+  return {
+    type: creators.SET_STYLE,
+    payload,
+  };
+};
+
+export const loadStyle = () => {
+  return async (dispatch, getState) => {
+    await GETData(`product/style`, "GET")
+      .then((response) => {
+        if (response !== null) {
+          dispatch(setStyle(response));   
+               
+        }
+      })
+      .catch((response) => console.error(response));
+  };
+};

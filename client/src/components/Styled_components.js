@@ -148,7 +148,7 @@ export const InfoProduct = styled.div`
   left: 0;
   background-color: rgba(0, 0, 0, 0.2);
   z-index: 3;
-  display: flex;
+  display: flex;  
   align-items: center;
   justify-content: center;
   transition: all 0.5s ease;
@@ -159,11 +159,12 @@ export const ContainerProduct = styled.div`
   flex: 1;
   margin: 5px;
   min-width: 280px;
-  height: 350px;
-  display: flex;
+  height: 450px;
+  display: flex;  
+  flex-direction: column;  
   align-items: center;
-  justify-content: center;
-  background-color: #f5fbfd;
+  justify-content: center;  
+  background-color: white;
   position: relative;
   &:hover ${InfoProduct} {
     opacity: 1;
@@ -197,6 +198,23 @@ export const IconProduct = styled.div`
     background-color: #e9f5f5;
     transform: scale(1.1);
   }
+`;
+
+export const ColorOption = styled.div`
+  width: 20px;
+  height: 20px;   
+  border-radius: 50%;
+  border-width: 1px;
+  border-style: solid;
+  border-color: black;
+  background-color: ${(props) => props.color};
+  margin: 0px 5px;
+  cursor: pointer;
+`;
+
+export const FilterList= styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 //-------------Products-----------------
@@ -317,7 +335,7 @@ export const FormLogin = styled.div`
 
 export const InputLogin = styled.input`
   flex: 1;
-  min-width: 40%;
+  min-width: 10%;
   margin: 10px 0;
   padding: 10px;
 `;
@@ -448,7 +466,7 @@ export const EditButton= styled.button`
   cursor: pointer;
   border: none;
   background-color: transparent;
-  color: blue
+  color: DarkBlue
 `;
 
 
@@ -469,6 +487,7 @@ export const BottomCart = styled.div`
 
 export const InfoCart = styled.div`
   flex: 3;
+ 
 `;
 
 export const ProductCart = styled.div`
@@ -521,13 +540,13 @@ export const ProductAmountContainer = styled.div`
 `;
 
 export const ProductAmount = styled.div`
-  font-size: 24px;
+  font-size: 14px;
   margin: 10px;
   ${mobile({ margin: "5px 15px" })}
 `;
 
 export const ProductPrice = styled.div`
-  font-size: 30px;
+  font-size: 16px;
   font-weight: 200;
   ${mobile({ marginBottom: "20px" })}
 `;

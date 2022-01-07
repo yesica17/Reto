@@ -3,23 +3,22 @@ import { useState, useEffect, Fragment } from "react";
 import 'rsuite/dist/styles/rsuite-default.css';
 
 
-const Prueba = () => {
-  const [open, setOpen] = useState(false);
+const Prueba = (props) => {
+  
 
   
   return (
-    <Fragment>
-      <Button onClick={()=>setOpen(true)}>Pinoccio</Button>
+      
 
-      <Drawer placement='right' show={open} onHide={() => setOpen(false)}>
-        <Drawer.Header>
-          <Drawer.Title>Drawer Title</Drawer.Title>
-        </Drawer.Header>
-        <Drawer.Body>
+      <Modal show={props.open} onHide={() => props.setOpen(false)}>
+        <Modal.Header>
+          <Modal.Title>Drawer Title</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
           dfhgiudsfbgidfgbidufh
-        </Drawer.Body>
-      </Drawer>
-    </Fragment>
+        </Modal.Body>
+      </Modal>
+    
   );
 };
 

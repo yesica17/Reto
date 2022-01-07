@@ -1,6 +1,9 @@
 import * as creators from "../creators/product";
 import { GETData, SETData } from "../../services/WebServices";
 
+import { Alert } from 'rsuite';
+import 'rsuite/dist/styles/rsuite-default.css';
+
 export const setProduct = (payload) => {
   return {
     type: creators.SET_DETAIL_PRODUCT,
@@ -35,11 +38,11 @@ export const createCart = (payload) => {
    
     await SETData(`cart`, "POST", stock)
       .then((response) => {
-        if (response !== null) {
+        if (response !== null) {          
           console.log(response);
           if(response==true){
-            alert("El producto ya fue agregado")
-          }
+            Alert.error("El producto ya fue agregado")
+          }else{Alert.success("El producto ha sido agregado al carrito")}
         } 
       })
       .catch((response) => console.error(response));
