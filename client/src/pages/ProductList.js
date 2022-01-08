@@ -60,9 +60,10 @@ const ProductList = (props) => {
     props.loadSize();
     props.loadBrand();
     props.loadStyle();
+    props.loadCategory();
   }, []);
  
-console.log(filters)
+//console.log(filters)
 
   return (
     <Container>
@@ -72,10 +73,21 @@ console.log(filters)
       <FilterContainer>
         <Filter>
           <FilterText>Filtrar Productos:</FilterText>
+
+          <FilterColor name="category"  onClick={handleFilters}>
+                  {props.categories.length
+                    ? props.categories.map((value) => (
+                        <FilterColorOption value={value.id} key={value.id}>
+                          {value.name}
+                        </FilterColorOption>
+                      ))
+                    : null}
+            </FilterColor>
+
            <FilterColor name="color"  onClick={handleFilters}>
                   {props.colors.length
                     ? props.colors.map((value) => (
-                        <FilterColorOption value={value.color} key={value.id}>
+                        <FilterColorOption value={value.id} key={value.id}>
                           {value.color}
                         </FilterColorOption>
                       ))
@@ -85,12 +97,24 @@ console.log(filters)
             <FilterColor name="size"  onClick={handleFilters}>
                   {props.sizes.length
                     ? props.sizes.map((value) => (
-                        <FilterColorOption value={value.size} key={value.id}>
+                        <FilterColorOption value={value.id} key={value.id}>
                           {value.size}
                         </FilterColorOption>
                       ))
                     : null}
             </FilterColor>
+
+            <FilterColor name="brand"  onClick={handleFilters}>
+                  {props.brands.length
+                    ? props.brands.map((value) => (
+                        <FilterColorOption value={value.id} key={value.id}>
+                          {value.name}
+                        </FilterColorOption>
+                      ))
+                    : null}
+            </FilterColor>
+
+            
 
             
           
@@ -105,7 +129,7 @@ console.log(filters)
           </Select>
         </Filter>
       </FilterContainer>
-      <Products/>      
+      <Products cat={cat} filters={filters}/>      
       <Footer />
     </Container>
   );
@@ -117,6 +141,7 @@ const mapStateToProps = (state) => ({
   sizes: state.options.sizes,
   brands: state.options.brands,
   styles: state.options.styles,
+  categories: state.options.categories,
 });
 
 //ejecutar acciones
@@ -125,6 +150,7 @@ const mapDispatchToProps = (dispatch) => ({
   loadSize: () => dispatch(optionsActions.loadSize()),  
   loadBrand: () => dispatch(optionsActions.loadBrand()),  
   loadStyle: () => dispatch(optionsActions.loadStyle()),  
+  loadCategory: () => dispatch(optionsActions.loadCategory()),  
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductList);

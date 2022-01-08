@@ -6,6 +6,7 @@ const initialState = {
   sizes: [],
   brands:[],
   styles: [],
+  categories: []
 };
 
 const optionsReducer = (state = initialState, { type, payload }) => {
@@ -24,6 +25,9 @@ const optionsReducer = (state = initialState, { type, payload }) => {
     
     case creators.SET_STYLE:
       return { ...state, styles: payload };
+
+    case creators.SET_CATEGORY:
+      return { ...state, categories: payload };
 
     default:
       return state;

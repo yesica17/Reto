@@ -38,6 +38,9 @@ export class Product extends BaseEntity {
   @UpdateDateColumn()
   updated_at: "string";
 
+  @Column({ type: "int", nullable: true})
+  views: number;
+
   @ManyToMany(() => Category, {
     eager: true,
     //cascade: true,

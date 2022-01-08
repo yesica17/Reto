@@ -23,7 +23,7 @@ const Product = (props) => {
   const location = useLocation();
   const id = location.pathname.split("/")[2];
   const [quantity, setQuantity] = useState(1);
-  const [stock, setStock] = useState();
+  const [stock, setStock] = useState(); 
 
   const updateStock = () => {
     if (props.product && cart.size.id !== null && cart.color.id !== null) {
@@ -38,9 +38,17 @@ const Product = (props) => {
     }
   };
 
-  useEffect(() => {
-    props.loadProduct(id);
+  useEffect( async () => {
+    await props.loadProduct(id);
+    
+    
   }, []);
+
+  if(props.product){const views= { 
+    id: id,
+    views: props.product.views + 1,   
+  };       
+    props.updateViews(views);}
 
   const handleQuantity = (type) => {
     if (type === "inc") {
@@ -203,6 +211,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   loadProduct: (payload) => dispatch(productActions.loadProduct(payload)),
   createCart: (payload) => dispatch(productActions.createCart(payload)),
+  updateViews: (payload) => dispatch(productActions.updateViews(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Product);

@@ -29,9 +29,7 @@ class ProductController {
     this.router.get(this.path + "/style", this.getAllStyle);
     this.router.get(this.path + "/brand", this.getAllBrand);
     this.router.get(this.path + "/:id", this.getProduct);
-
-    this.router.put(this.path + "/:id", this.updateProduct);
-
+    this.router.put(this.path + "/:id", this.updateProduct);    
     this.router.delete(this.path + "/:id", this.deleteProduct);
   }
 
@@ -101,7 +99,8 @@ class ProductController {
   //--------Get all products--------------
   public async getAllProduct(req: express.Request, res: express.Response) {     
     const products = await Product.find({
-      relations: ["stock"],      
+      relations: ["stock"],  
+      order:{views: "DESC"}    
     });    
     return res.send(products);
   }
@@ -149,6 +148,9 @@ class ProductController {
     Product.delete(req.params.id);
     return res.status(200).send({ message: "Product deleted successfully" });
   }
+
+
+
 }
 
 export default ProductController;

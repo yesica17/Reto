@@ -48,3 +48,18 @@ export const createCart = (payload) => {
       .catch((response) => console.error(response));
   };
 };
+
+export const updateViews = (payload) => {
+  return async (dispatch, getState) => {
+    const data = {
+      views: payload.views,      
+    };
+    await SETData(`product/${payload.id}`, "PUT", data)
+      .then((response) => {
+        if (response !== null) {
+          console.log(response);          
+        }
+      })
+      .catch((response) => console.error(response));
+  };
+};

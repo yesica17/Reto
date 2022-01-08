@@ -109,3 +109,23 @@ export const loadStyle = () => {
       .catch((response) => console.error(response));
   };
 };
+
+export const setCategory = (payload) => {
+  return {
+    type: creators.SET_CATEGORY,
+    payload,
+  };
+};
+
+export const loadCategory = () => {
+  return async (dispatch, getState) => {
+    await GETData(`product/category`, "GET")
+      .then((response) => {
+        if (response !== null) {
+          dispatch(setCategory(response));   
+               
+        }
+      })
+      .catch((response) => console.error(response));
+  };
+};

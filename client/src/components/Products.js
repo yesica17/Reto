@@ -9,19 +9,43 @@ import * as homeActions from "../store/actions/home";
 
 const Products = (props) => {
 
-   const [filteredProducts, setFilteredProducts] = useState();
+   const [filteredProducts, setFilteredProducts] = useState();   
   
   useEffect(() => {
     props.loadProducts();
   }, []); 
 
+  const isInArrayStock = (array, colorId, sizeId, categoryId, brandId) =>{
+  let flag = false;
+  array.forEach(element => {
+    if((element.colorId == colorId || colorId == undefined) && (element.colorId == sizeId || sizeId == undefined) && (element.product.categories[0].id == categoryId || categoryId == undefined) && (element.product.brands[0].id == brandId || brandId == undefined) ){
+      flag = true;          
+    }
+  });    
+  return flag;
+};
+
+  useEffect(() => {
+    props.products.length && props.filters &&
+      setFilteredProducts(
+        props.products.filter(element=>isInArrayStock(element.stock, props.filters.color, props.filters.size, props.filters.category, props.filters.brand))
+      );
+  }, [props.products, props.filters, props.cat]);
+  
+
   return (
     <ContainerProducts>
-      {props.products.length
-        ?  props.products.map((value) => (            
+      {  props.cat 
+      // ? filteredProducts.map((value) => (            
+      //       <Product value={value} key={value.id} />
+      //     ))
+      ? props.products.map((value) => (            
             <Product value={value} key={value.id} />
           ))
-        : null}
+      : props.products.slice(0,2).map((value) => (            
+            <Product value={value} key={value.id} />
+          ))
+        }
     </ContainerProducts>
   );
 };
