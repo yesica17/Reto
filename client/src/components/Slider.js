@@ -12,6 +12,7 @@ import {
   TitleSlider,
   DescSlider,
   ButtonSlider,
+  DescCollection
 } from "./Styled_components";
 import { sliderItems } from "../data";
 
@@ -19,9 +20,9 @@ const Slider = (props) => {
   const [slideIndex, setSlideIndex] = useState(0);
   const handleClick = (direction) => {
     if (direction === "left") {
-      setSlideIndex(slideIndex > 0 ? slideIndex - 1 : 2);
+      setSlideIndex(slideIndex > 0 ? slideIndex - 1 : 1);
     } else {
-      setSlideIndex(slideIndex < 2 ? slideIndex + 1 : 0);
+      setSlideIndex(slideIndex < 1 ? slideIndex + 1 : 0);
     }
   };
 
@@ -32,12 +33,11 @@ const Slider = (props) => {
       </ArrowSlider>
       <WrapperSlider slideIndex={slideIndex}>
         {sliderItems.map((item) => (
-          <Slide bg={item.bg} key={item.id}>
-            <ImgContainerSlider>
-              <ImageSlider src={item.img} />
-            </ImgContainerSlider>
-            <InfoContainerSlider>
+          
+          <Slide img={item.img} key={item.id}>            
+            <InfoContainerSlider>              
               <TitleSlider>{item.title}</TitleSlider>
+              <DescCollection>{item.collection}</DescCollection>
               <DescSlider>{item.desc}</DescSlider>
 
               <ButtonSlider>VER AHORA</ButtonSlider>

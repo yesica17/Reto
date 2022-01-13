@@ -1,5 +1,8 @@
 import styled from "styled-components";
-import { FilterColor, FilterColorOption, FilterSize, FilterSizeOption} from "../components/Styled_components";
+import { SearchContainerNavbar, InputNavbar, LeftNavbar} from "../components/Styled_components";
+import { Search} from "@material-ui/icons";
+import { CheckPicker } from 'rsuite';
+import 'rsuite/dist/styles/rsuite-default.css';
 import Navbar from "../components/Navbar";
 import Announcement from "../components/Announcement";
 import Products from "../components/Products";
@@ -44,8 +47,17 @@ const Option = styled.option``;
 const ProductList = (props) => {
   const location = useLocation();
   const cat = location.pathname.split("/")[2];
-  const [filters, setFilters] = useState({});
-  const [sort, setSort] = useState("newest");
+
+  const filters_init={
+    color:[],
+    size:[],
+    category:"",
+    brand:[],
+    search:""
+  }
+  
+  const [filters, setFilters] = useState(filters_init);
+  
 
   const handleFilters = (e) => {
     const value = e.target.value;
@@ -61,73 +73,57 @@ const ProductList = (props) => {
     props.loadBrand();
     props.loadStyle();
     props.loadCategory();
+    
   }, []);
- 
-//console.log(filters)
+
+  console.log(filters)
 
   return (
     <Container>
       <Navbar />
-      <Announcement />
-      <Title>{cat}</Title>
+      <Announcement /><br/>
+      <LeftNavbar>
+      <SearchContainerNavbar>
+            <InputNavbar placeholder="Búsqueda"  name="search" onChange={handleFilters} />   <Search style={{ color: "gray", fontSize: 16 }} />         
+      </SearchContainerNavbar>  
+      </LeftNavbar>        
       <FilterContainer>
         <Filter>
           <FilterText>Filtrar Productos:</FilterText>
-
-          <FilterColor name="category"  onClick={handleFilters}>
-                  {props.categories.length
-                    ? props.categories.map((value) => (
-                        <FilterColorOption value={value.id} key={value.id}>
-                          {value.name}
-                        </FilterColorOption>
-                      ))
-                    : null}
-            </FilterColor>
-
-           <FilterColor name="color"  onClick={handleFilters}>
-                  {props.colors.length
-                    ? props.colors.map((value) => (
-                        <FilterColorOption value={value.id} key={value.id}>
-                          {value.color}
-                        </FilterColorOption>
-                      ))
-                    : null}
-            </FilterColor>
-
-            <FilterColor name="size"  onClick={handleFilters}>
-                  {props.sizes.length
-                    ? props.sizes.map((value) => (
-                        <FilterColorOption value={value.id} key={value.id}>
-                          {value.size}
-                        </FilterColorOption>
-                      ))
-                    : null}
-            </FilterColor>
-
-            <FilterColor name="brand"  onClick={handleFilters}>
-                  {props.brands.length
-                    ? props.brands.map((value) => (
-                        <FilterColorOption value={value.id} key={value.id}>
-                          {value.name}
-                        </FilterColorOption>
-                      ))
-                    : null}
-            </FilterColor>
-
-            
-
-            
           
-          
-        </Filter>
-        <Filter>
-          <FilterText>Sort Products:</FilterText>
-          <Select onChange={(e) => setSort(e.target.value)}>
-            <Option value="newest">Newest</Option>
-            <Option value="asc">Price (asc)</Option>
-            <Option value="desc">Price (desc)</Option>
-          </Select>
-        </Filter>
+              <CheckPicker
+                                    
+                  style={{width: 150}}
+                  data={props.colors}
+                  labelKey="color"
+                  valueKey="id"
+                  size="sm"
+                  searchable={false}
+                  placeholder="Color"
+                  onChange={ value => { setFilters({ ...filters, color: value }) }} />  {" "}
+
+                  <CheckPicker
+                                    
+                  style={{width: 150}}
+                  data={props.sizes}
+                  labelKey="size"
+                  valueKey="id"
+                  size="sm"
+                  searchable={false}
+                  placeholder="Talla"
+                  onChange={ value => { setFilters({ ...filters, size: value }) }} />    {" "}
+
+                  <CheckPicker
+                                    
+                  style={{width: 150}}
+                  data={props.brands}
+                  labelKey="name"
+                  valueKey="id"
+                  size="sm"
+                  searchable={false}
+                  placeholder="Marca"
+                  onChange={ value => { setFilters({ ...filters, brand: value }) }} />            
+        </Filter>        
       </FilterContainer>
       <Products cat={cat} filters={filters}/>      
       <Footer />

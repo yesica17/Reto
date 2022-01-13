@@ -12,7 +12,7 @@ const Product = (props) => {
   
   
   return (
-    <ContainerProduct>      
+    <ContainerProduct>          
       <ImageProduct src={props.value.img} />     
       <InfoProduct>
         <IconProduct>

@@ -16,6 +16,7 @@ export const ContainerAnnouncement = styled.div`
 // -------------------------------Footer-----------------------
 export const ContainerFooter = styled.div`
   display: flex;
+  background-color: black;
   ${mobile({ flexDirection: "column" })}
 `;
 
@@ -26,11 +27,14 @@ export const LeftFooter = styled.div`
   padding: 20px;
 `;
 
-export const LogoFooter = styled.h1``;
+export const LogoFooter = styled.h5`
+color: white;
+`;
 
 export const DescFooter = styled.p`
   margin: 20px 0px;
-  text-align: justify;
+  text-align: justify;  
+  
 `;
 
 export const SocialContainerFooter = styled.div`
@@ -51,12 +55,13 @@ export const SocialIconFooter = styled.div`
 
 export const CenterFooter = styled.div`
   flex: 1;
-  padding: 20px;
+  padding: 10px;
   ${mobile({ display: "none" })}
 `;
 
-export const TitleFooter = styled.h3`
+export const TitleFooter = styled.h5`
   margin-bottom: 30px;
+  color: white;
 `;
 export const RightFooter = styled.div`
   flex: 1;
@@ -90,12 +95,6 @@ export const LeftNavbar = styled.div`
   align-items: center;
 `;
 
-export const GenreNavbar = styled.span`
-  font-size: 14px;
-  cursor: pointer;
-  ${mobile({ display: "none" })}
-`;
-
 export const SearchContainerNavbar = styled.div`
   border: 0.5px solid lightgray;
   display: flex;
@@ -112,6 +111,7 @@ export const InputNavbar = styled.input`
 export const ButtonNavbar = styled.button`
   padding: 10px;
   font-size: 30px;
+  color: black;
   font-weight: bold;
   background-color: transparent;
   border: none;
@@ -257,6 +257,7 @@ export const ArrowSlider = styled.div`
 export const WrapperSlider = styled.div`
   height: 100%;
   display: flex;
+  background-color: #fff7f7;
   transition: all 1.5s ease;
   transform: translateX(${(props) => props.slideIndex * -100}vw);
 `;
@@ -266,7 +267,10 @@ export const Slide = styled.div`
   height: 100vh;
   display: flex;
   align-items: center;
-  background-color: #${(props) => props.bg};
+  background-size: 100% 100%;
+  background-repeat:no-repeat;
+  background-size: cover;
+  background-image: url(${(props) => props.img});
 `;
 
 export const ImgContainerSlider = styled.div`
@@ -280,22 +284,42 @@ export const ImageSlider = styled.img`
 
 export const InfoContainerSlider = styled.div`
   flex: 1;
-  padding: 50px;
+  padding: 70px;  
+  
 `;
 
 export const TitleSlider = styled.h1`
-  font-size: 70px;
+  font-size: 60px;
+  color: white;
+  text-align: right;
+  text-shadow: 2px 2px 2px gray;
 `;
 
 export const DescSlider = styled.p`
-  margin: 50px 0px;
+  margin: 50px 300px;
   font-size: 20px;
   font-weight: 500;
+  text-align: justify;
   letter-spacing: 3px;
+  color: white;
+`;
+
+export const DescCollection = styled.p`
+  margin: 10px 0px;
+  text-align: right;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 3px;
+  color: white;
 `;
 
 export const ButtonSlider = styled.button`
   padding: 10px;
+  margin: 50px 500px;
+  color: white;
+  border-width: 1px;
+  border-style: solid;
+  border-color: white;
   font-size: 20px;
   background-color: transparent;
   cursor: pointer;
@@ -438,8 +462,8 @@ export const WrapperCart = styled.div`
   ${mobile({ padding: "10px" })}
 `;
 
-export const TitleCart = styled.h1`
-  font-weight: 300;
+export const TitleCart = styled.h3`
+  font-weight: 300;    
   text-align: center;
 `;
 
@@ -452,12 +476,17 @@ export const TopCart = styled.div`
 
 export const TopButtonCart = styled.button`
   padding: 10px;
+  width: 60%;
   font-weight: 600;
   cursor: pointer;
-  border: ${(props) => props.type === "filled" && "none"};
+  border:-color: yellow;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 5px;
+  box-shadow: 2px 2px 2px black;
   background-color: ${(props) =>
     props.type === "filled" ? "black" : "transparent"};
-  color: ${(props) => props.type === "filled" && "white"};
+  color: black;
 `;
 
 export const EditButton= styled.button`
@@ -583,11 +612,13 @@ export const SummaryItemText = styled.span``;
 export const SummaryItemPrice = styled.span``;
 
 export const ButtonCart = styled.button`
-  width: 100%;
+  width: 60%;
   padding: 10px;
+  border-radius: 5px;
   background-color: black;
   color: white;
   font-weight: 600;
+  box-shadow: 3px 3px 3px gray;
 `;
 
 //------------------Product--------------------
@@ -691,6 +722,8 @@ export const Amount = styled.span`
 export const ButtonProd = styled.button`
   padding: 15px;
   background-color: black;
+  border-radius: 5px;
+  box-shadow: 3px 3px 3px gray;
   color: white;
   cursor: pointer;
   font-weight: 500;

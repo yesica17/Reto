@@ -20,8 +20,15 @@ const Cart = (props) => {
   const [cart, setCart] = useState(null);
   const [open, setOpen] = useState(false);     
   const [quantity, setQuantity] = useState(1);
-  const [openModal, setOpenModal] = useState(false);      
-  const [state, setState] = useState(null);
+  const [openModal, setOpenModal] = useState(false);     
+  const stateCart=props.cart.filter( value=>value.req_quantity > value.stocks.available_quantity); 
+  const state_init={
+    id: null,
+    state_cart: false
+  }
+  const [state, setState] = useState(state_init);
+  
+ 
 
   useEffect(() => {
     props.loadCart();  
@@ -31,8 +38,9 @@ const Cart = (props) => {
   const amount = props.cart.filter(value=>value.stocks.available_quantity!==0 && value.req_quantity<= value.stocks.available_quantity).map((value) => value.req_quantity * value.stocks.product.price)
         .reduce((a, b) => a + b, 0);
   
-  const stateCart=props.cart.filter( value=>value.req_quantity > value.stocks.available_quantity);
+  
  
+
   
 
   return (   
@@ -95,12 +103,11 @@ const Cart = (props) => {
         <Announcement />
         {props.cart.length ? (
           <WrapperCart >
-            <TitleCart>Carrito de Compras</TitleCart>
+            <TitleCart><b>Carrito de Compras</b></TitleCart>
             <TopCart>
               <Link to="/">
-                <TopButtonCart>Continuar Comprando</TopButtonCart>
-              </Link>
-              <TopButtonCart type="filled">COMPRAR AHORA</TopButtonCart>
+                <button style={{color: "black", background: "transparent", fontSize: 20, textDecorationLine: "underline"}}><b>Continuar Comprando</b></button>
+              </Link>              
             </TopCart>
             <BottomCart>              
                   <InfoCart>
@@ -122,7 +129,7 @@ const Cart = (props) => {
                                       <ProductSize>
                                           <b>Talla:</b> {value.stocks.size.size}
                                       </ProductSize>
-                                      <TopButtonCart onClick={async () => {
+                                      <TopButtonCart  onClick={async () => {
                                             await props.deleteCart(value.id);
                                             await props.loadCart();
                                           }}>Eliminar producto
@@ -180,13 +187,13 @@ const Cart = (props) => {
                 </SummaryItemPrice>
               </SummaryItem>
               
-                <ButtonCart onClick={async()=>{setOpenModal(true);                    
-                    await stateCart.map(value=>setState(value));
-                    console.log("estado",state);        
-                    if(state){setState({...state, state_cart: false});
-                    console.log(state);
-                    await props.updateCart(state);
-                   }}}>COMPRAR AHORA
+                <ButtonCart onClick={async()=>{ ;                    
+                   stateCart.map(value=>setState({...state, id: value.id}));
+                    
+                    console.log(state)
+                    await setOpenModal(true)
+                          
+                    }}>COMPRAR AHORA
                 </ButtonCart>
               
             </Summary>

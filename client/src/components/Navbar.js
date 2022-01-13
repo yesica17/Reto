@@ -1,8 +1,7 @@
 import { Badge } from "@material-ui/core";
-import { Search, ShoppingCartOutlined } from "@material-ui/icons";
-import {
-  ContainerNavbar, WrapperNavbar, LeftNavbar, GenreNavbar, SearchContainerNavbar,  InputNavbar, ButtonNavbar, CenterNavbar, RightNavbar, MenuItemNavbar,} 
-  from "./Styled_components";
+import { ShoppingCartOutlined } from "@material-ui/icons";
+import { ContainerNavbar, WrapperNavbar, LeftNavbar, ButtonNavbar, CenterNavbar, RightNavbar, MenuItemNavbar,
+} from "./Styled_components";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import * as cartActions from "../store/actions/cart";
@@ -16,12 +15,7 @@ const Navbar = (props) => {
   return (
     <ContainerNavbar>
       <WrapperNavbar>
-        <LeftNavbar>
-          <GenreNavbar></GenreNavbar>
-          <SearchContainerNavbar>
-            <InputNavbar placeholder="Búsqueda" />
-            <Search style={{ color: "gray", fontSize: 16 }} />
-          </SearchContainerNavbar>
+        <LeftNavbar>           
         </LeftNavbar>
         <CenterNavbar>
           <Link to={`/`}>

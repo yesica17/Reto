@@ -27,13 +27,9 @@ const Footer = () => {
       <LeftFooter>
         <LogoFooter>Cidenet Shop</LogoFooter>
         <DescFooter>
-          Cidenet Shop es una empresa dedicada a la venta online de camisetas
-          para adultos. Nuestro objetivo es ofrecer la moda más actual a los
+          Cidenet Shop ofrece la moda más actual a los
           mejores precios. Tenemos a su disposición una gran variedad de
-          productos, los cuales son renovados cada temporada para dar siempre
-          las prendas más trendy. Tenemos un equipo que está dedicado a
-          satisfacer tus necesidades y que te contestará a tus dudas con la
-          mayor brevedad posible.
+          productos, los cuales son renovados cada temporada. Tenemos un equipo que está dedicado a satisfacer tus necesidades y que te contestará a tus dudas con la mayor brevedad posible.
         </DescFooter>
         <SocialContainerFooter>
           <SocialIconFooter color="3B5999">
@@ -52,7 +48,7 @@ const Footer = () => {
       </LeftFooter>
       <CenterFooter></CenterFooter>
       <RightFooter>
-        <TitleFooter>Contact</TitleFooter>
+        <TitleFooter>Contacto</TitleFooter>
         <ContactItemFooter>
           <Room style={{ marginRight: "10px" }} /> Medellín , Colombia
         </ContactItemFooter>
