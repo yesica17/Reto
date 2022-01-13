@@ -1,17 +1,8 @@
 import { Badge } from "@material-ui/core";
 import { Search, ShoppingCartOutlined } from "@material-ui/icons";
 import {
-  ContainerNavbar,
-  WrapperNavbar,
-  LeftNavbar,
-  GenreNavbar,
-  SearchContainerNavbar,
-  InputNavbar,
-  ButtonNavbar,
-  CenterNavbar,
-  RightNavbar,
-  MenuItemNavbar,
-} from "./Styled_components";
+  ContainerNavbar, WrapperNavbar, LeftNavbar, GenreNavbar, SearchContainerNavbar,  InputNavbar, ButtonNavbar, CenterNavbar, RightNavbar, MenuItemNavbar,} 
+  from "./Styled_components";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import * as cartActions from "../store/actions/cart";
