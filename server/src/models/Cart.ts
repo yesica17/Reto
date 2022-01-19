@@ -2,17 +2,15 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  BaseEntity,
-  ManyToMany,
-  JoinTable,
+  BaseEntity,  
   JoinColumn,
   ManyToOne,
-  RelationId,
+  
 } from "typeorm";
 import { Stock } from "./Stock";
 import { User } from "./User";
 import { Order } from "./Order";
-import StockController from "../controllers/StockController";
+
 
 @Entity()
 export class Cart extends BaseEntity {

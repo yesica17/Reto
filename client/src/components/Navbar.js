@@ -15,8 +15,7 @@ const Navbar = (props) => {
   return (
     <ContainerNavbar>
       <WrapperNavbar>
-        <LeftNavbar>           
-        </LeftNavbar>
+        <LeftNavbar/>         
         <CenterNavbar>
           <Link to={`/`}>
             <ButtonNavbar>Cidenet Shop</ButtonNavbar>

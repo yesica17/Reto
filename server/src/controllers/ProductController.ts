@@ -3,12 +3,15 @@ import { Product } from "../models/Products";
 import { Category } from "../models/Categories";
 import { Style } from "../models/Styles";
 import { Brand } from "../models/Brands";
+import { ProductsDto } from "../dto/productsDto";
 import { Stock } from "../models/Stock";
 import {
   verifyToken,
   verifyTokenAndAuthorization,
   verifyTokenAndAdmin,
 } from "../controllers/token";
+import { createSecureContext } from "tls";
+import { hasUncaughtExceptionCaptureCallback } from "process";
 
 class ProductController {
   public path = "/product";
@@ -25,6 +28,7 @@ class ProductController {
     // Controller endpoints
     this.router.post(this.path, this.createProduct);
     this.router.get(this.path, this.getAllProduct);
+    this.router.get(this.path + "/dto", this.getProductDto);    
     this.router.get(this.path + "/category", this.getAllCategory);
     this.router.get(this.path + "/style", this.getAllStyle);
     this.router.get(this.path + "/brand", this.getAllBrand);
@@ -97,14 +101,44 @@ class ProductController {
   }
 
   //--------Get all products--------------
-  public async getAllProduct(req: express.Request, res: express.Response) {     
+  public async getAllProduct(req: express.Request, res: express.Response) {       
     const products = await Product.find({
       relations: ["stock"],  
       order:{views: "DESC"}    
     });    
     return res.send(products);
   }
-  
+
+    //--------DTO Products--------------
+  public async getProductDto(req: express.Request, res: express.Response) {   
+    
+    const products = await Product.find({     
+      relations: ["stock"],   
+      order:{views: "DESC"}    
+    });      
+
+    const dtos: ProductsDto[] = products.map( p => {
+        return {
+        id_product: p.id,
+        desc: p.desc,
+        img: p.img,
+        price: p.price,
+        id_cat: p.categories.map(c=>c.id),
+        category: p.categories.map(c=>c.name.toLowerCase()),
+        id_brand: p.brands.map(b=>b.id),
+        brand: p.brands.map(b=>b.name.toLowerCase()),
+        id_style: p.styles.map(s=>s.id),
+        style: p.styles.map(s=>s.name.toLowerCase()),
+        id_stock: p.stock.map(i=>i.id),
+        available_quantity: p.stock.map(q=>q.available_quantity),
+        id_color: p.stock.map(c=>c.colorId),
+        color: p.stock.map(c=>c.color.color.toLowerCase()),
+        id_size: p.stock.map(s=>s.sizeId),
+        size: p.stock.map(s=>s.size.size.toLowerCase())
+        }
+        });
+        return res.send(dtos);    
+  } 
 
   //--------Get all category--------------
   public async getAllCategory(req: express.Request, res: express.Response) {
@@ -126,6 +160,7 @@ class ProductController {
 
   //---------------Get product---------------
   public async getProduct(req: express.Request, res: express.Response) {
+    
     const client = await Product.findOne(req.params.id, {
       relations: ["stock"],
     });

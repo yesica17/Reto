@@ -10,48 +10,34 @@ import * as homeActions from "../store/actions/home";
 const Products = (props) => {
 
    const [filteredProducts, setFilteredProducts] = useState([]); 
+   const [filteredData, setFilteredData] = useState([]); 
   
   useEffect(() => {
     props.loadProducts();
+    props.loadProductsDto();
   }, []);   
 
-const isInArrayStock = (array, arrayColorId, arraySizeId, category, arrayBrandId, item) =>{
-            let flag = false;
-            array.forEach(element => {
-            if((arrayColorId.includes(element.colorId) || arrayColorId.length===0) 
-            &&  (arraySizeId.includes(element.sizeId) || arraySizeId.length===0) &&     
-            (element.product.categories[0].name === category || category === undefined) 
-            && (arrayBrandId.includes(element.product.brands[0].id ) || arrayBrandId.length=== 0) && ((element.color.color.toLowerCase() === item) || (element.product.brands[0].name.toLowerCase() === item) || (element.product.styles[0].name.toLowerCase() === item) || (element.product.categories[0].name.toLowerCase() === item) || (element.size.size.toLowerCase() === item)|| item=== "")){
-                flag = true;
-            }
-  });
-  
-  return flag;
-};
+    useEffect(() => {
+    if(props.productsDto.length){ 
+      const search=props.wordEntered? props.wordEntered.search.toLowerCase() : "";
+      const f=props.filters     
+      console.log(search) 
 
-  useEffect(() => {
-    
-    if(props.products.length && props.filters && props.cat){ 
-       
-      
-      setFilteredProducts(
-        props.products.filter(element=>isInArrayStock(element.stock, props.filters.color, props.filters.size, props.cat, props.filters.brand, props.filters.search))
+      setFilteredData(
+        props.productsDto.filter(item=>(item.id_color.filter(c => f.color.includes(c)).length || !f.color.length) && (item.id_size.filter(c => f.size.includes(c)).length || !f.size.length) && (item.id_cat.filter(c => f.category.includes(c)).length || !f.category.length) && (item.id_brand.filter(c => f.brand.includes(c)).length || !f.brand.length) && (item.color.filter(e=>search.includes(e)).length || item.brand.filter(e=>search.includes(e)).length || item.style.filter(e=>search.includes(e)).length || search===""))
       )}
-  }, [props.products, props.filters, props.cat]);  
+  }, [props.productsDto, props.wordEntered, props.filters]);     
 
-  console.log("cat", props.cat, "filtrados", filteredProducts)
+//console.log(filteredData)
 
   return (
     <ContainerProducts>
-      {  props.cat    
-      ? filteredProducts.length 
-      ? filteredProducts.map((value) => (            
+      {  filteredData.length      
+      ? filteredData.map((value) => (            
             <Product value={value} key={value.id} />
           ))
-      : props.products.map((value) => (            
-            <Product value={value} key={value.id} />
-          ))      
-      : props.products.slice(0,8).map((value) => (            
+       
+      : props.productsDto.slice(0,3).map((value) => (            
             <Product value={value} key={value.id} />
           ))
       
@@ -63,11 +49,13 @@ const isInArrayStock = (array, arrayColorId, arraySizeId, category, arrayBrandId
 //leer estados
 const mapStateToProps = (state) => ({
   products: state.home.products,
+  productsDto: state.home.productsDto,
 });
 
 //ejecutar acciones
 const mapDispatchToProps = (dispatch) => ({
   loadProducts: () => dispatch(homeActions.loadProducts()),
+  loadProductsDto: () => dispatch(homeActions.loadProductsDto()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Products);

@@ -1,13 +1,12 @@
 import { Add, Remove } from "@material-ui/icons";
 import { useLocation } from "react-router-dom";
-import { Alert } from 'rsuite';
+import { Alert, Dropdown, SelectPicker} from 'rsuite';
 import 'rsuite/dist/styles/rsuite-default.css';
 import Announcement from "../components/Announcement";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import { ContainerProd, WrapperProd, ImgContainerProd, ImageProd, InfoContainer,
-  TitleProd, DescProd, Price, FilterContainer, Filter, FilterTitle, FilterColor,
-  FilterSize, FilterSizeOption, FilterColorOption, AmountContainer, Amount,  AddContainer, ButtonProd } from "../components/Styled_components";
+  TitleProd, DescProd, Price, FilterContainer, Filter, FilterTitle, AmountContainer, Amount,  AddContainer, ButtonProd } from "../components/Styled_components";
 
 import { useState, useEffect } from "react";
 
@@ -39,9 +38,7 @@ const Product = (props) => {
   };
 
   useEffect( async () => {
-    await props.loadProduct(id);
-    
-    
+    await props.loadProduct(id);    
   }, []);
 
   if(props.product){const views= { 
@@ -71,6 +68,30 @@ const Product = (props) => {
   };
 
   const [cart, setCart] = useState(cart_init);
+  const [color, setColor] = useState([]);
+  const [size, setSize] = useState([]);
+
+  useEffect( async () => {
+    if(props.product){setColor([
+                    ...new Map(
+                      props.product.stock
+                        .map((value) => value.color)
+                        .map((value) => {
+                          return [value.id, value];
+                        })
+                    ).values(),
+                  ]);
+                setSize([
+                    ...new Map(
+                      props.product.stock
+                        .map((value) => value.size)
+                        .map((value) => {
+                          return [value.id, value];
+                        })
+                    ).values(),
+                  ])}   
+    
+  }, [props.product]);
 
   return (
     <ContainerProd>
@@ -94,56 +115,42 @@ const Product = (props) => {
 
             <FilterContainer>
               <Filter>
-                <FilterTitle>Color</FilterTitle>
-                <FilterColor
-                  onClick={(value) => {
+                <FilterTitle>Color</FilterTitle>{" "}
+                <SelectPicker
+                                style={{width: 100}}
+                                data={color}
+                                labelKey="color"
+                                valueKey="id"
+                                size="sm"
+                                searchable={false}
+                                placeholder="Tu color"
+                                onChange={(value) => {
                     setCart({
                       ...cart,
-                      color: { id: value.target.value },
-                    });
-                  }}
-                >
-                  {[
-                    ...new Map(
-                      props.product.stock
-                        .map((value) => value.color)
-                        .map((value) => {
-                          return [value.id, value];
-                        })
-                    ).values(),
-                  ].map((value) => (
-                    <FilterColorOption value={value.id} key={value.id}>
-                      {value.color}
-                    </FilterColorOption>
-                  ))}
-                </FilterColor>{" "}
-                <FilterTitle>Talla</FilterTitle>
-                <FilterSize
-                  onClick={(value) => {
-                    setCart({
-                      ...cart,
-                      size: { id: value.target.value },
+                      color: { id: value },
                     });
                     updateStock();
-                  }}
-                >
-                  {[
-                    ...new Map(
-                      props.product.stock
-                        .map((value) => value.size)
-                        .map((value) => {
-                          return [value.id, value];
-                        })
-                    ).values(),
-                  ].map((value) => (
-                    <FilterSizeOption value={value.id} key={value.id}>
-                      {value.size}
-                    </FilterSizeOption>
-                  ))}
-                </FilterSize>
+                  }} />{" "}
+                
+                <FilterTitle>Talla</FilterTitle>{" "}
+                <SelectPicker
+                                style={{width: 100}}
+                                data={size}
+                                labelKey="size"
+                                valueKey="id"
+                                size="sm"
+                                searchable={false}
+                                placeholder="Tu talla"
+                                onChange={(value) => {
+                    setCart({
+                      ...cart,
+                      size: { id: value },
+                    });
+                    updateStock();
+                  }} />                
               </Filter>
 
-              {cart.size.id !== null && cart.color.id !== null ? (
+              {cart.size.id !== null && cart.color.id !== null ? (                
                 stock > 0 ? (
                   <h3>Disponible {stock}</h3>
                 ) : (
@@ -151,8 +158,8 @@ const Product = (props) => {
                 )
               ) : null}
             </FilterContainer>
-            <AddContainer>
-             
+
+            <AddContainer>             
                 <AmountContainer>
                   <Remove
                     onClick={() => {

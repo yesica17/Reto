@@ -97,6 +97,7 @@ export const LeftNavbar = styled.div`
 
 export const SearchContainerNavbar = styled.div`
   border: 0.5px solid lightgray;
+  width:35%;
   display: flex;
   align-items: center;
   margin-left: 25px;
@@ -105,6 +106,7 @@ export const SearchContainerNavbar = styled.div`
 
 export const InputNavbar = styled.input`
   border: none;
+  width:100%;
   ${mobile({ width: "50px" })}
 `;
 
@@ -228,7 +230,7 @@ export const ContainerProducts = styled.div`
 //-------------Slider-------------------
 export const ContainerSlider = styled.div`
   width: 100%;
-  height: 100vh;
+  height: 75vh;
   display: flex;
   position: relative;
   overflow: hidden;
@@ -296,7 +298,7 @@ export const TitleSlider = styled.h1`
 `;
 
 export const DescSlider = styled.p`
-  margin: 50px 300px;
+  margin: 30px 300px;
   font-size: 20px;
   font-weight: 500;
   text-align: justify;
@@ -315,7 +317,7 @@ export const DescCollection = styled.p`
 
 export const ButtonSlider = styled.button`
   padding: 10px;
-  margin: 50px 500px;
+  margin: 10px 500px;
   color: white;
   border-width: 1px;
   border-style: solid;
@@ -661,9 +663,10 @@ export const Price = styled.span`
 `;
 
 export const FilterContainer = styled.div`
-  width: 50%;
+  width: 100%;
   margin: 30px 0px;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   ${mobile({ width: "100%" })}
 `;

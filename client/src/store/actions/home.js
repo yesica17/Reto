@@ -19,3 +19,22 @@ export const loadProducts = () => {
       .catch((response) => console.error(response));
   };
 };
+
+export const setProductsDto = (payload) => {
+  return {
+    type: creators.SET_PRODUCTSDTO,
+    payload,
+  };
+};
+
+export const loadProductsDto = () => {
+  return async (dispatch, getState) => {
+    await GETData(`product/dto`, "GET")
+      .then((response) => {
+        if (response !== null) {
+          dispatch(setProductsDto(response));
+        }
+      })
+      .catch((response) => console.error(response));
+  };
+};

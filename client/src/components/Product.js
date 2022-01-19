@@ -19,7 +19,7 @@ const Product = (props) => {
           <ShoppingCartOutlined />
         </IconProduct>
         <IconProduct>
-          <Link to={`/product/${props.value.id}`}>
+          <Link to={`/product/${props.value.id_product}`}>
             <SearchOutlined />
           </Link>
         </IconProduct>        
@@ -29,20 +29,12 @@ const Product = (props) => {
       </InfoProduct> 
       <br/>
       <FilterList>
-      {[
-                    ...new Map(
-                      props.value.stock
-                        .map((value) => value.color)
-                        .map((value) => {
-                          return [value.id, value];
-                        })
-                    ).values(),
-                  ].map((value) => (
-      <ColorOption color={value.color}></ColorOption> ))} </FilterList><br/>
+      {
+                   [...new Set(props.value.color)].map((value) => (
+      <ColorOption color={value}></ColorOption> ))} </FilterList><br/>
       
-      <div style={{ fontSize: 14 }} > <b>{props.value.styles[0].name} {" "}
-          {props.value.brands[0].name}{" "}
-          {props.value.categories[0].name}</b>
+      <div style={{ fontSize: 14 }} > <b>{props.value.style} {" "}
+          {props.value.brand}{" "} {props.value.category}</b>
       </div>
       
       <div style={{ fontSize: 20 }} ><b>$</b> {(props.value.price / 1000).toFixed(3)}

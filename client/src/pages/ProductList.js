@@ -1,14 +1,7 @@
 import styled from "styled-components";
-import { SearchContainerNavbar, InputNavbar, LeftNavbar} from "../components/Styled_components";
-import { Search} from "@material-ui/icons";
 import { CheckPicker } from 'rsuite';
 import 'rsuite/dist/styles/rsuite-default.css';
-import Navbar from "../components/Navbar";
-import Announcement from "../components/Announcement";
-import Products from "../components/Products";
-import Footer from "../components/Footer";
 import { mobile } from "../responsive";
-import { useLocation } from "react-router";
 import { useState, useEffect} from "react";
 
 import { connect } from "react-redux";
@@ -45,27 +38,16 @@ const Select = styled.select`
 const Option = styled.option``;
 
 const ProductList = (props) => {
-  const location = useLocation();
-  const cat = location.pathname.split("/")[2];
 
   const filters_init={
     color:[],
     size:[],
     category:"",
     brand:[],
-    search:""
+    
   }
   
-  const [filters, setFilters] = useState(filters_init);
-  
-
-  const handleFilters = (e) => {
-    const value = e.target.value;
-    setFilters({
-      ...filters,
-      [e.target.name]: value,
-    });
-  };
+  const [filters, setFilters] = useState(filters_init); 
 
    useEffect(() => {    
     props.loadColor();
@@ -79,20 +61,11 @@ const ProductList = (props) => {
   console.log(filters)
 
   return (
-    <Container>
-      <Navbar />
-      <Announcement /><br/>
-      <LeftNavbar>
-      <SearchContainerNavbar>
-            <InputNavbar placeholder="Búsqueda"  name="search" onChange={handleFilters} />   <Search style={{ color: "gray", fontSize: 16 }} />         
-      </SearchContainerNavbar>  
-      </LeftNavbar>        
+    <Container>            
       <FilterContainer>
         <Filter>
-          <FilterText>Filtrar Productos:</FilterText>
-          
-              <CheckPicker
-                                    
+          <FilterText>Filtrar Productos:</FilterText>          
+              <CheckPicker                                    
                   style={{width: 150}}
                   data={props.colors}
                   labelKey="color"
@@ -102,8 +75,7 @@ const ProductList = (props) => {
                   placeholder="Color"
                   onChange={ value => { setFilters({ ...filters, color: value }) }} />  {" "}
 
-                  <CheckPicker
-                                    
+                  <CheckPicker                                    
                   style={{width: 150}}
                   data={props.sizes}
                   labelKey="size"
@@ -113,8 +85,7 @@ const ProductList = (props) => {
                   placeholder="Talla"
                   onChange={ value => { setFilters({ ...filters, size: value }) }} />    {" "}
 
-                  <CheckPicker
-                                    
+                  <CheckPicker                                    
                   style={{width: 150}}
                   data={props.brands}
                   labelKey="name"
@@ -124,9 +95,7 @@ const ProductList = (props) => {
                   placeholder="Marca"
                   onChange={ value => { setFilters({ ...filters, brand: value }) }} />            
         </Filter>        
-      </FilterContainer>
-      <Products cat={cat} filters={filters}/>      
-      <Footer />
+      </FilterContainer>      
     </Container>
   );
 };
