@@ -14,6 +14,7 @@ export const loadUser = () => {
       .then((response) => {
         if (response !== null) {
           dispatch(setUser(response));
+          
         }
       })
       .catch((response) => console.error(response));
@@ -26,6 +27,8 @@ export const loginUser = (payload) => {
       .then((response) => {
         if (response !== null) {
           dispatch(setUser(response));
+          localStorage.setItem('token', response.token);
+          console.log(response)
         }
       })
       .catch((response) => console.error(response));

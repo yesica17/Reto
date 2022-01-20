@@ -45,6 +45,9 @@ export class User extends BaseEntity {
   @UpdateDateColumn()
   updated_at: "string";
 
+   @Column({ type: "varchar", nullable: true })
+  token: string;
+
   @ManyToOne(() => Document)
   @JoinColumn()
   public type_document: Document;

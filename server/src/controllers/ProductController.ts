@@ -29,7 +29,7 @@ class ProductController {
     this.router.post(this.path, this.createProduct);
     this.router.get(this.path, this.getAllProduct);
     this.router.get(this.path + "/dto", this.getProductDto);    
-    this.router.get(this.path + "/category", this.getAllCategory);
+    this.router.get(this.path + "/category", this.getAllCategory, verifyToken);
     this.router.get(this.path + "/style", this.getAllStyle);
     this.router.get(this.path + "/brand", this.getAllBrand);
     this.router.get(this.path + "/:id", this.getProduct);
@@ -141,9 +141,12 @@ class ProductController {
   } 
 
   //--------Get all category--------------
-  public async getAllCategory(req: express.Request, res: express.Response) {
-    const categorys = await Category.find();
+  public async getAllCategory(req: express.Request, res: express.Response, next: express.NextFunction) {
+    const categorys = await Category.find();   
+    next(); 
     return res.send(categorys);
+    
+    
   }
 
   //--------Get all style--------------
