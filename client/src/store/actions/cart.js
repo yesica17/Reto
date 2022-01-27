@@ -13,10 +13,11 @@ export const setCart = (payload) => {
 
 export const loadCart = () => {
   return async (dispatch, getState) => {
-    const data = {
-      user: { id: 4 },
+    const data = {      
+      user: { id: getState().login.user.id },
       state_cart: true,
     };
+    
     await SETData(`cart/load`, "POST", data)
       .then((response) => {
         if (response !== null) {

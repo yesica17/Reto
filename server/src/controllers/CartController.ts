@@ -2,7 +2,7 @@ import * as express from "express";
 import { Cart } from "../models/Cart";
 import { Stock } from "../models/Stock";
 import { User } from "../models/User";
-import { getConnection } from "typeorm";
+import * as nodemailer from "nodemailer";
 
 import {
   verifyToken,
@@ -33,6 +33,7 @@ class CartController {
      this.router.put(this.path + "/amount"+"/:id", this.updateAmount);
 
     this.router.delete(this.path + "/:id", this.deleteCart);
+    this.router.post(this.path + "/email", this.sendEmail);
   }
 
   public validateInput(
@@ -181,6 +182,96 @@ class CartController {
   public async deleteCart(req: express.Request, res: express.Response) {
     Cart.delete(req.params.id);
     return res.status(200).send({ message: "Cart deleted successfully" });
+  }
+
+  //-------------------Send email---------------------
+  public async sendEmail(req: express.Request, res: express.Response) {
+    const data=req.body;
+
+    let transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+    auth: {
+        user: 'yriosbedoya@gmail.com',
+        pass: 'iofcygwhacaffseb'
+    },
+  });  
+
+  const user= data.user;
+  const order=data.order;
+  
+  let obj = {
+    campo: [
+        {
+            anotacion: "Camiseta manga corta Mujer Americanino",
+            fechat: "2",
+            fechac: "3",
+            resultado: "4"
+        },
+        {
+            anotacion: "Camiseta manga corta Hombre Levis",
+            fechat: "6",
+            fechac: "7",
+            resultado: "8"
+        }
+    ]
+}  
+
+    let cadena="";
+    const prueba=obj.campo.forEach(value=>{ 
+      cadena+=value.anotacion;  
+      cadena+=" - ";
+      return cadena
+    });
+
+
+  let mailOptions = await transporter.sendMail({
+    from: '"Cidenet Shop" <yriosbedoya@gmail.com>', // sender address
+    to: "yriosbedoya@gmail.com", // list of receivers
+    subject: "Detalle de la compra", // Subject line
+    // text: "Hello world?", // plain text body    
+    html: `<div>
+    <div style="background-color: black; height: 30px;">--</div>
+    <div style="text-align: center;"><h1>CidenetShop</h1></div><hr/>
+    <p style="font-size: 14px;">Hola, <b>${user}</b></p>
+    <p style="font-size: 14px;">Gracias por comprar en <b>CidenetShop</b></p>
+    <p style="font-size: 14px;">Tu pedido ha sido aprobado. Recuerda que el tiempo de entrega inicia a partir de este momento.</p>    
+    <table border="1" style="width:100%;">
+    <tr><th>Información del pedido</th></tr>
+    <tr><td><b>Pedido N° </b>${order}</td></tr>  
+    <tr><td><b>Realizado el </b>26/01/2022</td></tr>  
+    <tr><td><b>Datos de entrega </b>Carrera 16A#12-04</td></tr>  
+    <tr><td><b>Recibe </b>${cadena}</td></tr>   
+    <tr><td><b>Total a pagar $ </b>50.000</td></tr> 
+    <tr><td><b>Forma de pago </b>Contraentrega</td></tr> 
+    </table>
+    <div style="text-align: center;"><h2>¿Necesitas contactarnos?</h2></div><hr/>
+    <div style="text-align: center;">
+    <p style="font-size: 14px;">Puedes llamarnos a nuestra línea de servicio al cliente:</p> 
+    <p style="font-size: 14px;"><b>Medellín: </b>360-89-70</p> 
+    </div>
+    <div style="background-color: whiteSmoke;">
+    <p style="font-size: 12px; margin: auto;"><b>Políticas de garantía: </b>
+    <br/>
+    Para hacer valida la garantía de un producto el cliente deberá: <br/>
+    Presentar ticket o factura que avale la compra del producto.</br>
+    Presentar el producto completo con su empaque, accesorios, manual, drivers, etc.
+    </p> 
+    </div>
+    <div style="background-color: white; height: 20px;">--</div> 
+    <div style="background-color: black; height: 30px;">--</div>    
+    </div>`
+  });
+
+  // transporter.sendMail(mailOptions, (error, info)=>{
+  //   if(error){
+  //     res.status(500).send(error.message);
+  //   }else{
+  //     res.status(200).send({ message: "Email enviado" });
+  //   }
+
+  // });    
   }
 }
 

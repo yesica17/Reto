@@ -1,6 +1,7 @@
 import {FormLogin, InputLogin} from "../components/Styled_components";
-import { Modal, Button, IconButton, ButtonGroup, ButtonToolbar} from 'rsuite';
+import { Modal, Button} from 'rsuite';
 import 'rsuite/dist/styles/rsuite-default.css';
+import Order from "./Order";
 
 import { connect } from "react-redux";
 
@@ -17,9 +18,11 @@ const Contact = (props) => {
     adress: "",
   };
   const [contact, setContact] = useState(contactInit);  
+  const [openModal, setOpenModal] = useState(false);   
 
   return (
-    <Modal show={props.open} onHide={() => props.setOpen(false)}>  
+    <div>
+    <Modal show={props.open} overflow={true} onHide={() => props.setOpen(false)}>  
         <Modal.Header>
           <Modal.Title>Dirección de contacto</Modal.Title>
         </Modal.Header>  
@@ -44,17 +47,17 @@ const Contact = (props) => {
             }
           />
           <div>
-          <Link to="/order">                   
+                             
             <Button  color= "blue" appearance="ghost" 
               onClick={async () => {
                 props.cart.map(value=> props.updateAmount(value.id));
                 await props.createContact(contact);
+                await setOpenModal(true)
                 
               }}
             >
               Siguiente
-            </Button>                       
-          </Link>
+            </Button>          
           {" "}{" "}
           <Button onClick={() => props.setOpen(false)} appearance="subtle">
             <b>Cancelar</b>
@@ -63,6 +66,8 @@ const Contact = (props) => {
         </FormLogin>
       
     </Modal>
+    <Order open={openModal} setOpen={setOpenModal}></Order>
+    </div>
   );
 };
 

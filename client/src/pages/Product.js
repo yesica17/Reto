@@ -1,6 +1,6 @@
 import { Add, Remove } from "@material-ui/icons";
 import { useLocation } from "react-router-dom";
-import { Alert, Dropdown, SelectPicker} from 'rsuite';
+import { Alert, SelectPicker} from 'rsuite';
 import 'rsuite/dist/styles/rsuite-default.css';
 import Announcement from "../components/Announcement";
 import Footer from "../components/Footer";
@@ -13,13 +13,13 @@ import { useState, useEffect } from "react";
 import { connect } from "react-redux";
 
 import * as productActions from "../store/actions/product";
-import * as optionsActions from "../store/actions/options";
 
-import { Link } from "react-router-dom";
-import { Button } from "@material-ui/core";
+import { useHistory } from "react-router-dom";
+
 
 const Product = (props) => {
   const location = useLocation();
+  const history=useHistory()
   const id = location.pathname.split("/")[2];
   const [quantity, setQuantity] = useState(1);
   const [stock, setStock] = useState(); 
@@ -124,7 +124,7 @@ const Product = (props) => {
                                 size="sm"
                                 searchable={false}
                                 placeholder="Tu color"
-                                onChange={(value) => {
+                                onSelect={(value) => {
                     setCart({
                       ...cart,
                       color: { id: value },
@@ -141,7 +141,7 @@ const Product = (props) => {
                                 size="sm"
                                 searchable={false}
                                 placeholder="Tu talla"
-                                onChange={(value) => {
+                                onSelect={(value) => {
                     setCart({
                       ...cart,
                       size: { id: value },
@@ -181,15 +181,18 @@ const Product = (props) => {
                     }}
                   />
                 </AmountContainer>
-             
 
               <ButtonProd
                 onClick={async () => {
                   if (cart.size.id !== null && cart.color.id !== null) {
-                    if (stock !== 0) {
+                    if (props.user && stock !== 0) {
                       await props.createCart(cart);
-                    } else {
-                      Alert.error("El producto no esta disponible!");
+                    } else if(stock===0){
+                      Alert.error("El producto no esta disponible")
+                    }
+                    else {
+                      Alert.warning("Debes iniciar sesión para agregar productos al carrito");
+                      history.push("/login")
                     }
                   } else {
                   Alert.warning("Debe seleccionar un color y una talla")
@@ -211,6 +214,7 @@ const Product = (props) => {
 //leer estados
 const mapStateToProps = (state) => ({
   product: state.product.product,
+  user: state.login.user,
   
 });
 

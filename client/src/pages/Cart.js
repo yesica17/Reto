@@ -37,12 +37,7 @@ const Cart = (props) => {
   
   const amount = props.cart.filter(value=>value.stocks.available_quantity!==0 && value.req_quantity<= value.stocks.available_quantity).map((value) => value.req_quantity * value.stocks.product.price)
         .reduce((a, b) => a + b, 0);
-  
-  
- 
-
-  
-
+        
   return (   
     <Fragment>
       {cart?      
@@ -188,9 +183,9 @@ const Cart = (props) => {
               </SummaryItem>
               
                 <ButtonCart onClick={async()=>{ ;                    
-                   stateCart.map(value=>setState({...state, id: value.id}));
+                  //  stateCart.map(value=>setState({...state, id: value.id}));
                     
-                    console.log(state)
+                  //   console.log(state)
                     await setOpenModal(true)
                           
                     }}>COMPRAR AHORA

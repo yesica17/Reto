@@ -1,6 +1,6 @@
 import Product from "./Product";
 import { ContainerProducts } from "./Styled_components";
-
+import { RemoveShoppingCart} from "@material-ui/icons";
 import { useState, useEffect } from "react";
 
 import { connect } from "react-redux";
@@ -8,8 +8,7 @@ import { connect } from "react-redux";
 import * as homeActions from "../store/actions/home";
 
 const Products = (props) => {
-
-   const [filteredProducts, setFilteredProducts] = useState([]); 
+   
    const [filteredData, setFilteredData] = useState([]); 
   
   useEffect(() => {
@@ -21,11 +20,12 @@ const Products = (props) => {
     if(props.productsDto.length){ 
       const search=props.wordEntered? props.wordEntered.search.toLowerCase() : "";
       const f=props.filters     
-      console.log(search) 
 
-      setFilteredData(
-        props.productsDto.filter(item=>(item.id_color.filter(c => f.color.includes(c)).length || !f.color.length) && (item.id_size.filter(c => f.size.includes(c)).length || !f.size.length) && (item.id_cat.filter(c => f.category.includes(c)).length || !f.category.length) && (item.id_brand.filter(c => f.brand.includes(c)).length || !f.brand.length) && (item.color.filter(e=>search.includes(e)).length || item.brand.filter(e=>search.includes(e)).length || item.style.filter(e=>search.includes(e)).length || search===""))
-      )}
+      const dataFiltered = 
+        props.productsDto.filter(item=>((item.id_color.filter(c => f.color.includes(c)).length || !f.color.length) && (item.id_size.filter(c => f.size.includes(c)).length || !f.size.length) && (item.id_cat.filter(c => f.category.includes(c)).length || !f.category.length) && (item.id_brand.filter(c => f.brand.includes(c)).length || !f.brand.length) && (item.color.filter(e=>search.includes(e)).length || item.brand.filter(e=>search.includes(e)).length || item.style.filter(e=>search.includes(e)).length || search==="")))
+      
+        setFilteredData(dataFiltered);
+      }
   }, [props.productsDto, props.wordEntered, props.filters]);     
 
 //console.log(filteredData)
@@ -37,10 +37,8 @@ const Products = (props) => {
             <Product value={value} key={value.id} />
           ))
        
-      : props.productsDto.slice(0,3).map((value) => (            
-            <Product value={value} key={value.id} />
-          ))
-      
+      : 
+      <div style={{flex: 1, display: "flex", flexDirection: "column", alignItems: "center", margin: "auto", height: 300, justifyContent:"center"}}><RemoveShoppingCart style={{fontSize: 150, color: "Lavender"}}/><h3 style={{color: "SlateGray"}}>No disponible</h3><h5 style={{color: "silver"}}>No hay productos para mostrar ahora mismo</h5></div>
         }
     </ContainerProducts>
   );

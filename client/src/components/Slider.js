@@ -1,13 +1,10 @@
-import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { ArrowLeftOutlined, ArrowRightOutlined } from "@material-ui/icons";
 import {
   ContainerSlider,
   ArrowSlider,
   WrapperSlider,
-  Slide,
-  ImgContainerSlider,
-  ImageSlider,
+  Slide,  
   InfoContainerSlider,
   TitleSlider,
   DescSlider,
@@ -16,7 +13,7 @@ import {
 } from "./Styled_components";
 import { sliderItems } from "../data";
 
-const Slider = (props) => {
+const Slider = () => {
   const [slideIndex, setSlideIndex] = useState(0);
   const handleClick = (direction) => {
     if (direction === "left") {

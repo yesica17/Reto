@@ -1,5 +1,9 @@
 import * as creators from "../creators/login";
 import { GETData, SETData } from "../../services/WebServices";
+import { Alert } from 'rsuite';
+import 'rsuite/dist/styles/rsuite-default.css';
+
+
 
 export const setUser = (payload) => {
   return {
@@ -26,11 +30,26 @@ export const loginUser = (payload) => {
     await SETData(`user/login`, "POST", payload)
       .then((response) => {
         if (response !== null) {
+          if(response === false){
+            Alert.error("Contraseña incorrecta");
+          }else if (response === true) {
+            Alert.error("El email no es válido");
+          }else{
           dispatch(setUser(response));
           localStorage.setItem('token', response.token);
-          console.log(response)
+          //console.log(response)
+        }
+          
         }
       })
       .catch((response) => console.error(response));
   };
 };
+
+export const logoutUser=()=>{
+  return async (dispatch) => {
+          dispatch(setUser(null));
+          localStorage.removeItem('token');
+          
+        }      
+  };

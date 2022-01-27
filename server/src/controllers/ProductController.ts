@@ -29,9 +29,9 @@ class ProductController {
     this.router.post(this.path, this.createProduct);
     this.router.get(this.path, this.getAllProduct);
     this.router.get(this.path + "/dto", this.getProductDto);    
-    this.router.get(this.path + "/category", this.getAllCategory, verifyToken);
+    this.router.get(this.path + "/category", this.getAllCategory);
     this.router.get(this.path + "/style", this.getAllStyle);
-    this.router.get(this.path + "/brand", this.getAllBrand);
+    this.router.get(this.path + "/brand", this.getAllBrand, verifyToken);
     this.router.get(this.path + "/:id", this.getProduct);
     this.router.put(this.path + "/:id", this.updateProduct);    
     this.router.delete(this.path + "/:id", this.deleteProduct);
@@ -141,9 +141,9 @@ class ProductController {
   } 
 
   //--------Get all category--------------
-  public async getAllCategory(req: express.Request, res: express.Response, next: express.NextFunction) {
+  public async getAllCategory(req: express.Request, res: express.Response) {
     const categorys = await Category.find();   
-    next(); 
+    
     return res.send(categorys);
     
     
@@ -156,8 +156,9 @@ class ProductController {
   }
 
   //--------Get all brand--------------
-  public async getAllBrand(req: express.Request, res: express.Response) {
+  public async getAllBrand(req: express.Request, res: express.Response, next: express.NextFunction) {
     const brands = await Brand.find();
+    next();
     return res.send(brands);
   }
 

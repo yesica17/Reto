@@ -1,5 +1,6 @@
 import Product from "./Product";
-import { ContainerProducts } from "./Styled_components";
+import {ContainerSlider, ArrowSlider, WrapperSlider, SlideProducts } from "./Styled_components";
+import { ArrowLeftOutlined, ArrowRightOutlined } from "@material-ui/icons";
 
 import { useState, useEffect } from "react";
 
@@ -13,14 +14,33 @@ const PopularProducts = (props) => {
     props.loadProductsDto();
   }, []);   
 
+  const [slideIndex, setSlideIndex] = useState(0);
+  const handleClick = (direction) => {
+    if (direction === "left") {
+      setSlideIndex(slideIndex > 0 ? slideIndex - 1 : 1);
+    } else {
+      setSlideIndex(slideIndex < 1 ? slideIndex + 1 : 0);
+    }
+  };
+
   return (
-    <ContainerProducts>
-      {  props.productsDto.length      
-      ? props.productsDto.slice(0,4).map((value) => (            
-            <Product value={value} key={value.id} />
-          ))       
-      : null }
-    </ContainerProducts>
+     <ContainerSlider>
+      <ArrowSlider direction="left" onClick={() => handleClick("left")}>
+        <ArrowLeftOutlined />
+      </ArrowSlider>
+      <WrapperSlider slideIndex={slideIndex}>          
+          <SlideProducts > 
+              {  props.productsDto.length      
+                  ? props.productsDto.slice(0,4).map((value) => (            
+                        <Product value={value} key={value.id} />
+                      ))       
+                  : null }          
+          </SlideProducts>
+      </WrapperSlider>
+      <ArrowSlider direction="right" onClick={() => handleClick("right")}>
+        <ArrowRightOutlined />
+      </ArrowSlider>
+    </ContainerSlider>  
   );
 };
 

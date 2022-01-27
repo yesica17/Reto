@@ -55,7 +55,7 @@ const Home = (props) => {
     const filters_init={
     color:[],
     size:[],
-    category:"",
+    category:[],
     brand:[],
     
   }  
@@ -79,10 +79,10 @@ const Home = (props) => {
   }; 
 
   return (
-    <div>
-      <Announcement />
-      <Navbar />      
-      <Slider />
+    <div>      
+      <Navbar />  
+      <Announcement />    
+      <Slider />     
       {/* <Categories /> */}
       <WrapperNavbar>
       <LeftNavbar>
@@ -139,7 +139,7 @@ const Home = (props) => {
     </Container>
       
       <Products wordEntered={wordEntered} filters={filters}/> 
-      <TitleCart><b>Los más destacados</b></TitleCart> 
+      <TitleCart><b>Los más buscados</b></TitleCart> 
       <PopularProducts/>       
       <Footer />
     </div>
@@ -154,7 +154,7 @@ const mapStateToProps = (state) => ({
   sizes: state.options.sizes,
   brands: state.options.brands,
   styles: state.options.styles,
-  categories: state.options.categories,
+  categories: state.options.categories,  
 });
 
 //ejecutar acciones

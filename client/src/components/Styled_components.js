@@ -4,7 +4,7 @@ import { mobile } from "../responsive";
 // --------------------------Announcement------------------------
 export const ContainerAnnouncement = styled.div`
   height: 35px;
-  background-color: black;
+  background-color: CadetBlue;
   color: white;
   display: flex;
   align-items: center;
@@ -77,7 +77,7 @@ export const ContactItemFooter = styled.div`
 
 // ---------------------------Navbar------------------------
 export const ContainerNavbar = styled.div`
-  height: 60px;
+  height: 70px;
   ${mobile({ height: "50px" })}
 `;
 
@@ -113,7 +113,7 @@ export const InputNavbar = styled.input`
 export const ButtonNavbar = styled.button`
   padding: 10px;
   font-size: 30px;
-  color: black;
+  color: white;
   font-weight: bold;
   background-color: transparent;
   border: none;
@@ -325,6 +325,15 @@ export const ButtonSlider = styled.button`
   font-size: 20px;
   background-color: transparent;
   cursor: pointer;
+`;
+
+//-----------------Slider Popular Products--------
+export const SlideProducts = styled.div`
+  width: 100vw;
+  height: 100%;
+  display: flex;
+  align-items: center;  
+  background-color: white;
 `;
 
 //-----------------Login------------------

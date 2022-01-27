@@ -77,12 +77,12 @@ class UserController {
       const user = await User.findOne({
         email: loginData.email,
       });
-      !user && res.status(401).json("Wrong email");
+      !user && res.send(true);
       const isPasswordMatching = await bcrypt.compare(
         loginData.password,
         user.password
       );
-      !isPasswordMatching && res.status(401).json("Wrong Password");
+      !isPasswordMatching && res.send(false);
 
       const accessToken = jwt.sign(
         {

@@ -14,18 +14,12 @@ const Product = (props) => {
   return (
     <ContainerProduct>          
       <ImageProduct src={props.value.img} />     
-      <InfoProduct>
-        <IconProduct>
-          <ShoppingCartOutlined />
-        </IconProduct>
+      <InfoProduct>        
         <IconProduct>
           <Link to={`/product/${props.value.id_product}`}>
             <SearchOutlined />
           </Link>
-        </IconProduct>        
-        <IconProduct>
-          <FavoriteBorderOutlined />
-        </IconProduct>                  
+        </IconProduct>                          
       </InfoProduct> 
       <br/>
       <FilterList>
