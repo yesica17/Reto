@@ -86,8 +86,11 @@ class UserController {
 
       const accessToken = jwt.sign(
         {
-          id: user.id,
-          isAdmin: user.isAdmin,
+          user: {
+            id: user.id,
+            isAdmin: user.isAdmin,
+            name: user.name
+          }
         },
         process.env.JWT_SEC,
         { expiresIn: "15d" }

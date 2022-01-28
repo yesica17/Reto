@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
 import * as cartActions from "../store/actions/cart";
+import * as contactActions from "../store/actions/contact";
 
 
 const Cart = (props) => {       
@@ -22,18 +23,14 @@ const Cart = (props) => {
   const [quantity, setQuantity] = useState(1);
   const [openModal, setOpenModal] = useState(false);     
   const stateCart=props.cart.filter( value=>value.req_quantity > value.stocks.available_quantity); 
-  const state_init={
-    id: null,
-    state_cart: false
-  }
-  const [state, setState] = useState(state_init);
-  
- 
+  console.log("state cart", stateCart)
 
   useEffect(() => {
     props.loadCart();  
     
   }, []);    
+
+  console.log(props.cart)
   
   const amount = props.cart.filter(value=>value.stocks.available_quantity!==0 && value.req_quantity<= value.stocks.available_quantity).map((value) => value.req_quantity * value.stocks.product.price)
         .reduce((a, b) => a + b, 0);
@@ -126,7 +123,7 @@ const Cart = (props) => {
                                       </ProductSize>
                                       <TopButtonCart  onClick={async () => {
                                             await props.deleteCart(value.id);
-                                            await props.loadCart();
+                                            
                                           }}>Eliminar producto
                                       </TopButtonCart>
                                   </DetailsCart>
@@ -182,10 +179,9 @@ const Cart = (props) => {
                 </SummaryItemPrice>
               </SummaryItem>
               
-                <ButtonCart onClick={async()=>{ ;                    
-                  //  stateCart.map(value=>setState({...state, id: value.id}));
-                    
-                  //   console.log(state)
+                <ButtonCart onClick={async()=>{
+                    await props.cart.map(value=> props.updateAmount(value.id));                  
+                    await stateCart.map(value=> props.updateStateCart(value.id));
                     await setOpenModal(true)
                           
                     }}>COMPRAR AHORA
@@ -215,6 +211,8 @@ const mapDispatchToProps = (dispatch) => ({
   loadCart: () => dispatch(cartActions.loadCart()), 
   deleteCart: (payload) => dispatch(cartActions.deleteCart(payload)),  
   updateCart: (payload) => dispatch(cartActions.updateCart(payload)),  
+  updateStateCart: (payload) => dispatch(cartActions.updateStateCart(payload)),  
+  updateAmount: (payload) => dispatch(contactActions.updateAmount(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cart);

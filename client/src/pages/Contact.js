@@ -6,7 +6,6 @@ import Order from "./Order";
 import { connect } from "react-redux";
 
 import * as contactActions from "../store/actions/contact";
-import * as cartActions from "../store/actions/cart";
 
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
@@ -49,10 +48,10 @@ const Contact = (props) => {
           <div>
                              
             <Button  color= "blue" appearance="ghost" 
-              onClick={async () => {
-                props.cart.map(value=> props.updateAmount(value.id));
+              onClick={async () => {                
                 await props.createContact(contact);
-                await setOpenModal(true)
+                await setOpenModal(true);
+                await props.setOpen(false)
                 
               }}
             >
@@ -76,9 +75,7 @@ const mapStateToProps = (state) => ({cart: state.cart.cart,});
 
 //ejecutar acciones
 const mapDispatchToProps = (dispatch) => ({
-  createContact: (payload) => dispatch(contactActions.createContact(payload)),
-  loadCart: () => dispatch(cartActions.loadCart()), 
-  updateAmount: (payload) => dispatch(contactActions.updateAmount(payload)),
+  createContact: (payload) => dispatch(contactActions.createContact(payload)), 
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Contact);

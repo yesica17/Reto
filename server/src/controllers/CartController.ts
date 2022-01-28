@@ -30,7 +30,8 @@ class CartController {
 
     this.router.put(this.path + "/:id", this.updateCart);
     this.router.put(this.path + "/quantity"+"/:id", this.updateQuantity);
-     this.router.put(this.path + "/amount"+"/:id", this.updateAmount);
+    this.router.put(this.path + "/amount"+"/:id", this.updateAmount);
+    this.router.put(this.path + "/state"+"/:id", this.updateState);
 
     this.router.delete(this.path + "/:id", this.deleteCart);
     this.router.post(this.path + "/email", this.sendEmail);
@@ -125,6 +126,17 @@ class CartController {
 
   //--------Update quantity cart--------------
   public async updateQuantity(req: express.Request, res: express.Response) {
+    const cartData = req.body;
+    const cart = await Cart.findOne(req.params.id);
+   if (cart !== undefined) {
+      await Cart.update(req.params.id, cartData);           
+      return res.status(200).send({ message: "Cart updated correctly" });
+    }
+    return res.status(404).send({ message: "Cart not found" });
+  } 
+
+  //------------Select cart by order---------------
+   public async updateState(req: express.Request, res: express.Response) {
     const cartData = req.body;
     const cart = await Cart.findOne(req.params.id);
    if (cart !== undefined) {

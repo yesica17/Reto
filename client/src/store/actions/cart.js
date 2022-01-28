@@ -14,7 +14,8 @@ export const setCart = (payload) => {
 export const loadCart = () => {
   return async (dispatch, getState) => {
     const data = {      
-      user: { id: getState().login.user.id },
+      //user: { id: getState().login.user.id },
+      user: { id: 4 },
       state_cart: true,
     };
     
@@ -58,5 +59,22 @@ export const updateCart = (payload) => {
       .catch((response) => console.error(response));
   };
 };
+
+export const updateStateCart = (payload) => {
+  return async (dispatch, getState) => {
+    const data = {      
+      state_cart: false
+    };
+    await SETData(`cart/state/${payload}`, "PUT", data)
+      .then((response) => {
+        if (response !== null) {
+          console.log(response);          
+        }
+      })
+      .catch((response) => console.error(response));
+  };
+};
+
+
 
 

@@ -2,7 +2,7 @@ import * as creators from "../creators/login";
 import { GETData, SETData } from "../../services/WebServices";
 import { Alert } from 'rsuite';
 import 'rsuite/dist/styles/rsuite-default.css';
-
+import jwt_decode from "jwt-decode";
 
 
 export const setUser = (payload) => {
@@ -53,3 +53,5 @@ export const logoutUser=()=>{
           
         }      
   };
+
+

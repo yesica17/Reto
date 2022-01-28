@@ -1,5 +1,5 @@
-import { ContainerLogin, WrapperLogin, TitleLogin, ButtonLogin, ProductColor, ContainerCart,  WrapperCart,  TitleCart,  TopCart,  TopButtonCart, BottomCart,InfoCart, ProductCart, ProductDetail, ImageCart, DetailsCart, ProductName, ProductId, ProductSize, PriceDetail, ProductAmountContainer,  ProductAmount, ProductPrice, HrCart, Summary, SummaryTitle, SummaryItem,  SummaryItemText, SummaryItemPrice, ButtonCart, EditButton,ImgContainerProd, InfoContainer, AmountContainer, Amount, ButtonProd
-} from "../components/Styled_components";
+import { ButtonLogin, ProductColor, InfoCart, ProductOrder, ProductDetail, ImageCart, DetailsCart, ProductName, ProductId, ProductSize, PriceDetail, ProductAmountContainer,  ProductAmount, ProductPrice, HrCart,
+ButtonOrder, InfoOrder, ProductDetailOrder, ImageOrder, ProductTitle, PriceOrder, DetailsOrder } from "../components/Styled_components";
 
 import { connect } from "react-redux";
 
@@ -11,92 +11,62 @@ import { Modal, Button} from 'rsuite';
 import 'rsuite/dist/styles/rsuite-default.css';
 
 const Order = (props) => {
+  if(props.cart){
+    console.log("productos orden ", props.cart)
+  }
   
   return (
-    <Modal show={props.open} overflow={true} onHide={() => props.setOpen(false)}>  
+    <Modal show={props.open} overflow={(true)} size ="sm" onHide={() => props.setOpen(false)}>  
         <Modal.Header>
           <Modal.Title>Resumen del pedido</Modal.Title>
-        </Modal.Header>   
-         <InfoCart>
+        </Modal.Header><br/>   
+         <InfoOrder>
                       { props.cart.map((value) =>                     
-                          <ProductCart >
-                              <ProductDetail>                              
-                                  <ImageCart src={value.stocks.product.img} />
-                                  <DetailsCart>
-                                      <ProductName>
+                          <ProductOrder >
+                              <ProductDetailOrder>                              
+                                  <ImageOrder src={value.stocks.product.img} />
+                                  <DetailsOrder>
+                                      <ProductTitle>
                                           <b>Producto:</b>{" "}
                                           {value.stocks.product.styles[0].name}{" "}
                                           {value.stocks.product.brands[0].name}{" "}
                                           {value.stocks.product.categories[0].name}
-                                      </ProductName>
-                                      <ProductId>
-                                          <b>ID:</b> {value.stocks.product.id}
-                                      </ProductId>
-                                      <ProductColor color={value.stocks.color.color} />
-                                      <ProductSize>
+                                      </ProductTitle>
+                                      <ProductTitle><b>Color:</b>{" "}
+                                      {value.stocks.color.color} </ProductTitle>
+                                      <ProductTitle>
                                           <b>Talla:</b> {value.stocks.size.size}
-                                      </ProductSize>
-                                      
-                                  </DetailsCart>
-                                  </ProductDetail>
-                                      <PriceDetail>                                 
-                                          <ProductAmountContainer>                  
-                                              <ProductAmount> <b>Cantidad: 
+                                      </ProductTitle>
+                                      </DetailsOrder>
+                                  </ProductDetailOrder>
+                                      <PriceOrder >
+                                        <DetailsOrder>                         
+                                              <ProductTitle> <b>Cantidad x
                                                 {value.req_quantity}</b>
-                                              </ProductAmount><br/>
-                                              
-                                            </ProductAmountContainer>             
-                                            <ProductPrice> <b>Precio por unidad: 
+                                              </ProductTitle><br/>                
+                                            <ProductTitle> <b>Precio por unidad: 
                                                   $ {(value.stocks.product.price/ 1000).toFixed(3)}{" "}</b>
-                                            </ProductPrice>
-                                            <ProductPrice> <b>Subtotal: 
-                                                  $ {(value.req_quantity*value.stocks.product.price/ 1000).toFixed(3)}{" "}</b>
-                                              </ProductPrice>
-                                        </PriceDetail>
-                            </ProductCart>)}
-                    <HrCart/>       
-                  </InfoCart>
+                                            </ProductTitle><br/>  
+                                            
+                                              </DetailsOrder>   
+                                        </PriceOrder >
+                            </ProductOrder>)}                           
+                  </InfoOrder>
+                  <div style={{margin: 20}}>
+                  <ButtonOrder
+                    onClick={async () => {
+                      await props.createOrder();
+                      await props.cart.map((value) => props.updateStock(value.id));
+                    }}
+                  >
+                    Confirmar compra
+                  </ButtonOrder>{" "}
+                  <Button onClick={() => props.setOpen(false)} appearance="subtle">
+                    <b>Cancelar</b>
+                  </Button></div>
         
       
-    </Modal>);
-
-  //   <ContainerLogin>
-  //     {props.cart.length ? (
-  //       <WrapperLogin>
-  //         <TitleLogin>Resumen Compra</TitleLogin>
-  //         <hr />
-  //         {props.cart.map((value) =>
-  //           value.stocks ? (
-  //             <div>
-  //               <b>Id. {value.stocks.product.id}</b>{" "}
-  //               {value.stocks.product.styles[0].name}{" "}
-  //               {value.stocks.product.brands[0].name}{" "}
-  //               {value.stocks.product.categories[0].name}
-  //               <br />
-  //               <b>Talla:</b>
-  //               {value.stocks.size.size}
-  //               <br />
-  //               <ProductColor color={value.stocks.color.color} />
-  //               <br />
-  //               <hr />
-  //             </div>
-  //           ) : null
-  //         )}
-  //         <br />
-  //         <Link to="/">
-  //           <ButtonLogin
-  //             onClick={async () => {
-  //               await props.createOrder();
-  //               await props.cart.map((value) => props.updateStock(value.id));
-  //             }}
-  //           >
-  //             Confirmar compra
-  //           </ButtonLogin>
-  //         </Link>
-  //       </WrapperLogin>
-  //     ) : null}
-  //   </ContainerLogin>
-  // );
+    </Modal>);  
 };
 
 //leer estados

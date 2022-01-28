@@ -1,5 +1,7 @@
 import { ContainerRegister, WrapperRegister, TitleRegister, FormRegister, InputRegister, AgreementRegister, ButtonRegister, FilterID, FilterIDOption, Error,
 } from "../components/Styled_components";
+import { Drawer, Tooltip, Whisper} from 'rsuite';
+import 'rsuite/dist/styles/rsuite-default.css';
 
 import { connect } from "react-redux";
 
@@ -32,11 +34,11 @@ const Register = (props) => {
   };
 
   return (
-    <ContainerRegister>
-      <WrapperRegister>
-        <TitleRegister>CREAR UNA CUENTA</TitleRegister>
-        <FormRegister onSubmit={handleSubmit}>
-          <FilterID
+
+        <Drawer placement='left' size='sm' show={props.open} onHide={() => props.setOpen(false)}>
+          <Drawer.Header><Drawer.Title><h3><b>Crear una cuenta</b></h3></Drawer.Title></Drawer.Header><Drawer.Body>
+              <FormRegister onSubmit={handleSubmit}>
+                    <FilterID
             onChange={(value) =>
               setUser({ ...user, type_document: { id: value.target.value } })
             }
@@ -54,36 +56,42 @@ const Register = (props) => {
               : null}
           </FilterID>
 
-          <InputRegister
-            type="number"
-            placeholder="No. documento"
-            onChange={(value) =>
-              setUser({ ...user, document: value.target.value })
-            }
-            required={true}
-          />
+          <Whisper
+                trigger="hover"
+                placement= "bottom"
+                speaker={
+                  <Tooltip>Introduzca sólo caracteres númericos </Tooltip>}>
+                 <InputRegister
+                    type="number"
+                    placeholder="número documento"
+                    onChange={(value) =>
+                    setUser({ ...user, document: value.target.value })
+                    }
+                    required={true}
+                 />
+            </Whisper> 
+
+         
           <InputRegister
             type="text"
-            placeholder="Nombre"
+            placeholder="escribe tu nombre"
             required={true}
             onChange={(value) => setUser({ ...user, name: value.target.value })}
           />
 
           <Error>
-            Username should be textual characters and shouldn't include any
-            special character!,
+            Introduzca sólo caracteres alfabéticos.
           </Error>
           <InputRegister
             type="text"
-            placeholder="Apellidos"
+            placeholder="escribe tus apellidos"
             onChange={(value) =>
               setUser({ ...user, lastname: value.target.value })
             }
             required={true}
           />
           <Error>
-            Username should be textual characters and shouldn't include any
-            special character!,
+            Introduzca sólo caracteres alfabéticos.
           </Error>
           <InputRegister
             type="email"
@@ -93,7 +101,7 @@ const Register = (props) => {
             }
             required={true}
           />
-          <Error>It should be a valid email address!</Error>
+          <Error>Introduzca una dirección de email válida.</Error>
 
           <InputRegister
             type="password"
@@ -101,12 +109,12 @@ const Register = (props) => {
             onChange={(value) =>
               setUser({ ...user, password: value.target.value })
             }
-            pattern="^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$"
+            pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9^&*]{5,20}$"
             required={true}
           />
           <Error>
-            Password should be 8-20 characters and include at least 1 letter, 1
-            number and 1 special character!
+            La contraseña debe ser de longitud mínima 5, y debe contener letras mayúsculas, letras minúsculas y números.
+            
           </Error>
           <InputRegister
             type="password"
@@ -114,7 +122,7 @@ const Register = (props) => {
             pattern={user.password}
             required={true}
           />
-          <Error>Passwords don't match!</Error>
+          <Error>Las contraseñas no coinciden.</Error>
           <AgreementRegister>
             Al crear esta cuenta, acepto el procesamiento de mis datos
             personales de acuerdo con los términos y condiciones de las{" "}
@@ -125,8 +133,9 @@ const Register = (props) => {
             CREAR
           </ButtonRegister>
         </FormRegister>
-      </WrapperRegister>
-    </ContainerRegister>
+          </Drawer.Body>
+        </Drawer>
+    
   );
 };
 

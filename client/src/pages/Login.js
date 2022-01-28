@@ -7,6 +7,7 @@ import * as loginActions from "../store/actions/login";
 
 import { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
+import Register from "./Register";
 
 
 const Login = (props) => {
@@ -15,11 +16,10 @@ const Login = (props) => {
     password: "",
   };
   const [user, setUser] = useState(userInit);
-  const history=useHistory()
+  const history=useHistory();
 
-  
-  
-  
+  const [open, setOpen] = useState(false);    
+  console.log(props.user)
   return (
     <div>
       <Navbar/>
@@ -45,14 +45,15 @@ const Login = (props) => {
                 if(props.user){
                   history.push("/");
                 }                
-                }}> INGRESAR </ButtonLogin>
+                }}> INGRESAR </ButtonLogin>  
+
+            <h5>¿No tienes una cuenta?</h5>      
+            <LinkLogin onClick={()=>{setOpen(true)}}>CREAR UNA CUENTA NUEVA</LinkLogin>
           
-          <Link to="/register">
-            <LinkLogin>CREAR UNA CUENTA NUEVA</LinkLogin>
-          </Link>
         </FormLogin>
       </WrapperLogin>
     </ContainerLogin>
+    <Register open={open} setOpen={setOpen}></Register>
     </div>
   );
 };

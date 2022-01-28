@@ -31,13 +31,7 @@ const App = () => {
         </Route>
         <Route path="/register">
           <Register />
-        </Route>
-        <Route path="/contact">
-          <Contact />
-        </Route>
-        <Route path="/order">
-          <Order />
-        </Route>     
+        </Route>          
         <Route path="/prueba">
           <Prueba />
         </Route>  

@@ -355,6 +355,7 @@ export const WrapperLogin = styled.div`
   width: 25%;
   padding: 20px;
   background-color: white;
+  border-radius: 7px;     
   ${mobile({ width: "75%" })}
 `;
 
@@ -365,29 +366,32 @@ export const TitleLogin = styled.h1`
 
 export const FormLogin = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: column;  
+  align-items: center; 
 `;
 
 export const InputLogin = styled.input`
   flex: 1;
-  min-width: 10%;
+  min-width: 80%;
   margin: 10px 0;
   padding: 10px;
 `;
 
 export const ButtonLogin = styled.button`
-  width: 100%;
-  border: none;
-  padding: 15px 20px;
+  width: 60%;
+  padding: 10px;
+  border-radius: 5px;
   background-color: black;
   color: white;
-  cursor: pointer;
-  margin-bottom: 10px;
+  font-weight: 600;
+  box-shadow: 3px 3px 3px gray;
+  margin-bottom: 20px;
+  margin-top: 20px;
 `;
 
 export const LinkLogin = styled.a`
   margin: 5px 0px;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: bolder;
   text-decoration: underline;
   cursor: pointer;
@@ -422,47 +426,62 @@ export const TitleRegister = styled.h1`
 
 export const FormRegister = styled.form`
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: wrap;  
+  width: 70%;
+  margin: 0 auto;
+  justify-content: center;
+  border-radius: 7px;
+  border-width: 2px;
+  border-style: solid;
+  border-color: black;
 `;
 
 export const InputRegister = styled.input`
-  flex: 1;
+  flex: 0.1;
   min-width: 80%;
-  margin: 20px 10px 0px 0px;
-  padding: 10px;
+  margin: 10px 10px 0px 0px;
+  padding: 5px;
   &:invalid ~ span {
     display: block;
   }
 `;
 
 export const FilterID = styled.select`
-  flex: 1;
-  min-width: 40%;
+  flex: 0.5;
+  min-width: 80%;
   margin: 20px 10px 0px 0px;
-  padding: 10px;
+  padding: 7px;
 `;
 
 export const FilterIDOption = styled.option``;
 
 export const AgreementRegister = styled.span`
-  font-size: 12px;
-  margin: 20px 0px;
+  font-size: 14px;
+  margin: 30px 35px;
+  text-align: justify;
+  color: LightSlateGray;
 `;
 
 export const ButtonRegister = styled.button`
-  width: 100%;
-  border: none;
-  padding: 15px 20px;
-  background-color: teal;
+  width: 50%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  background-color: black;
   color: white;
-  cursor: pointer;
+  font-weight: 600;
+  box-shadow: 3px 3px 3px gray;
 `;
 
 export const Error = styled.span`
-  font-size: 12px;
+  font-size: 13px;
   padding: 3px;
-  color: red;
+  margin-left: 30px;
+  margin-right: 40px;
+  color: DarkRed;
+  font-weight: bold;
   display: none;
+  text-align: justify;
 `;
 
 //---------------Cart--------------------------
@@ -526,8 +545,7 @@ export const BottomCart = styled.div`
 `;
 
 export const InfoCart = styled.div`
-  flex: 3;
- 
+  flex: 3; 
 `;
 
 export const ProductCart = styled.div`
@@ -630,6 +648,60 @@ export const ButtonCart = styled.button`
   color: white;
   font-weight: 600;
   box-shadow: 3px 3px 3px gray;
+`;
+
+//--------------Order----------------
+export const ButtonOrder = styled.button`
+  width: 30%;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: black;
+  color: white;
+  font-weight: 600;
+  box-shadow: 3px 3px 3px gray;
+`;
+
+export const InfoOrder = styled.div`
+  flex: 3; 
+`;
+
+export const ProductOrder = styled.div`
+  display: flex;
+  justify-content: space-between; 
+  height: 30vh;
+  padding: 10px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: black;
+  ${mobile({ flexDirection: "column" })}
+`;
+
+export const ProductDetailOrder = styled.div`
+  flex: 2.5;
+  display: flex;  
+`;
+
+export const ImageOrder = styled.img`
+  width: 150px;
+`;
+
+export const ProductTitle = styled.span`
+    font-size: 14px;
+`;
+
+export const PriceOrder = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  justify-content: center;
+`;
+
+export const DetailsOrder = styled.div`
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 `;
 
 //------------------Product--------------------
