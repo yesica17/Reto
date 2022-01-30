@@ -40,7 +40,7 @@ export const createCart = (payload) => {
       .then((response) => {
         if (response !== null) {          
           console.log(response);
-          if(response==true){
+          if(response === true){
             Alert.error("El producto ya fue agregado")
           }else{Alert.success("El producto ha sido agregado al carrito")}
         } 
@@ -77,6 +77,80 @@ export const loadStockDto = () => {
       .then((response) => {
         if (response !== null) {
           dispatch(setStockDto(response));         
+        }
+      })
+      .catch((response) => console.error(response));
+  };
+};
+
+export const createStock = (payload) => {
+  return async (dispatch, getState) => {
+    await SETData(`stock`, "POST", payload)
+      .then((response) => {
+       if (response !== null) {          
+          console.log(response);
+          if(response === true){
+            Alert.error("El registro ya existe")
+          }else{Alert.success("El registro se ha generado con éxito")}
+        } 
+      })
+      .catch((response) => console.error(response));
+  };
+};
+
+export const createProduct = (payload) => {
+  return async (dispatch, getState) => {
+    await SETData(`product`, "POST", payload)
+      .then((response) => {
+       if (response !== null) {          
+          console.log(response);
+          Alert.success("El producto ha sido añadido con éxito!")
+          
+        }else{console.log("fallo")}
+      })
+      .catch((response) => console.error(response));
+  };
+};
+
+export const updateProductStatus = (payload) => {
+  return async (dispatch, getState) => {
+    const data = {
+      status_product: false,      
+    };
+    await SETData(`product/${payload}`, "PUT", data)
+      .then((response) => {
+        if (response !== null) {
+          console.log(response);          
+        }
+      })
+      .catch((response) => console.error(response));
+  };
+};
+
+export const deleteStock= (payload) => {
+  return async (dispatch, getState) => {
+   
+    await SETData(`stock/${payload}`, "DELETE")
+      .then((response) => {
+        if (response !== null) {
+          console.log(response); 
+          Alert.success("El registro se elimino con éxito")         
+        }
+      })
+      .catch((response) => console.error(response));
+  };
+};
+
+export const updateStock = (payload) => {
+  return async (dispatch, getState) => {
+    const data = {
+      available_quantity: payload.available_quantity,       
+    };
+    await SETData(`stock/${payload.id}`, "PUT", data)
+      .then((response) => {
+        if (response !== null) {
+          console.log(response); 
+          Alert.success("Actualización exitosa")         
         }
       })
       .catch((response) => console.error(response));

@@ -31,7 +31,7 @@ const PopularProducts = (props) => {
       <WrapperSlider slideIndex={slideIndex}>          
           <SlideProducts > 
               {  props.productsDto.length      
-                  ? props.productsDto.slice(0,4).map((value) => (            
+                  ? props.productsDto.slice(0,8).map((value) => (            
                         <Product value={value} key={value.id} />
                       ))       
                   : null }          

@@ -114,6 +114,9 @@ class ProductController {
     
     const products = await Product.find({     
       relations: ["stock"],   
+      where: [
+        { status_product: true },
+      ],
       order:{views: "DESC"}    
     });      
 
@@ -170,7 +173,7 @@ class ProductController {
       relations: ["stock"],
     });
     return res.send(client);
-  }
+  } 
 
   //------------------Update product------------------
   public async updateProduct(req: express.Request, res: express.Response) {

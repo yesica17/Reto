@@ -81,12 +81,16 @@ class StockController {
     stock.color = color;
     const product = await Product.findOne(stockData.product.id);
     stock.product = product;
+    
+    const findStock = await Stock.find({where: [{colorId: stockData.color.id, sizeId: stockData.size.id, productId: stockData.product.id}]});  
 
-    console.log(stockData)
+    console.log(findStock.length)
 
     try {
-      const savedStock = await stock.save();
-      res.status(200).json(savedStock);
+        if (findStock.length === 1){ res.send(true)}else{
+            const savedStock = await    stock.save();
+            res.status(200).json(savedStock);
+           }    
     } catch (err) {
       res.status(500).json(err);
     }
@@ -95,7 +99,11 @@ class StockController {
   //--------DTO Stock--------------
   public async getStockDto(req: express.Request, res: express.Response) {       
     const stock = await Stock.find({     
-      relations: ["product"],            
+      relations: ["product"],  
+      where: [
+        { status_stock: true },
+      ],    
+      order:{ id: "DESC" }        
     });      
 
     const dtoStock: StockDto[] = stock.map( s => {
@@ -113,28 +121,6 @@ class StockController {
         
         return res.send(dtoStock);    
   } 
-
-  //--------Get all stock--------------
-//   public async getAllStock(req: express.Request, res: express.Response) {
-//     const stock = await Stock.find({
-//       relations: ["product"],
-//     });
-//     return res.send(stock);
-//   }
-
-  //--------Get all stock by id_product--------------
-//   public async getAllStock(req: express.Request, res: express.Response) {
-//     const stockData = req.body;
-//     const stock = await Stock.find({      
-//       where: [
-//         {
-//           productId: stockData.product.id,          
-//         },
-//       ],
-//     });
-//     return res.send(stock);
-//   }
-
 
   //--------Get all size--------------
   public async getAllSize(req: express.Request, res: express.Response) {

@@ -60,13 +60,15 @@ const Product = (props) => {
   const [color, setColor] = useState([]);
   const [size, setSize] = useState([]);
 
-  const updateStock = () => {
-    if (props.product && cart.size.id !== null && cart.color.id !== null) {
+  const updateStock = (payload) => {
+    if (props.product && (cart.size.id || payload.id_size) && 
+    (cart.color.id || payload.id_color)) {
       setStock(
         props.product.stock
           .filter(
             (value) =>
-              value.sizeId === cart.size.id && value.colorId === cart.color.id
+              (value.sizeId === cart.size.id || value.sizeId === payload.id_size)&& 
+              (value.colorId === cart.color.id || value.colorId === payload.id_color) 
           )
           .map((value) => value.available_quantity)[0]
       );
@@ -121,38 +123,42 @@ const Product = (props) => {
             <FilterContainer>
               <Filter>
                 <FilterTitle>Color</FilterTitle>{" "}
-                <SelectPicker
+                    {color.length?
+                        <SelectPicker
                                 style={{width: 100}}
                                 data={color}
                                 labelKey="color_spa"
                                 valueKey="id"
                                 size="sm"
+                                cleanable={false}
                                 searchable={false}
                                 placeholder="Tu color"
-                                onSelect={async (value) => {
-                    setCart({
-                      ...cart,
-                      color: { id: value },
-                    });
-                    await updateStock();
-                  }} />{" "}
+                                onChange={(value) => {
+                                    setCart({
+                                    ...cart,
+                                    color: { id: value },
+                                    });
+                                    updateStock({id_color: value, id_size: null});
+                    }} />: null}
                 
                 <FilterTitle>Talla</FilterTitle>{" "}
-                <SelectPicker
+                {size.length?
+                    <SelectPicker
                                 style={{width: 100}}
                                 data={size}
                                 labelKey="size"
                                 valueKey="id"
                                 size="sm"
+                                cleanable={false}
                                 searchable={false}
                                 placeholder="Tu talla"
-                                onSelect={async (value) => {
-                    setCart({
-                      ...cart,
-                      size: { id: value },
-                    });
-                    await updateStock();
-                  }} />                
+                                onChange={(value) => {
+                                    setCart({
+                                    ...cart,
+                                    size: { id: value },
+                                    });
+                                    updateStock({id_color: null, id_size: value});
+                        }} />  : null}              
               </Filter>
 
               {cart.size.id !== null && cart.color.id !== null && stock !== null? (                 

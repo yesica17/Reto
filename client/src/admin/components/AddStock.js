@@ -1,5 +1,6 @@
-import { Modal, Button, SelectPicker, InputNumber, Whisper, Tooltip, Table} from 'rsuite';
+import { Modal, SelectPicker, InputNumber, Whisper, Tooltip, Table, Alert, Button} from 'rsuite';
 import 'rsuite/dist/styles/rsuite-default.css';
+import { FormRegister, InputRegister, AgreementRegister, ButtonRegister } from "../components/Styled_components";
 
 import { connect } from "react-redux";
 import * as optionsActions from "../../store/actions/options";
@@ -8,7 +9,8 @@ import { useState, useEffect } from "react";
 
 import ModalBody from 'rsuite/lib/Modal/ModalBody';
 import ModalFooter from 'rsuite/lib/Modal/ModalFooter';
-import {Help, Delete, Edit} from "@material-ui/icons";
+import {Help, Delete, Edit, ArrowBack} from "@material-ui/icons";
+import UpdateStock from './UpdateStock';
 
 const { Column, HeaderCell, Cell, Pagination } = Table;
 
@@ -20,48 +22,87 @@ const AddStock = (props) => {
     props.loadSize();   
   }, []);  
 
-  const newStock= props.stockDto;
+  const newStock = props.stockDto;
+
+  const stock_init = {
+    available_quantity: null,    
+    size:{
+        id : null
+    },
+    color:{
+        id: null   
+    },
+    product :{
+        id: null
+    }
+}
+
+const [stock, setStock] = useState(stock_init);
+const [open, setOpen] = useState(false);
+const [rowData, setRowData] = useState({});  
 
   return (
     <div>
-    <Modal size= "lg" show={props.open} overflow={true} onHide={() => props.setOpen(false)}>  
+    <Modal  onEnter={()=>{setStock({...stock, product: { id: props.rowData.id_product}})}} size= "lg" show={props.open} overflow={true} onHide={() => props.setOpen(false)} onExit={async()=>await props. loadStockDto()}>  
         <Modal.Header>
-          <Modal.Title><h5>Crear inventario</h5></Modal.Title>
+          <Modal.Title><div style={{display: "flex", flexDirection: "row"}}><ArrowBack onClick={()=>props.setOpen(false)}/><div style={{marginLeft: 20}}><h5>Crear inventario</h5></div></div></Modal.Title>
         </Modal.Header>  
         <ModalBody style={{display: "flex", flexDirection: "column"}}>
             <div style={{display: "flex", flexDirection: "row"}}>
             <div style={{padding: 5}}>
             <SelectPicker
-                                style={{width: 250}}
+                                style={{width: 200}}
                                 data={props.colors}
                                 labelKey="color_spa"
                                 valueKey="id"
                                 size="md"
+                                cleanable={false}
                                 searchable={false}
                                 placeholder="Elige un color"
-                                /></div>
+                                onSelect={async (value) => {
+                                        setStock({
+                                        ...stock,
+                                        color: { id: value },
+                                        });
+                                }}  /></div>
             <div style={{padding: 5}}>
             <SelectPicker
-                                style={{width: 250}}
+                                style={{width: 200}}
                                 data={props.sizes}
                                 labelKey="size"
                                 valueKey="id"
                                 size="md"
+                                cleanable={false}
                                 searchable={false}
                                 placeholder="Elige una talla"
-                                /></div>
+                                onSelect={async (value) => {
+                                        setStock({
+                                        ...stock,
+                                        size: { id: value },
+                                        });
+                                }} /></div>
                     <div style={{padding: 5}}>
-                    <InputNumber  size= "md" prefix="#" defaultValue={0} min={0}/></div>
+                    <InputNumber  style={{width: 200}} size= "md" prefix="#"  min={0}   onChange={(value) => setStock({ ...stock, available_quantity: value})
+                    }/></div>
                     <Whisper
                         trigger="hover"
                         placement= "rightTop"
                         speaker={
                     <Tooltip>Escriba la cantidad disponible</Tooltip>}><Help/></Whisper>
+
+                    <div style={{marginLeft: 100}}><Button style={{background: "DodgerBlue", color: "white", boxShadow: "3px 3px 3px gray"}} onClick={async()=>{if(stock.size.id !== null && stock.color.id !== null && stock.available_quantity !== null){
+                await props.createStock(stock); 
+                await props.loadStockDto();
+                } else {Alert.warning("Todos los campos son requeridos")}}}><b>Agregar al inventario</b></Button>
+                </div> 
+
+
             </div>
+             
             <Table
           height={400}        
           data={newStock.filter(value=>value.id_product === props.rowData.id_product)}  
-          sortType='asc'
+          sortType='asc'         
         //   onRowClick={data => {
         //     console.log(data);
         //   }}
@@ -95,8 +136,8 @@ const AddStock = (props) => {
                 }
                 return (
                   <span>
-                    <a onClick={handleAction}> <Edit style={{color: "LightSlateGray", fontSize: 20}}/> </a> |{' '}
-                    <a onClick={handleAction}> <Delete style={{color: "Tomato", fontSize: 20}}/></a>
+                    <a onClick={()=>{setRowData(rowData); setOpen(true)}}> <Edit style={{color: "LightSlateGray", fontSize: 20, cursor: "pointer"}}/> </a> |{' '}
+                    <a onClick={async()=>{await props.deleteStock(rowData.id_stock); await props. loadStockDto()}}> <Delete style={{color: "Tomato", fontSize: 20, cursor: "pointer"}}/></a>
                   </span>
                 );
               }}
@@ -106,7 +147,8 @@ const AddStock = (props) => {
 
         </ModalBody>
         <ModalFooter></ModalFooter>      
-    </Modal>    
+    </Modal>   
+    <UpdateStock open={open} setOpen={setOpen} rowData={rowData}/> 
     </div>
   );
 };
@@ -122,7 +164,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   loadStockDto: () => dispatch(productActions.loadStockDto()),
   loadColor: () => dispatch(optionsActions.loadColor()),
-  loadSize: () => dispatch(optionsActions.loadSize()),    
+  loadSize: () => dispatch(optionsActions.loadSize()),   
+  createStock: (payload) => dispatch(productActions.createStock(payload)), 
+  deleteStock: (payload) => dispatch(productActions.deleteStock (payload)), 
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddStock);

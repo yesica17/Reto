@@ -135,7 +135,7 @@ class CartController {
     return res.status(404).send({ message: "Cart not found" });
   } 
 
-  //------------Select cart by order---------------
+  //------------Update state cart---------------
    public async updateState(req: express.Request, res: express.Response) {
     const cartData = req.body;
     const cart = await Cart.findOne(req.params.id);

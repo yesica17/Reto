@@ -50,7 +50,7 @@ const Order = (props) => {
                                           {value.stocks.product.categories[0].name}
                                       </ProductTitle>
                                       <ProductTitle><b>Color:</b>{" "}
-                                      {value.stocks.color.color} </ProductTitle>
+                                      {value.stocks.color.color_spa} </ProductTitle>
                                       <ProductTitle>
                                           <b>Talla:</b> {value.stocks.size.size}
                                       </ProductTitle>

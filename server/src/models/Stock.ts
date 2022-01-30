@@ -29,6 +29,9 @@ export class Stock extends BaseEntity {
   @Column({ name: "product_id" })
   productId: number;
 
+  @Column({ type: "boolean", default: true })
+  status_stock: boolean;
+
   @ManyToOne(() => Size, { nullable: false, eager: true })
   @JoinColumn({ name: "size_id" })
   size: Size;
