@@ -53,7 +53,7 @@ const Footer = () => {
           <Room style={{ marginRight: "10px" }} /> Medellín , Colombia
         </ContactItemFooter>
         <ContactItemFooter>
-          <Phone style={{ marginRight: "10px" }} /> +1 234 56 78
+          <Phone style={{ marginRight: "10px" }} /> +604 360 89 70
         </ContactItemFooter>
         <ContactItemFooter>
           <MailOutline style={{ marginRight: "10px" }} /> contact@cidenet.co

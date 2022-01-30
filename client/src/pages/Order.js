@@ -10,11 +10,28 @@ import { Link } from "react-router-dom";
 import { Modal, Button} from 'rsuite';
 import 'rsuite/dist/styles/rsuite-default.css';
 
-const Order = (props) => {
-  if(props.cart){
-    console.log("productos orden ", props.cart)
-  }
-  
+const Order = (props) => {    
+
+ const data = {
+        user: "",
+        order: null,
+        address: "",
+        amount: null,
+        products: []    
+    };
+
+  const [infoEmail, setInfoEmail] = useState(data);
+
+  useEffect(() => {
+        if(props.cart){
+            const title= props.cart.map(value=>value.stocks.product.styles[0].name+" "+ value.stocks.product.brands[0].name + " " + value.stocks.product.categories[0].name + " " +"x" + " " + value.req_quantity + " " + "ud.");             
+
+            const name= props.user.name;
+            setInfoEmail({...infoEmail, user: name, products: title})      
+         }  
+         
+  }, [props.cart])  
+
   return (
     <Modal show={props.open} overflow={(true)} size ="sm" onHide={() => props.setOpen(false)}>  
         <Modal.Header>
@@ -54,9 +71,11 @@ const Order = (props) => {
                   </InfoOrder>
                   <div style={{margin: 20}}>
                   <ButtonOrder
-                    onClick={async () => {
+                    onClick={async () => {                        
                       await props.createOrder();
                       await props.cart.map((value) => props.updateStock(value.id));
+                      await props.setOpen(false);    
+                      await props.sendEmail(infoEmail);
                     }}
                   >
                     Confirmar compra
@@ -70,12 +89,13 @@ const Order = (props) => {
 };
 
 //leer estados
-const mapStateToProps = (state) => ({ cart: state.cart.cart });
+const mapStateToProps = (state) => ({ cart: state.cart.cart, user: state.login.user, contact: state.contact.contact });
 
 //ejecutar acciones
 const mapDispatchToProps = (dispatch) => ({
   createOrder: () => dispatch(orderActions.createOrder()),  
-  updateStock: (payload) => dispatch(orderActions.updateStock(payload)),
+  updateStock: (payload) => dispatch(orderActions.updateStock(payload)),  
+  sendEmail: (payload) => dispatch(orderActions.sendEmail(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Order);

@@ -5,9 +5,9 @@ import { useState, useEffect } from "react";
 
 import { connect } from "react-redux";
 
-import * as homeActions from "../store/actions/home";
+import * as homeActions from "../../store/actions/home";
 
-const Products = (props) => {
+const ProductsAdmin = (props) => {
    
    const [filteredData, setFilteredData] = useState([]); 
   
@@ -22,7 +22,7 @@ const Products = (props) => {
       const f=props.filters     
 
       const dataFiltered = 
-        props.productsDto.filter(item=>((item.id_color.filter(c => f.color.includes(c)).length || !f.color.length) && (item.id_size.filter(c => f.size.includes(c)).length || !f.size.length) && (item.id_cat.filter(c => f.category.includes(c)).length || !f.category.length) && (item.id_brand.filter(c => f.brand.includes(c)).length || !f.brand.length) && (item.color_spa.filter(e=>search.includes(e)).length || item.brand.filter(e=>search.includes(e)).length || item.style.filter(e=>search.includes(e)).length || search==="")))
+        props.productsDto.filter(item=>((item.id_color.filter(c => f.color.includes(c)).length || !f.color.length) && (item.id_size.filter(c => f.size.includes(c)).length || !f.size.length) && (item.id_cat.filter(c => f.category.includes(c)).length || !f.category.length) && (item.id_brand.filter(c => f.brand.includes(c)).length || !f.brand.length) && (item.color.filter(e=>search.includes(e)).length || item.brand.filter(e=>search.includes(e)).length || item.style.filter(e=>search.includes(e)).length || search==="")))
       
         setFilteredData(dataFiltered);
       }
@@ -56,4 +56,4 @@ const mapDispatchToProps = (dispatch) => ({
   loadProductsDto: () => dispatch(homeActions.loadProductsDto()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Products);
+export default connect(mapStateToProps, mapDispatchToProps)(ProductsAdmin);

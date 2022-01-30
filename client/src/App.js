@@ -4,9 +4,8 @@ import Product from "./pages/Product";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Cart from "./pages/Cart";
-import Contact from "./pages/Contact";
-import Order from "./pages/Order";
-import Prueba from "./pages/modal";
+import ProductListAdmin from "./admin/pages/ProductList";
+import AddProducts from "./admin/pages/AddProducts"
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 
@@ -31,13 +30,13 @@ const App = () => {
         </Route>
         <Route path="/register">
           <Register />
-        </Route>          
-        <Route path="/prueba">
-          <Prueba />
-        </Route>  
-        <Route path="/products/:category">
-          <ProductList />
-        </Route>  
+        </Route>    
+        <Route path="/admin">
+          <ProductListAdmin />
+        </Route>
+        <Route path="/addproduct">
+          <AddProducts/>
+        </Route>       
       </Switch>
     </Router>
   );

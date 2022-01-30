@@ -22,6 +22,7 @@ class ContactController {
 
     // Controller endpoints
     this.router.post(this.path, this.createContact);
+    this.router.get(this.path + "/:id", this.getContact);
   }
 
   public validateInput(
@@ -82,6 +83,12 @@ class ContactController {
     } catch (err) {
       res.status(500).json(err);
     }
+  };
+
+  //---------------Get order---------------
+  public async getContact(req: express.Request, res: express.Response) {
+    const contact = await UserContact.findOne(req.params.id);
+    return res.send(contact);
   }
 }
 

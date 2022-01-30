@@ -1,5 +1,7 @@
 import * as creators from "../creators/options";
 import { GETData, SETData } from "../../services/WebServices";
+import { Alert } from 'rsuite';
+import 'rsuite/dist/styles/rsuite-default.css';
 
 export const setTypeDocument = (payload) => {
   return {
@@ -25,6 +27,7 @@ export const createUser = (payload) => {
     await SETData(`user`, "POST", payload)
       .then((response) => {
         if (response !== null) {
+          Alert.success("El usuario se ha creado correctamente")
           console.log(response);
         }
       })
@@ -79,7 +82,7 @@ export const setBrand = (payload) => {
 
 export const loadBrand = () => {
   return async (dispatch, getState) => {
-    await GETData(`product/brand`, "GET")
+    await GETData(`product/brand`, "GET", true)
       .then((response) => {
         if (response !== null) {
           dispatch(setBrand(response));   

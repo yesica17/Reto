@@ -1,24 +1,21 @@
 import React, { Fragment } from "react";
-import Navbar from "../components/Navbar";
-import Announcement from "../components/Announcement";
-import Slider from "../components/Slider";
-import Categories from "../components/Categories";
+
 import Products from "../components/Products";
-import PopularProducts from "../components/PopularProducts";
-import Footer from "../components/Footer";
-import {TitleCart} from "../components/Styled_components";
+
 import { useState, useEffect } from "react";
 import { SearchContainerNavbar, InputNavbar, LeftNavbar, WrapperNavbar } from "../components/Styled_components";
 import { Search} from "@material-ui/icons";
 import styled from "styled-components";
-import { CheckPicker } from 'rsuite';
+import { CheckPicker, Navbar } from 'rsuite';
 import 'rsuite/dist/styles/rsuite-default.css';
-import { mobile } from "../responsive";
+import { mobile } from "../../responsive";
 
 
 import { connect } from "react-redux";
 
-import * as optionsActions from "../store/actions/options";
+import * as optionsActions from "../../store/actions/options";
+import Navigation from "../components/Navigation";
+
 
 const Container = styled.div``;
 
@@ -50,7 +47,7 @@ const Select = styled.select`
 `;
 const Option = styled.option``;
 
-const Home = (props) => {
+const ProductListAdmin = (props) => {
   const [wordEntered, setWordEntered] = useState("");
     const filters_init={
     color:[],
@@ -81,17 +78,15 @@ const Home = (props) => {
   
 
   return (
-    <div>      
-      <Navbar />  
-      <Announcement />    
-      <Slider />     
-      {/* <Categories /> */}
+    <div style={{display:"flex", flexDirection: "row"}}>  
+        <Navigation/> 
+        <div style={{display:"flex", flexDirection: "column"}}>       
       <WrapperNavbar>
       <LeftNavbar>
       <SearchContainerNavbar>
           <InputNavbar placeholder="Búsqueda"  name="search"  onChange={handleWord}/>   <Search style={{ color: "gray", fontSize: 16 }} />         
-      </SearchContainerNavbar>  
-      </LeftNavbar>
+      </SearchContainerNavbar>      
+      </LeftNavbar>      
       </WrapperNavbar>
       <Container>                    
       <FilterContainer>
@@ -110,7 +105,7 @@ const Home = (props) => {
               <CheckPicker                                    
                   style={{width: 150}}
                   data={props.colors}
-                  labelKey="color_spa"
+                  labelKey="color"
                   valueKey="id"
                   size="sm"
                   searchable={false}
@@ -140,10 +135,7 @@ const Home = (props) => {
       </FilterContainer>      
     </Container>
       
-      <Products wordEntered={wordEntered} filters={filters}/> 
-      <TitleCart><b>Los más buscados</b></TitleCart> 
-      <PopularProducts/>       
-      <Footer />
+      <Products wordEntered={wordEntered} filters={filters}/></div>       
     </div>
   );
 };
@@ -168,4 +160,4 @@ const mapDispatchToProps = (dispatch) => ({
   loadCategory: () => dispatch(optionsActions.loadCategory()),  
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(ProductListAdmin);

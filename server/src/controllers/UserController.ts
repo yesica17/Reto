@@ -89,7 +89,8 @@ class UserController {
           user: {
             id: user.id,
             isAdmin: user.isAdmin,
-            name: user.name
+            name: user.name,
+            lastname: user.lastname,
           }
         },
         process.env.JWT_SEC,

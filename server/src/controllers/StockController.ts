@@ -3,6 +3,7 @@ import { Stock } from "../models/Stock";
 import { Size } from "../models/Sizes";
 import { Color } from "../models/Colors";
 import { Product } from "../models/Products";
+import { StockDto } from "../dto/stockDto";
 import {
   verifyToken,
   verifyTokenAndAuthorization,
@@ -23,10 +24,11 @@ class StockController {
 
     // Controller endpoints
     this.router.post(this.path, this.createStock);
-    this.router.get(this.path, this.getAllStock);
+    this.router.get(this.path + "/load", this.getStockDto);
     this.router.get(this.path + "/size", this.getAllSize);
     this.router.get(this.path + "/color", this.getAllColor);
     this.router.get(this.path + "/:id", this.getStock);
+    
 
     this.router.put(this.path + "/:id", this.updateStock);
 
@@ -90,13 +92,49 @@ class StockController {
     }
   }
 
+  //--------DTO Stock--------------
+  public async getStockDto(req: express.Request, res: express.Response) {       
+    const stock = await Stock.find({     
+      relations: ["product"],            
+    });      
+
+    const dtoStock: StockDto[] = stock.map( s => {
+        return {
+        id_product: s.product.id,        
+        id_stock: s.id,
+        available_quantity: s.available_quantity,
+        id_color: s.colorId,
+        color: s.color.color,
+        color_spa: s.color.color_spa,
+        id_size: s.sizeId,
+        size: s.size.size,
+        }
+        });
+        
+        return res.send(dtoStock);    
+  } 
+
   //--------Get all stock--------------
-  public async getAllStock(req: express.Request, res: express.Response) {
-    const stock = await Stock.find({
-      relations: ["product"],
-    });
-    return res.send(stock);
-  }
+//   public async getAllStock(req: express.Request, res: express.Response) {
+//     const stock = await Stock.find({
+//       relations: ["product"],
+//     });
+//     return res.send(stock);
+//   }
+
+  //--------Get all stock by id_product--------------
+//   public async getAllStock(req: express.Request, res: express.Response) {
+//     const stockData = req.body;
+//     const stock = await Stock.find({      
+//       where: [
+//         {
+//           productId: stockData.product.id,          
+//         },
+//       ],
+//     });
+//     return res.send(stock);
+//   }
+
 
   //--------Get all size--------------
   public async getAllSize(req: express.Request, res: express.Response) {

@@ -133,6 +133,7 @@ class ProductController {
         available_quantity: p.stock.map(q=>q.available_quantity),
         id_color: p.stock.map(c=>c.colorId),
         color: p.stock.map(c=>c.color.color.toLowerCase()),
+        color_spa: p.stock.map(c=>c.color.color_spa.toLowerCase()),
         id_size: p.stock.map(s=>s.sizeId),
         size: p.stock.map(s=>s.size.size.toLowerCase())
         }

@@ -11,7 +11,7 @@ export const setContact = (payload) => {
 export const createContact = (payload) => {
   return async (dispatch, getState) => {
     const data = {
-      users: { id: 4 },
+      users: { id: getState().login.user.id },
       state: payload.state,
       city: payload.city,
       adress: payload.adress,
@@ -19,7 +19,20 @@ export const createContact = (payload) => {
     await SETData(`contact`, "POST", data)
       .then((response) => {
         if (response !== null) {
+          console.log(response);
+        }
+      })
+      .catch((response) => console.error(response));
+  };
+};
+
+export const loadContact = (payload) => {
+  return async (dispatch, getState) => {
+    await GETData(`contact/${payload}`, "GET")
+      .then((response) => {
+        if (response !== null) {
           dispatch(setContact(response));
+          
         }
       })
       .catch((response) => console.error(response));

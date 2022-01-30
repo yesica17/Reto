@@ -22,20 +22,9 @@ const Product = (props) => {
   const history=useHistory()
   const id = location.pathname.split("/")[2];
   const [quantity, setQuantity] = useState(1);
-  const [stock, setStock] = useState(); 
+  const [stock, setStock] = useState(null);   
 
-  const updateStock = () => {
-    if (props.product && cart.size.id !== null && cart.color.id !== null) {
-      setStock(
-        props.product.stock
-          .filter(
-            (value) =>
-              value.sizeId == cart.size.id && value.colorId == cart.color.id
-          )
-          .map((value) => value.available_quantity)[0]
-      );
-    }
-  };
+  
 
   useEffect( async () => {
     await props.loadProduct(id);    
@@ -70,6 +59,22 @@ const Product = (props) => {
   const [cart, setCart] = useState(cart_init);
   const [color, setColor] = useState([]);
   const [size, setSize] = useState([]);
+
+  const updateStock = () => {
+    if (props.product && cart.size.id !== null && cart.color.id !== null) {
+      setStock(
+        props.product.stock
+          .filter(
+            (value) =>
+              value.sizeId === cart.size.id && value.colorId === cart.color.id
+          )
+          .map((value) => value.available_quantity)[0]
+      );
+    }
+  };
+
+  console.log("carrito", cart, "stock", stock);
+  
 
   useEffect( async () => {
     if(props.product){setColor([
@@ -119,17 +124,17 @@ const Product = (props) => {
                 <SelectPicker
                                 style={{width: 100}}
                                 data={color}
-                                labelKey="color"
+                                labelKey="color_spa"
                                 valueKey="id"
                                 size="sm"
                                 searchable={false}
                                 placeholder="Tu color"
-                                onSelect={(value) => {
+                                onSelect={async (value) => {
                     setCart({
                       ...cart,
                       color: { id: value },
                     });
-                    updateStock();
+                    await updateStock();
                   }} />{" "}
                 
                 <FilterTitle>Talla</FilterTitle>{" "}
@@ -141,20 +146,20 @@ const Product = (props) => {
                                 size="sm"
                                 searchable={false}
                                 placeholder="Tu talla"
-                                onSelect={(value) => {
+                                onSelect={async (value) => {
                     setCart({
                       ...cart,
                       size: { id: value },
                     });
-                    updateStock();
+                    await updateStock();
                   }} />                
               </Filter>
 
-              {cart.size.id !== null && cart.color.id !== null ? (                
+              {cart.size.id !== null && cart.color.id !== null && stock !== null? (                 
                 stock > 0 ? (
-                  <h3>Disponible {stock}</h3>
+                  <h4 style={{color: "DarkGray"}}>Disponible {stock}</h4>
                 ) : (
-                  <h3>No disponible</h3>
+                  <h4 style={{color: "DarkGray"}}>No disponible</h4>
                 )
               ) : null}
             </FilterContainer>
@@ -166,7 +171,7 @@ const Product = (props) => {
                       handleQuantity("dec");
                       setCart({
                         ...cart,
-                        req_quantity: quantity,
+                        req_quantity: quantity-1,
                       });
                     }}
                   />
@@ -176,7 +181,7 @@ const Product = (props) => {
                       handleQuantity("inc");
                       setCart({
                         ...cart,
-                        req_quantity: quantity,
+                        req_quantity: quantity+1,
                       });
                     }}
                   />

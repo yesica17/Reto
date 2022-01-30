@@ -1,1 +1,2 @@
 export const SET_DETAIL_PRODUCT = "SET_DETAIL_PRODUCT";
+export const SET_STOCKDTO = "SET_STOCKDTO";

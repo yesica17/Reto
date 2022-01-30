@@ -1,8 +1,9 @@
 import {
   FavoriteBorderOutlined,
-  SearchOutlined,
-  ShoppingCartOutlined,
+  SearchOutlined, CallMade,
+  ShoppingCartOutlined, Input
 } from "@material-ui/icons";
+
 import { InfoProduct, ContainerProduct, CircleProduct, ImageProduct, IconProduct, ColorOption, FilterList} from "./Styled_components";
 import { Link } from "react-router-dom";
 import { useState, useEffect, Fragment } from "react";
@@ -17,7 +18,7 @@ const Product = (props) => {
       <InfoProduct>        
         <IconProduct>
           <Link to={`/product/${props.value.id_product}`}>
-            <SearchOutlined />
+            <Input style={{color: "LightSlateGray"}}/>
           </Link>
         </IconProduct>                          
       </InfoProduct> 

@@ -1,5 +1,5 @@
 import styled, { css } from "styled-components";
-import { mobile } from "../responsive";
+import { mobile } from "../../responsive";
 
 // --------------------------Announcement------------------------
 export const ContainerAnnouncement = styled.div`
@@ -123,13 +123,18 @@ export const ButtonNavbar = styled.button`
 export const CenterNavbar = styled.div`
   flex: 1;
   text-align: center;
+  flex-direction: row;
+ width:100%;
+ background-color: yellow;
 `;
 
 export const RightNavbar = styled.div`
   flex: 1;
   display: flex;
-  align-items: center;
-  justify-content: flex-end;
+  margin-right: 5px;
+  align-items: left;
+  justify-content: space-around; 
+  
   ${mobile({ flex: 2, justifyContent: "center" })}
 `;
 
@@ -151,7 +156,7 @@ export const InfoProduct = styled.div`
   background-color: rgba(0, 0, 0, 0.2);
   z-index: 3;
   display: flex;  
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
   transition: all 0.5s ease;
   cursor: pointer;
@@ -160,8 +165,8 @@ export const InfoProduct = styled.div`
 export const ContainerProduct = styled.div`
   flex: 1;
   margin: 5px;
-  min-width: 280px;
-  height: 450px;
+  min-width: 200px;
+  height: 350px;
   display: flex;  
   flex-direction: column;  
   align-items: center;
@@ -182,13 +187,13 @@ export const CircleProduct = styled.div`
 `;
 
 export const ImageProduct = styled.img`
-  height: 75%;
+  height: 75%;  
   z-index: 2;
 `;
 
 export const IconProduct = styled.div`
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   background-color: MintCream;
   flex-direction: row;
@@ -428,19 +433,17 @@ export const TitleRegister = styled.h1`
 export const FormRegister = styled.form`
   display: flex;
   flex-wrap: wrap;  
-  width: 70%;
+  width: 80%;  
+  height: 50vh;
   margin: 0 auto;
   justify-content: center;
-  border-radius: 7px;
-  border-width: 2px;
-  border-style: solid;
-  border-color: black;
 `;
 
 export const InputRegister = styled.input`
-  flex: 0.1;
-  min-width: 80%;
-  margin: 10px 10px 0px 0px;
+  flex: 1;
+  min-width: 20%;
+  height: 20%;
+  margin: 10px 10px 10px 10px;
   padding: 5px;
   &:invalid ~ span {
     display: block;
@@ -464,11 +467,11 @@ export const AgreementRegister = styled.span`
 `;
 
 export const ButtonRegister = styled.button`
-  width: 50%;
+  width: 15%;
   padding: 10px;
   margin-bottom: 20px;
   border-radius: 5px;
-  background-color: black;
+  background-color: DodgerBlue;
   color: white;
   font-weight: 600;
   box-shadow: 3px 3px 3px gray;

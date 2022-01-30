@@ -1,16 +1,23 @@
 const current = `http://localhost:8000/`;
 
-const SETData = async (url, method, params, endpoint = current) => {
-  let token = localStorage.getItem('token');
-  
+const token = localStorage.getItem('token');  
 
-  const response = await fetch(`${endpoint}${url}`, {
-    method: method,
-    headers: {
+const headers_sec= {
       Accept: "application/json",
       "Content-Type": "application/json",
       'token': `Bearer ${token}`
-    },
+    };
+
+const headers= {
+      Accept: "application/json",
+      "Content-Type": "application/json",      
+    };
+
+const SETData = async (url, method, params, endpoint = current, sec) => {  
+
+  const response = await fetch(`${endpoint}${url}`, {    
+    method: method,    
+    headers: sec ? headers_sec : headers,
     body: JSON.stringify(params),
   });
   if (response.ok) {
@@ -26,17 +33,13 @@ const SETData = async (url, method, params, endpoint = current) => {
   }
 };
 
-const GETData = async (url, method, endpoint = current) => {
-  let token = localStorage.getItem('token');  
+const GETData = async (url, method, sec = false, endpoint = current ) => {
+  
 
-  const response = await fetch(`${endpoint}${url}`, {
-    method: method,
+  const response = await fetch(`${endpoint}${url}`, {    
+    method: method,    
     mode: "cors",
-    headers: new Headers({
-      "Access-Control-Allow-Origin": "*",
-      'token': `Bearer ${token}`
-      
-    }),
+    headers: sec ? headers_sec : headers,
   });
   if (response.ok) {
     const body = await response.text().then(response);

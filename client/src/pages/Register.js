@@ -129,7 +129,10 @@ const Register = (props) => {
             <b>POLÍTICAS PRIVADAS</b>
           </AgreementRegister>
 
-          <ButtonRegister onClick={async () => await props.createUser(user)}>
+          <ButtonRegister onClick={async () =>
+             {  await props.createUser(user);
+                //props.setOpen(false);            
+             }}>
             CREAR
           </ButtonRegister>
         </FormRegister>

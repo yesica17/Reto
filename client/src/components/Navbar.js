@@ -4,11 +4,17 @@ import { ContainerNavbar, WrapperNavbar, LeftNavbar, ButtonNavbar, CenterNavbar,
 } from "./Styled_components";
 import { Dropdown, Tooltip, Whisper, Button, Icon} from 'rsuite';
 import 'rsuite/dist/styles/rsuite-default.css';
+import { useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import * as loginActions from "../store/actions/login";
+import * as cartActions from "../store/actions/cart";
 
 const Navbar = (props) => {
+
+    useEffect(() => {        
+    props.loadCart();      
+  }, []);  
   
   const len = props.cart.length;
   const history=useHistory()
@@ -19,9 +25,9 @@ const Navbar = (props) => {
         <LeftNavbar>
          {props.user ?
             props.user.isAdmin === true 
-            ? <Button appearance="ghost" color="cyan">
+            ? <Link to={`/admin`}><Button appearance="ghost" color="cyan">
                 <Icon icon="user"  /> Administrar productos
-               </Button>
+               </Button></Link>
             : null
             :null}
         </LeftNavbar>         
@@ -69,6 +75,7 @@ const mapStateToProps = (state) => ({
 //ejecutar acciones
 const mapDispatchToProps = (dispatch) => ({
   logoutUser: () => dispatch(loginActions.logoutUser()),  
+  loadCart: () => dispatch(cartActions.loadCart()), 
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Navbar);

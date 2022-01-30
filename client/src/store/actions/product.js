@@ -63,3 +63,22 @@ export const updateViews = (payload) => {
       .catch((response) => console.error(response));
   };
 };
+
+export const setStockDto = (payload) => {
+  return {
+    type: creators.SET_STOCKDTO,
+    payload,
+  };
+};
+
+export const loadStockDto = () => {
+  return async (dispatch, getState) => {
+    await GETData(`stock/load`, "GET")
+      .then((response) => {
+        if (response !== null) {
+          dispatch(setStockDto(response));         
+        }
+      })
+      .catch((response) => console.error(response));
+  };
+};

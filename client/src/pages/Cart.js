@@ -1,5 +1,5 @@
 import {Add, Remove, Edit, WarningSharp, AssignmentLateSharp } from "@material-ui/icons";
-import { Drawer} from 'rsuite';
+import { Drawer, Modal, Button} from 'rsuite';
 import 'rsuite/dist/styles/rsuite-default.css';
 
 import Announcement from "../components/Announcement";
@@ -14,23 +14,24 @@ import { connect } from "react-redux";
 
 import * as cartActions from "../store/actions/cart";
 import * as contactActions from "../store/actions/contact";
+import ModalBody from "rsuite/lib/Modal/ModalBody";
+import ModalFooter from "rsuite/lib/Modal/ModalFooter";
 
 
 const Cart = (props) => {       
 
   const [cart, setCart] = useState(null);
   const [open, setOpen] = useState(false);     
+  const [openDel, setOpenDel] = useState(false);     
   const [quantity, setQuantity] = useState(1);
   const [openModal, setOpenModal] = useState(false);     
   const stateCart=props.cart.filter( value=>value.req_quantity > value.stocks.available_quantity); 
-  console.log("state cart", stateCart)
-
-  useEffect(() => {
-    props.loadCart();  
-    
+ 
+  useEffect(() => {        
+        props.loadCart();    
   }, []);    
 
-  console.log(props.cart)
+ 
   
   const amount = props.cart.filter(value=>value.stocks.available_quantity!==0 && value.req_quantity<= value.stocks.available_quantity).map((value) => value.req_quantity * value.stocks.product.price)
         .reduce((a, b) => a + b, 0);
@@ -83,6 +84,8 @@ const Cart = (props) => {
                   <br/><br/>
                   <ButtonProd onClick={async () => {
                         await props.updateCart(cart);
+                        await props.loadCart();
+                        setOpen(false);
                         }}> Actualizar </ButtonProd>
               
               </InfoContainer>
@@ -115,17 +118,34 @@ const Cart = (props) => {
                                           {value.stocks.product.categories[0].name}
                                       </ProductName>
                                       <ProductId>
-                                          <b>ID:</b> {value.stocks.product.id}
+                                          <b>Ref. </b> {value.stocks.id}
                                       </ProductId>
                                       <ProductColor color={value.stocks.color.color} />
                                       <ProductSize>
                                           <b>Talla:</b> {value.stocks.size.size}
                                       </ProductSize>
                                       <TopButtonCart  onClick={async () => {
-                                            await props.deleteCart(value.id);
-                                            
-                                          }}>Eliminar producto
+                                            //await props.deleteCart(value.id);
+                                            await setOpenDel(true);
+                                          }}>Eliminar
                                       </TopButtonCart>
+                                      <Modal show={openDel} overflow={true} onHide={() => setOpenDel(false)}>  
+                                    <Modal.Header>
+                                    <Modal.Title>Eliminar producto</Modal.Title>
+                                    </Modal.Header>
+                                    <ModalBody>¿Estas seguro que quieres eliminar este producto?</ModalBody>
+                                    <ModalFooter>
+                                        <Button  color= "blue" appearance="ghost" 
+                                            onClick={async () => {
+                                                await props.updateStateCart(value.id); 
+                                                await props.loadCart();
+                                                setOpenDel(false)}}> 
+                                                Eliminar </Button>{" "}
+                                    <Button onClick={() => setOpenDel(false)} appearance="subtle">
+                                        <b>Cancelar</b>
+                                    </Button>
+                                    </ModalFooter>
+                                </Modal>
                                   </DetailsCart>
                                   </ProductDetail>
                                       {value.req_quantity<= value.stocks.available_quantity ?(<PriceDetail>                                 
@@ -179,10 +199,11 @@ const Cart = (props) => {
                 </SummaryItemPrice>
               </SummaryItem>
               
-                <ButtonCart onClick={async()=>{
-                    await props.cart.map(value=> props.updateAmount(value.id));                  
-                    await stateCart.map(value=> props.updateStateCart(value.id));
-                    await setOpenModal(true)
+                <ButtonCart onClick={async()=>{                    
+                    await props.cart.map(async value=> await props.updateAmount(value.id));                  
+                    await stateCart.map(async value=> await props.updateStateCart(value.id));
+                    await props.loadCart();                                    
+                    setOpenModal(true);
                           
                     }}>COMPRAR AHORA
                 </ButtonCart>
@@ -194,7 +215,7 @@ const Cart = (props) => {
         <Footer />
       </ContainerCart>
        
-      <Contact open={openModal} setOpen={setOpenModal}></Contact>
+      <Contact open={openModal} setOpen={setOpenModal}></Contact>      
     </Fragment>
       
   );
