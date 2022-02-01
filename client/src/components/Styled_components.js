@@ -375,7 +375,7 @@ export const InputLogin = styled.input`
   flex: 1;
   min-width: 80%;
   margin: 10px 0;
-  padding: 10px;
+  padding: 10px; 
 `;
 
 export const ButtonLogin = styled.button`

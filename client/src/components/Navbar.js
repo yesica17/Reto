@@ -12,9 +12,9 @@ import * as cartActions from "../store/actions/cart";
 
 const Navbar = (props) => {
 
-    useEffect(() => {        
-    props.loadCart();      
-  }, []);  
+//     useEffect(() => {        
+//     props.loadCart();      
+//   }, []);  
   
   const len = props.cart.length;
   const history=useHistory()

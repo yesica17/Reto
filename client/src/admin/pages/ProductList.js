@@ -56,7 +56,7 @@ const ProductListAdmin = (props) => {
     brand:[],
     
   }  
-  const [filters, setFilters] = useState(filters_init);   
+  const [filters, setFilters] = useState(filters_init);    
 
     useEffect(() => {    
     props.loadColor();

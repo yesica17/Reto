@@ -1,5 +1,5 @@
 import {FormLogin, InputLogin} from "../components/Styled_components";
-import { Modal, Button} from 'rsuite';
+import { Modal, Button, Alert} from 'rsuite';
 import 'rsuite/dist/styles/rsuite-default.css';
 import Order from "./Order";
 
@@ -33,20 +33,20 @@ const Contact = (props) => {
         </Modal.Header>  
       
         <FormLogin>
-          <InputLogin
-            placeholder="Departamento"
+          <InputLogin            
+            placeholder="Departamento"            
             onChange={(value) =>
               setContact({ ...contact, state: value.target.value })
             }
           />
-          <InputLogin
-            placeholder="Ciudad"
+          <InputLogin            
+            placeholder="Ciudad"            
             onChange={(value) =>
               setContact({ ...contact, city: value.target.value })
             }
           />
-          <InputLogin
-            placeholder="Dirección"
+          <InputLogin            
+            placeholder="Dirección"            
             onChange={(value) =>
               setContact({ ...contact, adress: value.target.value })
             }
@@ -54,12 +54,16 @@ const Contact = (props) => {
           <div>
                              
             <Button  color= "blue" appearance="ghost" 
-              onClick={async () => {                
+              onClick={async () => { 
+                if(contact.state !== "" && contact.city !== "" && contact.adress !== ""){              
                 await props.createContact(contact);
                 //await props.loadContact(props.user.id);  
                 await props.loadCart();              
                 await setOpenModal(true);   
-                await props.setOpen(false);             
+                await props.setOpen(false); 
+                }else{
+                    Alert.warning("Todos los campos son requeridos")
+                }          
               }}
             >
               Siguiente

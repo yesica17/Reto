@@ -24,7 +24,8 @@ const Cart = (props) => {
   const [open, setOpen] = useState(false);     
   const [openDel, setOpenDel] = useState(false);     
   const [quantity, setQuantity] = useState(1);
-  const [openModal, setOpenModal] = useState(false);     
+  const [openModal, setOpenModal] = useState(false);    
+  const [idCart, setIdCart] = useState(null);   
   const stateCart=props.cart.filter( value=>value.req_quantity > value.stocks.available_quantity); 
  
   useEffect(() => {        
@@ -124,28 +125,12 @@ const Cart = (props) => {
                                       <ProductSize>
                                           <b>Talla:</b> {value.stocks.size.size}
                                       </ProductSize>
-                                      <TopButtonCart  onClick={async () => {
-                                            //await props.deleteCart(value.id);
-                                            await setOpenDel(true);
+                                      <TopButtonCart  onClick={ () => {
+                                            setIdCart(value.id);
+                                            setOpenDel(true);
                                           }}>Eliminar
                                       </TopButtonCart>
-                                      <Modal show={openDel} overflow={true} onHide={() => setOpenDel(false)}>  
-                                    <Modal.Header>
-                                    <Modal.Title>Eliminar producto</Modal.Title>
-                                    </Modal.Header>
-                                    <ModalBody>¿Estas seguro que quieres eliminar este producto?</ModalBody>
-                                    <ModalFooter>
-                                        <Button  color= "blue" appearance="ghost" 
-                                            onClick={async () => {
-                                                await props.updateStateCart(value.id); 
-                                                await props.loadCart();
-                                                setOpenDel(false)}}> 
-                                                Eliminar </Button>{" "}
-                                    <Button onClick={() => setOpenDel(false)} appearance="subtle">
-                                        <b>Cancelar</b>
-                                    </Button>
-                                    </ModalFooter>
-                                </Modal>
+                                      
                                   </DetailsCart>
                                   </ProductDetail>
                                       {value.req_quantity<= value.stocks.available_quantity ?(<PriceDetail>                                 
@@ -216,6 +201,25 @@ const Cart = (props) => {
       </ContainerCart>
        
       <Contact open={openModal} setOpen={setOpenModal}></Contact>      
+      <Modal show={openDel} overflow={true} onHide={() => setOpenDel(false)}>  
+                                    <Modal.Header>
+                                    <Modal.Title>Eliminar producto</Modal.Title>
+                                    </Modal.Header>
+                                    <ModalBody>¿Estas seguro que quieres eliminar este producto?</ModalBody>
+                                    <ModalFooter>
+                                        <Button  color= "blue" appearance="ghost" 
+                                            onClick={                  
+                                                async () => {
+                                                await props.updateStateCart(idCart); 
+                                                await props.loadCart();
+                                                setOpenDel(false)}
+                                                }> 
+                                                Eliminar </Button>{" "}
+                                    <Button onClick={() => setOpenDel(false)} appearance="subtle">
+                                        <b>Cancelar</b>
+                                    </Button>
+                                    </ModalFooter>
+                                </Modal>
     </Fragment>
       
   );

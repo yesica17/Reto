@@ -75,8 +75,7 @@ const Product = (props) => {
     }
   };
 
-  console.log("carrito", cart, "stock", stock);
-  
+  console.log("carrito", cart, "stock", stock); 
 
   useEffect( async () => {
     if(props.product){setColor([
@@ -162,7 +161,7 @@ const Product = (props) => {
               </Filter>
 
               {cart.size.id !== null && cart.color.id !== null && stock !== null? (                 
-                stock > 0 ? (
+                stock > 0  ? (
                   <h4 style={{color: "DarkGray"}}>Disponible {stock}</h4>
                 ) : (
                   <h4 style={{color: "DarkGray"}}>No disponible</h4>

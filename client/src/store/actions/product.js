@@ -127,6 +127,30 @@ export const updateProductStatus = (payload) => {
   };
 };
 
+export const updateProduct = (payload) => {
+  return async (dispatch, getState) => {
+      const data = {
+       desc: payload.desc, 
+       img: payload.img,
+       price: payload.price,
+    //    categories: [{id: payload.categories[0].id}],
+    //     styles: [{id: payload.styles[0].id}],
+    //     brands: [{id: payload.brands[0].id}]   
+    };
+
+    await SETData(`product/${payload.id}`, "PUT", data)
+      .then((response) => {
+          console.log("res actualizado", response)
+        if (response !== null) {
+          console.log(response);  
+          Alert.success("El producto se actualizo con éxito!");       
+        }
+      })
+      .catch((response) => console.error(response));
+  };
+};
+
+
 export const deleteStock= (payload) => {
   return async (dispatch, getState) => {
    

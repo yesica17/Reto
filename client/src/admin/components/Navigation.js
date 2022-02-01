@@ -8,7 +8,7 @@ const Navigation = ()=>{
 
  <div>
     
-    <Sidenav defaultOpenKeys={['3', '4']} activeKey="1" expanded={false} appearance='inverse'>
+    <Sidenav defaultOpenKeys={['2']} activeKey="1" expanded={false} appearance='inverse'>
       <Sidenav.Body>
         <Nav>            
           <Nav.Item eventKey="1" icon={<Icon icon="dashboard" />}>

@@ -1,6 +1,5 @@
 import { Modal, SelectPicker, InputNumber, Whisper, Tooltip, Table, Alert, Button} from 'rsuite';
 import 'rsuite/dist/styles/rsuite-default.css';
-import { FormRegister, InputRegister, AgreementRegister, ButtonRegister } from "../components/Styled_components";
 
 import { connect } from "react-redux";
 import * as optionsActions from "../../store/actions/options";
@@ -11,6 +10,7 @@ import ModalBody from 'rsuite/lib/Modal/ModalBody';
 import ModalFooter from 'rsuite/lib/Modal/ModalFooter';
 import {Help, Delete, Edit, ArrowBack} from "@material-ui/icons";
 import UpdateStock from './UpdateStock';
+import ModalDelete from './ModalDelete';
 
 const { Column, HeaderCell, Cell, Pagination } = Table;
 
@@ -40,6 +40,7 @@ const AddStock = (props) => {
 const [stock, setStock] = useState(stock_init);
 const [open, setOpen] = useState(false);
 const [rowData, setRowData] = useState({});  
+const [openDel, setOpenDel] = useState(false);
 
   return (
     <div>
@@ -137,7 +138,7 @@ const [rowData, setRowData] = useState({});
                 return (
                   <span>
                     <a onClick={()=>{setRowData(rowData); setOpen(true)}}> <Edit style={{color: "LightSlateGray", fontSize: 20, cursor: "pointer"}}/> </a> |{' '}
-                    <a onClick={async()=>{await props.deleteStock(rowData.id_stock); await props. loadStockDto()}}> <Delete style={{color: "Tomato", fontSize: 20, cursor: "pointer"}}/></a>
+                    <a onClick={()=>{setRowData(rowData); setOpenDel(true)}}> <Delete style={{color: "Tomato", fontSize: 20, cursor: "pointer"}}/></a>
                   </span>
                 );
               }}
@@ -149,6 +150,7 @@ const [rowData, setRowData] = useState({});
         <ModalFooter></ModalFooter>      
     </Modal>   
     <UpdateStock open={open} setOpen={setOpen} rowData={rowData}/> 
+    <ModalDelete openDel={openDel} setOpenDel={setOpenDel} rowData={rowData}/> 
     </div>
   );
 };
@@ -165,8 +167,7 @@ const mapDispatchToProps = (dispatch) => ({
   loadStockDto: () => dispatch(productActions.loadStockDto()),
   loadColor: () => dispatch(optionsActions.loadColor()),
   loadSize: () => dispatch(optionsActions.loadSize()),   
-  createStock: (payload) => dispatch(productActions.createStock(payload)), 
-  deleteStock: (payload) => dispatch(productActions.deleteStock (payload)), 
+  createStock: (payload) => dispatch(productActions.createStock(payload)),   
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddStock);

@@ -19,8 +19,7 @@ export const loadCart = () => {
     };
     
     await SETData(`cart/load`, "POST", data)
-      .then((response) => {
-          console.log("esta es la respuesta" ,response)
+      .then((response) => {          
         if (response !== null) {
           dispatch(setCart(response));
         } else {

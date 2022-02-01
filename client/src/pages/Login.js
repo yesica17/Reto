@@ -1,5 +1,7 @@
 import { ContainerLogin, WrapperLogin, TitleLogin, FormLogin, InputLogin, ButtonLogin, LinkLogin } from "../components/Styled_components";
 import Navbar from "../components/Navbar";
+import { Input} from 'rsuite';
+import 'rsuite/dist/styles/rsuite-default.css';
 
 import { connect } from "react-redux";
 
@@ -27,18 +29,21 @@ const Login = (props) => {
       <WrapperLogin>
         <TitleLogin>Iniciar Sesión</TitleLogin>
         <FormLogin>
-          <InputLogin
+        <div style={{marginTop: 5, width: 250}}>
+          <Input
             placeholder="email"
             onChange={(value) =>
-              setUser({ ...user, email: value.target.value })
+              setUser({ ...user, email: value })
             }
-          />
-          <InputLogin
+          /></div>
+          <div style={{marginTop: 5, width: 250}}>
+          <Input
+            type="password"
             placeholder="password"
             onChange={(value) =>
-              setUser({ ...user, password: value.target.value })
+              setUser({ ...user, password: value })
             }
-          />
+          /></div>
           
             <ButtonLogin onClick={async () => {
                 await props.loginUser(user);
