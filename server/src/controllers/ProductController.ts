@@ -33,7 +33,7 @@ class ProductController {
     this.router.get(this.path + "/style", this.getAllStyle);
     this.router.get(this.path + "/brand", this.getAllBrand, verifyToken);
     this.router.get(this.path + "/:id", this.getProduct);
-    this.router.put(this.path + "/:id", this.updateProduct);    
+    this.router.put(this.path + "/:id", this.updateProduct);        
     this.router.delete(this.path + "/:id", this.deleteProduct);
   }
 
@@ -178,6 +178,7 @@ class ProductController {
   //------------------Update product------------------
   public async updateProduct(req: express.Request, res: express.Response) {
     const product = await Product.findOne(req.params.id);
+    console.log(req.body)
     if (product !== undefined) {
       await Product.update(req.params.id, req.body);
       return res.status(200).send({ message: "Product updated correctly" });
@@ -185,6 +186,8 @@ class ProductController {
 
     return res.status(404).send({ message: "Product not found" });
   }
+
+  
 
   //-------------------Delete product---------------------
   public async deleteProduct(req: express.Request, res: express.Response) {

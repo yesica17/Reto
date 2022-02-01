@@ -1,9 +1,8 @@
-import Home from "./pages/Home";
-import ProductList from "./pages/ProductList";
-import Product from "./pages/Product";
-import Register from "./pages/Register";
-import Login from "./pages/Login";
-import Cart from "./pages/Cart";
+import Home from "./pages/home/Home";
+import Product from "./pages/product/Product";
+import Register from "./pages/register/Register";
+import Login from "./pages/login/Login";
+import Cart from "./pages/cart/Cart";
 import ProductListAdmin from "./admin/pages/ProductList";
 import AddProducts from "./admin/pages/AddProducts"
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
@@ -18,10 +17,7 @@ const App = () => {
         </Route>
         <Route exact path="/">
           <Home />
-        </Route>
-        <Route path="/products/:category">
-          <ProductList />
-        </Route>
+        </Route>        
         <Route path="/product/:id">
           <Product />
         </Route>
