@@ -7,8 +7,15 @@ import { Link, useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import * as loginActions from "../../store/actions/login";
 import * as cartActions from "../../store/actions/cart";
+import { useEffect } from "react";
 
 const Navbar = (props) => {
+
+    useEffect(() => {   
+        if(props.user){         
+            props.loadCart(); 
+        }        
+    }, []);  
 
     const len = props.cart.length;
     const history=useHistory()

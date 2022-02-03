@@ -22,8 +22,6 @@ export const loadCart = () => {
       .then((response) => {          
         if (response !== null) {
           dispatch(setCart(response));
-        } else {
-          console.log("es nula");
         }
       })
       .catch((response) => console.error(response));

@@ -27,7 +27,7 @@ export const loadProduct = (payload) => {
 export const createCart = (payload) => {
   return async (dispatch, getState) => {
     const stock = {
-      user: { id: 4 },
+      user: { id: getState().login.user.id },   
       product: { id: getState().product.product.id },
       order: { id: "" },
       req_quantity: payload.req_quantity,

@@ -18,21 +18,24 @@ export const createContact = (payload) => {
     };    
     await SETData(`contact`, "POST", data)
       .then((response) => {
-        if (response !== null) {
-          console.log(response);
+        if (response !== null) {         
+          console.log(response)
         }
       })
       .catch((response) => console.error(response));
   };
 };
 
-export const loadContact = (payload) => {
-  return async (dispatch, getState) => {
-    await GETData(`contact/${payload}`, "GET")
+export const loadContact = () => {    
+  return async (dispatch, getState) => { 
+    const data = {
+        id: getState().login.user.id
+    };    
+    await SETData(`contact/load`, "POST", data)
       .then((response) => {
-        if (response !== null) {
+        if (response !== null) {         
           dispatch(setContact(response));
-          
+          console.log(response)
         }
       })
       .catch((response) => console.error(response));

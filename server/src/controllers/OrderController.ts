@@ -23,6 +23,7 @@ class OrderController {
 
     // Controller endpoints
     this.router.post(this.path, this.createOrder);
+    this.router.post(this.path + "/amount", this.getAmount);
     this.router.get(this.path, this.getAllOrder);
     this.router.get(this.path + "/:id", this.getOrder);
 
@@ -75,13 +76,6 @@ class OrderController {
     
     const contact = prueba.map(value=>value)[0]
     order.contact = contact;  
-
-    
-
-    //console.log(contact.users.id)
-
-    console.log(prueba)
-
     const orders = await Cart.find({
       where: { userId: orderData.user.id, state_cart: true },
     });
@@ -96,6 +90,20 @@ class OrderController {
       res.status(500).json(err);
     }
   }
+
+  //---------Get amount-------------
+  public async getAmount(req: express.Request, res: express.Response) {
+    const orderData = req.body;    
+    const orders = await Cart.find({
+      where: { userId: orderData.id, state_cart: true },
+    });
+
+    const amount = orders.map((value) => value.amount)
+      .reduce((a, b) => a + b, 0);  
+    
+    return res.status(200).send({amount});
+  }
+
 
   //--------Get all order--------------
   public async getAllOrder(req: express.Request, res: express.Response) {

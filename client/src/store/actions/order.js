@@ -13,7 +13,7 @@ export const setOrder = (payload) => {
 export const createOrder = () => {
   return async (dispatch, getState) => {
     const data = {
-      user: { id: 4 }      
+      user: { id: getState().login.user.id },        
     };
     await SETData(`order`, "POST", data)
       .then((response) => {
@@ -42,12 +42,28 @@ export const updateStock = (payload) => {
   };
 };
 
+export const getAmount = () => {    
+  return async (dispatch, getState) => { 
+    const data = {
+        id: getState().login.user.id
+    };    
+    await SETData(`order/amount`, "POST", data)
+      .then((response) => {
+        if (response !== null) {         
+          dispatch(setOrder(response));          
+        }
+      })
+      .catch((response) => console.error(response));
+  };
+};
+
 export const sendEmail = (payload) => {
   return async (dispatch, getState) => {
     const data = {
+        email: payload.email,
         user: payload.user,
         order: 1223,
-        address: "carrera 16 a # 12- 04",
+        address: payload.address,
         amount: payload.amount,
         products: payload.products    
     };

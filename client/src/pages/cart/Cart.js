@@ -23,12 +23,12 @@ const Cart = (props) => {
     const [openDel, setOpenDel] = useState(false);     
     const [quantity, setQuantity] = useState(1);
     const [openModal, setOpenModal] = useState(false);    
-    const [idCart, setIdCart] = useState(null);   
-    const stateCart=props.cart.filter( value=>value.req_quantity > value.stocks.available_quantity); 
+    const [idCart, setIdCart] = useState(null);      
+    const stateCart=props.cart.filter( value=>value.req_quantity > value.stocks.available_quantity);      
     
-    useEffect(() => {        
-            props.loadCart();    
-    }, []);   
+    useEffect(() => {            
+        props.loadCart();         
+    }, []);      
 
     const amount = props.cart.filter(value=>value.stocks.available_quantity!==0 
         && value.req_quantity<= value.stocks.available_quantity).map((value) => value.req_quantity * value.stocks.product.price).reduce((a, b) => a + b, 0);
@@ -157,13 +157,12 @@ const Cart = (props) => {
 
 //leer estados
 const mapStateToProps = (state) => ({
-    cart: state.cart.cart,   
+    cart: state.cart.cart,      
 });
 
 //ejecutar acciones
 const mapDispatchToProps = (dispatch) => ({
-    loadCart: () => dispatch(cartActions.loadCart()), 
-    deleteCart: (payload) => dispatch(cartActions.deleteCart(payload)),  
+    loadCart: () => dispatch(cartActions.loadCart()),    
     updateCart: (payload) => dispatch(cartActions.updateCart(payload)),  
     updateStateCart: (payload) => dispatch(cartActions.updateStateCart(payload)),  
     updateAmount: (payload) => dispatch(contactActions.updateAmount(payload)),

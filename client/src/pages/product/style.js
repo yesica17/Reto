@@ -50,9 +50,9 @@ export const FilterContainer = styled.div`
 
 export const Filter = styled.div`
   flex: 1;
-  min-width: 40%;
+  min-width: 100%;
   margin: 20px 10px 0px 0px;
-  padding: 10px;
+  padding: 10px;  
 `;
 
 export const FilterTitle = styled.span`
@@ -100,7 +100,7 @@ export const Amount = styled.span`
 `;
 
 export const ButtonProd = styled.button`
-  padding: 15px;
+  padding: 15px;  
   background-color: black;
   border-radius: 5px;
   box-shadow: 3px 3px 3px gray;

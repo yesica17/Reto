@@ -1,6 +1,7 @@
 import { ProductOrder, ButtonOrder, InfoOrder, ProductDetailOrder, ImageOrder, ProductTitle, PriceOrder, DetailsOrder } from "./style";
 
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
 import * as orderActions from "../../store/actions/order";
 
@@ -8,23 +9,27 @@ import { useState, useEffect } from "react";
 import { Modal, Button} from 'rsuite';
 import 'rsuite/dist/styles/rsuite-default.css';
 
-const Order = (props) => {    
+const Order = (props) => {   
 
     const data = {
+            email: "",
             user: "",
             order: null,
             address: "",
             amount: null,
             products: []    
-        };
+        };   
 
     const [infoEmail, setInfoEmail] = useState(data);
 
     useEffect(() => {
-            if(props.cart){
-                const title= props.cart.map(value=>value.stocks.product.styles[0].name+" "+ value.stocks.product.brands[0].name + " " + value.stocks.product.categories[0].name + " " +"x" + " " + value.req_quantity + " " + "ud.");             
-                const name= props.user.name;
-                setInfoEmail({...infoEmail, user: name, products: title});     
+            if(props.cart && props.contact && props.user){
+                const title = props.cart.map(value=>value.stocks.product.styles[0].name+" "+ value.stocks.product.brands[0].name + " " + value.stocks.product.categories[0].name + " " +"x" + " " + value.req_quantity + " " + "ud.");             
+                const name = props.user.name;
+                const email = props.user.email;
+                const address = props.contact.map(c=>c.state+", "+c.city+", "+c.adress)[0];
+                const amount = props.amount.amount;
+                setInfoEmail({...infoEmail, user: name, products: title, address: address, amount: amount, email: email});     
             }              
     }, [props.cart])  
 
@@ -51,25 +56,31 @@ const Order = (props) => {
                         </ProductOrder>)}                           
                 </InfoOrder>
                 <div style={{margin: 20}}>
+                    <Link to="/">
                     <ButtonOrder onClick={async () => {                        
                         await props.createOrder();
                         await props.cart.map((value) => props.updateStock(value.id));
                         await props.setOpen(false);    
-                        await props.sendEmail(infoEmail);
-                     }}> Confirmar compra </ButtonOrder>{" "}
+                        await props.sendEmail(infoEmail);                        
+                     }}> Confirmar compra </ButtonOrder></Link>{" "}
                     <Button onClick={() => props.setOpen(false)} appearance="subtle"> <b>Cancelar</b> </Button>
                 </div>        
         </Modal>);  
 };
 
 //leer estados
-const mapStateToProps = (state) => ({ cart: state.cart.cart, user: state.login.user, contact: state.contact.contact });
+const mapStateToProps = (state) => ({ 
+    cart: state.cart.cart, 
+    user: state.login.user, 
+    contact: state.contact.contact, 
+    amount: state.order.order,   
+});
 
 //ejecutar acciones
 const mapDispatchToProps = (dispatch) => ({
   createOrder: () => dispatch(orderActions.createOrder()),  
-  updateStock: (payload) => dispatch(orderActions.updateStock(payload)),  
-  sendEmail: (payload) => dispatch(orderActions.sendEmail(payload)),
+  updateStock: (payload) => dispatch(orderActions.updateStock(payload)),    
+  sendEmail: (payload) => dispatch(orderActions.sendEmail(payload)),  
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Order);

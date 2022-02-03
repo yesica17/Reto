@@ -91,7 +91,7 @@ class CartController {
     });
     cart.stocks=stock[0];
 
-    const findStock = await Cart.find({where: [{stockId: stock[0], state_cart: true }]});   
+    const findStock = await Cart.find({where: [{stockId: stock[0], userId: cartData.user.id, state_cart: true }]});   
    
     const user = await User.findOne(cartData.user.id);
     cart.user = user;
@@ -211,8 +211,7 @@ class CartController {
   });  
 
   let date= new Date();
-  const user= data.user;
-  const order=data.order;
+  const user= data.user;  
   const address= data.address;
   const products= data.products;
   const amount= data.amount; 
@@ -227,7 +226,7 @@ class CartController {
 
   await transporter.sendMail({
     from: '"Cidenet Shop" <yriosbedoya@gmail.com>', // sender address
-    to: "yriosbedoya@gmail.com", // list of receivers
+    to: data.email, // list of receivers
     subject: "Detalle de la compra", // Subject line
     // text: "Hello world?", // plain text body    
     html: `<div>    

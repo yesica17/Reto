@@ -100,7 +100,7 @@ const Home = (props) => {
                 </Container>
                 
                 <Products wordEntered={wordEntered} filters={filters}/> 
-                <h3><b>Los más buscados</b></h3> 
+                <div style={{textAlign: "center"}}><h3 ><b>Los más buscados</b></h3></div>
                 <PopularProducts/>       
                 <Footer />
             </Fragment>

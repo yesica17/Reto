@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 
 import * as contactActions from "../../store/actions/contact";
 import * as cartActions from "../../store/actions/cart";
+import * as orderActions from "../../store/actions/order";
 import { useState, useEffect } from "react";
 
 
@@ -22,7 +23,7 @@ const Contact = (props) => {
             adress: "",
         };
         const [contact, setContact] = useState(contactInit);  
-        const [openModal, setOpenModal] = useState(false);   
+        const [openModal, setOpenModal] = useState(false); 
 
         return (
             <div>
@@ -40,7 +41,9 @@ const Contact = (props) => {
                         <Button  color= "blue" appearance="ghost" 
                             onClick={async () => { 
                             if(contact.state !== "" && contact.city !== "" && contact.adress !== "")
-                                { await props.createContact(contact);                            
+                                { await props.createContact(contact);  
+                                await props.loadContact();  
+                                await props.getAmount();                        
                                 await props.loadCart();              
                                 await setOpenModal(true);   
                                 await props.setOpen(false); 
@@ -52,7 +55,7 @@ const Contact = (props) => {
                     </div>
                     </FormLogin>                
                 </Modal>
-                <Order open={openModal} setOpen={setOpenModal}></Order>
+                <Order open={openModal} setOpen={setOpenModal} contact={contact}></Order>
             </div>
         );
 };
@@ -62,9 +65,10 @@ const mapStateToProps = (state) => ({cart: state.cart.cart,  user: state.login.u
 
 //ejecutar acciones
 const mapDispatchToProps = (dispatch) => ({
-  createContact: (payload) => dispatch(contactActions.createContact(payload)), 
-  loadContact: (payload) => dispatch(contactActions.loadContact(payload)),
+  createContact: (payload) => dispatch(contactActions.createContact(payload)),  
   loadCart: () => dispatch(cartActions.loadCart()), 
+  loadContact: () => dispatch(contactActions.loadContact()),
+  getAmount: () => dispatch(orderActions.getAmount()),  
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Contact);
