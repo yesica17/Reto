@@ -1,14 +1,13 @@
 import {Edit, Delete, RemoveRedEye} from "@material-ui/icons";
-import { Modal, SelectPicker, InputNumber, Whisper, Tooltip, Table, Alert, Button, Sidenav, Dropdown, Nav, Icon} from 'rsuite';
+import { Modal, Button } from 'rsuite';
 import 'rsuite/dist/styles/rsuite-default.css';
 import ModalBody from 'rsuite/lib/Modal/ModalBody';
 import ModalFooter from 'rsuite/lib/Modal/ModalFooter';
 
-import { InfoProduct, ContainerProduct, CircleProduct, ImageProduct, IconProduct, ColorOption, FilterList} from "./Styled_components";
-import { Link } from "react-router-dom";
-import { useState, useEffect, Fragment } from "react";
+import { InfoProduct, ContainerProduct, ImageProduct, IconProduct } from "./Styled_components";
+import { useState } from "react";
 import DetailProduct from "./DetailProduct";
-import ModalDelete from './ModalDelete';
+
 
 import { connect } from "react-redux";
 import * as productActions from "../../store/actions/product";
@@ -40,18 +39,13 @@ const ProductAdmin = (props) => {
         <DetailProduct open={open} setOpen={setOpen} value={props.value}></DetailProduct>  
         <UpdateProduct open={openEdit} setOpen={setOpenEdit} value={props.value}></UpdateProduct>  
         <Modal show={openDel} overflow={true} onHide={() => setOpenDel(false)} onExit={async()=> await props.loadProductsDto()}>  
-                                    <Modal.Header>
-                                    <Modal.Title>Eliminar producto</Modal.Title>
-                                    </Modal.Header>
-                                    <ModalBody>¿Estas seguro que quieres eliminar este producto?</ModalBody>
-                                    <ModalFooter>
-                                        <Button onClick={async()=>{           
-                                            await props.updateProductStatus(props.value.id_product);     
-                                            setOpenDel(false)
-                                        }}>Eliminar</Button>
-                                         <Button>Cancelar</Button>
-                                    </ModalFooter>
-                                </Modal> 
+            <Modal.Header> <Modal.Title>Eliminar producto</Modal.Title> </Modal.Header>
+                <ModalBody>¿Estas seguro que quieres eliminar este producto?</ModalBody>
+                <ModalFooter>
+                    <Button onClick={async()=>{ await props.updateProductStatus(props.value.id_product); setOpenDel(false)}}>Eliminar</Button>
+                    <Button>Cancelar</Button>
+                </ModalFooter>
+        </Modal> 
     </ContainerProduct>
     );
 };

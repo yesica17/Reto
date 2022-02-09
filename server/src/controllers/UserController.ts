@@ -10,6 +10,21 @@ import {
   verifyTokenAndAdmin,
 } from "../controllers/token";
 
+/**
+ *  @swagger
+ *  components:
+ *      schemas:
+ *          User:
+ *              type: object
+ *              properties:
+ *                  name:
+ *                      type: string
+ *                      description: the user name
+ *              required:
+ *                - name
+ *              
+ */
+
 class UserController {
   public path = "/user";
   public router: express.Router = express.Router();
@@ -104,7 +119,13 @@ class UserController {
       res.status(500).json(err);
     }
   }
-
+  /**
+   * @swagger
+   * /user:
+   *    post:
+   *        summary: create a new user
+   * 
+   */
   //------------Create User-----------------
   public async createUser(req: express.Request, res: express.Response) {
     const userData = req.body;

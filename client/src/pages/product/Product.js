@@ -1,23 +1,24 @@
-import { Add, Remove } from "@material-ui/icons";
 import { useLocation } from "react-router-dom";
 import { Alert, SelectPicker, InputNumber, Button} from 'rsuite';
 import 'rsuite/dist/styles/rsuite-default.css';
 import Announcement from "../../components/announcement/Announcement";
 import Footer from "../../components/footer/Footer";
 import Navbar from "../../components/navbar/Navbar";
+import LoginModal from "./login";
 import { ContainerProd, WrapperProd, ImgContainerProd, ImageProd, InfoContainer, TitleProd, DescProd, Price, FilterContainer, Filter, FilterTitle, AmountContainer, Amount,  AddContainer, ButtonProd } from "./style";
 
 import { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import * as productActions from "../../store/actions/product";
+import * as cartActions from "../../store/actions/cart";
 import { useHistory } from "react-router-dom";
 
 const Product = (props) => {
         const location = useLocation();
         const history=useHistory()
-        const id = location.pathname.split("/")[2];
-        const [quantity, setQuantity] = useState(1);
+        const id = location.pathname.split("/")[2];        
         const [stock, setStock] = useState(null);  
+        const [openModal, setOpenModal] = useState(false);   
 
         useEffect( async () => {
             await props.loadProduct(id);    
@@ -115,10 +116,11 @@ const Product = (props) => {
                         <Button  style={{background: "black", color: "white", boxShadow: "3px 3px 3px gray"}}
                             onClick={async () => {
                                 if (cart.size.id !== null && cart.color.id !== null) 
-                                    { if (props.user && stock !== 0) { await props.createCart(cart);}
+                                    { if (props.user && stock !== 0) { await props.createCart(cart); await props.loadCart()}
                                     else if(stock===0){ Alert.error("El producto no esta disponible")}
                                     else { Alert.warning("Debes iniciar sesión para agregar productos al carrito");
-                                    history.push("/login")
+                                              setOpenModal(true)
+                                    //history.push("/login")
                                     }
                                 } else { Alert.warning("Debe seleccionar un color y una talla")}
                             }}> Agregar al carro </Button>
@@ -127,7 +129,8 @@ const Product = (props) => {
                     </InfoContainer>                
                 </WrapperProd>
                 ) : null}
-                <Footer />            
+                <Footer /> 
+                <LoginModal open={openModal} setOpen={setOpenModal}></LoginModal>             
             </ContainerProd>
         );
 };
@@ -142,7 +145,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   loadProduct: (payload) => dispatch(productActions.loadProduct(payload)),
   createCart: (payload) => dispatch(productActions.createCart(payload)),
-  updateViews: (payload) => dispatch(productActions.updateViews(payload)),     
+  updateViews: (payload) => dispatch(productActions.updateViews(payload)),  
+  loadCart: () => dispatch(cartActions.loadCart()),      
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Product);

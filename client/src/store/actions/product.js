@@ -127,6 +127,21 @@ export const updateProductStatus = (payload) => {
   };
 };
 
+export const activeProduct= (payload) => {
+  return async (dispatch, getState) => {
+    const data = {
+      status_product: true,      
+    };
+    await SETData(`product/${payload}`, "PUT", data)
+      .then((response) => {
+        if (response !== null) {
+          console.log(response);          
+        }
+      })
+      .catch((response) => console.error(response));
+  };
+};
+
 export const updateProduct = (payload) => {
   return async (dispatch, getState) => {
       const data = {
@@ -175,6 +190,25 @@ export const updateStock = (payload) => {
         if (response !== null) {
           console.log(response); 
           Alert.success("Actualización exitosa")         
+        }
+      })
+      .catch((response) => console.error(response));
+  };
+};
+
+export const setProductsDtoAdmin = (payload) => {
+  return {
+    type: creators.SET_PRODUCTSDTO_ADMIN,
+    payload,
+  };
+};
+
+export const loadProductsDtoAdmin = () => {
+  return async (dispatch, getState) => {
+    await GETData(`product/dtoAdmin`, "GET")
+      .then((response) => {
+        if (response !== null) {
+          dispatch(setProductsDtoAdmin(response));
         }
       })
       .catch((response) => console.error(response));

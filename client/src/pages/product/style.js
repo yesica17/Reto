@@ -112,3 +112,29 @@ export const ButtonProd = styled.button`
     color: gray;
   }
 `;
+
+export const FormLogin = styled.div`
+  display: flex;
+  flex-direction: column;  
+  align-items: center; 
+`;
+
+export const ButtonLogin = styled.button`
+  width: 40%;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: black;
+  color: white;
+  font-weight: 600;
+  box-shadow: 3px 3px 3px gray;
+  margin-bottom: 20px;
+  margin-top: 20px;
+`;
+
+export const LinkLogin = styled.a`
+  margin: 5px 0px;
+  font-size: 14px;
+  font-weight: bolder;
+  text-decoration: underline;
+  cursor: pointer;
+`;

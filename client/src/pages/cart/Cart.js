@@ -5,6 +5,7 @@ import Announcement from "../../components/announcement/Announcement";
 import Footer from "../../components/footer/Footer";
 import Navbar from "../../components/navbar/Navbar";
 import Contact from "../contact/Contact";
+import Notification from "./modal";
 import {  ContainerCart,  WrapperCart,  TitleCart,  TopCart,  TopButtonCart, BottomCart,InfoCart, ProductCart, ProductDetail, ImageCart, DetailsCart, ProductName, ProductId, ProductColor, ProductSize, PriceDetail, ProductAmountContainer,  ProductAmount, ProductPrice, HrCart, Summary, SummaryTitle, SummaryItem,  SummaryItemText, SummaryItemPrice, ButtonCart, EditButton,ImgContainerProd, InfoContainer, AmountContainer, Amount, ButtonProd} from "./style";
 
 import { useState, useEffect, Fragment } from "react";
@@ -21,14 +22,15 @@ const Cart = (props) => {
     const [cart, setCart] = useState(null);
     const [open, setOpen] = useState(false);     
     const [openDel, setOpenDel] = useState(false);     
-    const [quantity, setQuantity] = useState(1);
+    const [quantity, setQuantity] = useState(1);  
     const [openModal, setOpenModal] = useState(false);    
+    const [openNotification, setOpenNotification] = useState(false);    
     const [idCart, setIdCart] = useState(null);      
     const stateCart=props.cart.filter( value=>value.req_quantity > value.stocks.available_quantity);      
     
     useEffect(() => {            
-        props.loadCart();         
-    }, []);      
+        props.loadCart();              
+    }, [stateCart]);      
 
     const amount = props.cart.filter(value=>value.stocks.available_quantity!==0 
         && value.req_quantity<= value.stocks.available_quantity).map((value) => value.req_quantity * value.stocks.product.price).reduce((a, b) => a + b, 0);
@@ -126,19 +128,38 @@ const Cart = (props) => {
                                     <SummaryItemPrice> $ {(amount / 1000).toFixed(3)} </SummaryItemPrice>
                                     </SummaryItem>                            
                                     <ButtonCart onClick={async()=>{                    
-                                        await props.cart.map(async value=> await props.updateAmount(value.id));                  
-                                        await stateCart.map(async value=> await props.updateStateCart(value.id));
-                                        await props.loadCart();                                    
-                                        setOpenModal(true);                                        
+                                            
+                                        if(stateCart.length === props.cart.length){
+                                            setOpenNotification(true)
+                                            await stateCart.map(async value=> await props.updateStateCart(value.id));
+                                        } else{
+                                            await props.cart.map(async value=> await props.updateAmount(value.id));                  
+                                            await stateCart.map(async value=> await props.updateStateCart(value.id));
+                                            await props.loadCart();                                    
+                                            setOpenModal(true); 
+                                        }                                                                
                                     }}>COMPRAR AHORA </ButtonCart>                            
                                 </Summary>
                                 </BottomCart>                            
                         </WrapperCart>
-                    ) : null}
+                    ) 
+                    : <div style={{ padding: "20px 0px 200px 0px", display: "flex", flexDirection: "column", textAlign: "center"}}>
+                        <h3>Tu carro está vacío</h3>
+                        <div style={{padding: "50px 0px 0px 0px"}}>
+                            <p style={{fontSize: 18}}>Encuentre las mejores marcas de moda y estilos de ropa al mejor precio.</p>
+                        </div>
+                        <div style={{padding: 20}}>
+                            <Link to="/">
+                                    <button style={{color: "black", background: "transparent", fontSize: 20, textDecorationLine: "underline"}}><b>Continuar Comprando</b></button>
+                            </Link>
+                        </div>
+                    </div>
+                    }
                 <Footer />
             </ContainerCart>
         
-            <Contact open={openModal} setOpen={setOpenModal}></Contact>      
+            <Contact open={openModal} setOpen={setOpenModal}></Contact>     
+            <Notification open={openNotification} setOpen={setOpenNotification}></Notification>  
             <Modal show={openDel} overflow={true} onHide={() => setOpenDel(false)}>  
                     <Modal.Header> <Modal.Title>Eliminar producto</Modal.Title> </Modal.Header>
                     <ModalBody>¿Estas seguro que quieres eliminar este producto?</ModalBody>

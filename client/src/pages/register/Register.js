@@ -32,7 +32,7 @@ const Register = (props) => {
 
         return (
 
-            <Drawer placement='left' size='sm' show={props.open} onHide={() => props.setOpen(false)}>
+            <Drawer   style={{background: "yellow"}} placement='left' size='sm' show={props.open} onHide={() => props.setOpen(false)}>
                 <Drawer.Header><Drawer.Title><h3><b>Crear una cuenta</b></h3></Drawer.Title></Drawer.Header>
                 <Drawer.Body>
                     <FormRegister onSubmit={handleSubmit}>

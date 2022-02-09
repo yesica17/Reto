@@ -7,29 +7,24 @@ import { connect } from "react-redux";
 import * as productActions from "../../store/actions/product";
 
 const ModalDelete = (props) => {   
-  const [stock, setStock] = useState(null);
 
-   useEffect(() => {  
-    props.loadStockDto();      
-  }, []);  
+        const [stock, setStock] = useState(null);
 
-  return (
-     <Modal show={props.openDel} overflow={true} onHide={() => props.setOpenDel(false)} onEnter={()=>setStock(props.rowData.id_stock)} onExit={async()=> await props.loadStockDto()}>  
-                                    <Modal.Header>
-                                    <Modal.Title>Eliminar producto</Modal.Title>
-                                    </Modal.Header>
-                                    <ModalBody>¿Estas seguro que quieres eliminar este producto?</ModalBody>
-                                    <ModalFooter>
-                                        <Button onClick={async()=>{           
-                                            await props.deleteStock(stock);     
-                                            props.setOpenDel(false)
-                                        }}>Eliminar</Button>
-                                         <Button>Cancelar</Button>
-                                    </ModalFooter>
-                                </Modal>
-  );
+        useEffect(() => {  
+            props.loadStockDto();      
+        }, []);  
+
+        return (
+            <Modal show={props.openDel} overflow={true} onHide={() => props.setOpenDel(false)} onEnter={()=>setStock(props.rowData.id_stock)} onExit={async()=> await props.loadStockDto()}>  
+                <Modal.Header> <Modal.Title>Eliminar producto</Modal.Title> </Modal.Header>
+                <ModalBody>¿Estas seguro que quieres eliminar este producto?</ModalBody>
+                <ModalFooter>
+                    <Button onClick={async()=>{ await props.deleteStock(stock); props.setOpenDel(false)}}>Eliminar</Button>
+                    <Button>Cancelar</Button>
+                </ModalFooter>
+            </Modal>
+        );
 };
-
 
 //leer estados
 const mapStateToProps = (state) => ({

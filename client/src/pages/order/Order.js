@@ -9,7 +9,9 @@ import { useState, useEffect } from "react";
 import { Modal, Button} from 'rsuite';
 import 'rsuite/dist/styles/rsuite-default.css';
 
-const Order = (props) => {   
+const Order = (props) => {  
+    
+    
 
     const data = {
             email: "",
@@ -22,16 +24,17 @@ const Order = (props) => {
 
     const [infoEmail, setInfoEmail] = useState(data);
 
-    useEffect(() => {
-            if(props.cart && props.contact && props.user){
+    useEffect(() => {     
+        console.log("orden cambia")   
+            if(props.cart && props.contact && props.user && props.amount){
                 const title = props.cart.map(value=>value.stocks.product.styles[0].name+" "+ value.stocks.product.brands[0].name + " " + value.stocks.product.categories[0].name + " " +"x" + " " + value.req_quantity + " " + "ud.");             
                 const name = props.user.name;
                 const email = props.user.email;
-                const address = props.contact.map(c=>c.state+", "+c.city+", "+c.adress)[0];
-                const amount = props.amount.amount;
+                const address = props.contact.map(c=>c.state+", "+c.city+", "+c.adress)[0];                
+                const amount = props.amount.amount;                                
                 setInfoEmail({...infoEmail, user: name, products: title, address: address, amount: amount, email: email});     
             }              
-    }, [props.cart])  
+    }, [props.contact, props.amount])  
 
     return (
         <Modal show={props.open} overflow={(true)} size ="sm" onHide={() => props.setOpen(false)}>  
@@ -56,13 +59,13 @@ const Order = (props) => {
                         </ProductOrder>)}                           
                 </InfoOrder>
                 <div style={{margin: 20}}>
-                    <Link to="/">
+                    
                     <ButtonOrder onClick={async () => {                        
                         await props.createOrder();
                         await props.cart.map((value) => props.updateStock(value.id));
                         await props.setOpen(false);    
                         await props.sendEmail(infoEmail);                        
-                     }}> Confirmar compra </ButtonOrder></Link>{" "}
+                     }}> Confirmar compra </ButtonOrder>{" "}
                     <Button onClick={() => props.setOpen(false)} appearance="subtle"> <b>Cancelar</b> </Button>
                 </div>        
         </Modal>);  

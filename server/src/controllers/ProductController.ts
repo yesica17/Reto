@@ -29,6 +29,7 @@ class ProductController {
     this.router.post(this.path, this.createProduct);
     this.router.get(this.path, this.getAllProduct);
     this.router.get(this.path + "/dto", this.getProductDto);    
+    this.router.get(this.path + "/dtoAdmin", this.getProductDtoAdmin);  
     this.router.get(this.path + "/category", this.getAllCategory);
     this.router.get(this.path + "/style", this.getAllStyle);
     this.router.get(this.path + "/brand", this.getAllBrand, verifyToken);
@@ -109,7 +110,7 @@ class ProductController {
     return res.send(products);
   }
 
-    //--------DTO Products--------------
+    //--------DTO Products Client--------------
   public async getProductDto(req: express.Request, res: express.Response) {   
     
     const products = await Product.find({     
@@ -143,6 +144,39 @@ class ProductController {
         });
         return res.send(dtos);    
   } 
+
+  //--------DTO Products Admin--------------
+  public async getProductDtoAdmin(req: express.Request, res: express.Response) {   
+    
+    const products = await Product.find({     
+      relations: ["stock"],         
+      order:{id: "DESC"}    
+    });      
+
+    const dtos: ProductsDto[] = products.map( p => {
+        return {
+        id_product: p.id,
+        desc: p.desc,
+        img: p.img,
+        price: p.price,
+        id_cat: p.categories.map(c=>c.id),
+        category: p.categories.map(c=>c.name.toLowerCase()),
+        id_brand: p.brands.map(b=>b.id),
+        brand: p.brands.map(b=>b.name.toLowerCase()),
+        id_style: p.styles.map(s=>s.id),
+        style: p.styles.map(s=>s.name.toLowerCase()),
+        id_stock: p.stock.map(i=>i.id),
+        available_quantity: p.stock.map(q=>q.available_quantity),
+        id_color: p.stock.map(c=>c.colorId),
+        color: p.stock.map(c=>c.color.color.toLowerCase()),
+        color_spa: p.stock.map(c=>c.color.color_spa.toLowerCase()),
+        id_size: p.stock.map(s=>s.sizeId),
+        size: p.stock.map(s=>s.size.size.toLowerCase())
+        }
+        });
+        return res.send(dtos);    
+  } 
+
 
   //--------Get all category--------------
   public async getAllCategory(req: express.Request, res: express.Response) {

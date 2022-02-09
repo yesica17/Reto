@@ -6,8 +6,10 @@ import PopularProducts from "../../components/popular_product/PopularProducts";
 import Footer from "../../components/footer/Footer";
 import { SearchContainerNavbar, InputNavbar, LeftNavbar, WrapperNavbar, Container, FilterContainer, Filter, FilterText } from "./style";
 import { Search} from "@material-ui/icons";
-import { CheckPicker } from 'rsuite';
+import { CheckPicker, Pagination } from 'rsuite';
 import 'rsuite/dist/styles/rsuite-default.css';
+
+
 
 import { useState, useEffect, Fragment } from "react";
 import { connect } from "react-redux";
@@ -25,6 +27,8 @@ const Home = (props) => {
             
         }  
         const [filters, setFilters] = useState(filters_init);   
+        const [activePage, setActivePage] = useState(1);
+       
 
         useEffect(() => {    
             props.loadColor();
@@ -97,11 +101,24 @@ const Home = (props) => {
                                     onChange={ value => { setFilters({ ...filters, brand: value }) }} />            
                             </Filter>        
                         </FilterContainer>      
-                </Container>
-                
+                </Container>                
                 <Products wordEntered={wordEntered} filters={filters}/> 
+                {/* <Pagination                    
+                    size= 'md'
+                    prev= {true}
+                    next= {true}
+                    first= {true}
+                    last= {true}
+                    ellipsis= {true}
+                    boundaryLinks= {true}
+                    total= {200}                    
+                    pages= {10}                   
+                    maxButtons= {5}
+                    activePage={activePage}
+                    onChangePage={setActivePage}                   
+                /> */}
                 <div style={{textAlign: "center"}}><h3 ><b>Los más buscados</b></h3></div>
-                <PopularProducts/>       
+                <PopularProducts/>                      
                 <Footer />
             </Fragment>
         );

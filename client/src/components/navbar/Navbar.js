@@ -13,7 +13,7 @@ const Navbar = (props) => {
 
     useEffect(() => {   
         if(props.user){         
-            props.loadCart(); 
+            props.loadCart();             
         }        
     }, []);  
 
@@ -47,7 +47,7 @@ const Navbar = (props) => {
                             {props.user ?
                                 <Link to="/cart">
                                     <MenuItemNavbar>
-                                    <Badge badgeContent={len} color="primary">
+                                    <Badge badgeContent={props.cart.length} color="primary">
                                         <ShoppingCartOutlined style={{color:"CornflowerBlue"}}/>
                                     </Badge>
                                     </MenuItemNavbar>

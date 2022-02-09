@@ -29,7 +29,7 @@ export class Product extends BaseEntity {
   @Column({ type: "int", nullable: false })
   price: number;
 
-  @Column({ type: "boolean", default: true })
+  @Column({ type: "boolean", default: false })
   status_product: boolean;
 
   @CreateDateColumn()

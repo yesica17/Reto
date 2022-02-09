@@ -50,7 +50,8 @@ export const getAmount = () => {
     await SETData(`order/amount`, "POST", data)
       .then((response) => {
         if (response !== null) {         
-          dispatch(setOrder(response));          
+          dispatch(setOrder(response)); 
+          console.log("amount", response)         
         }
       })
       .catch((response) => console.error(response));

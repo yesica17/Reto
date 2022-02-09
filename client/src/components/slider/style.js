@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 import { mobile } from "../../responsive";
 
 export const ContainerSlider = styled.div`
@@ -34,8 +34,10 @@ export const WrapperSlider = styled.div`
   display: flex;
   background-color: #fff7f7;
   transition: all 1.5s ease;
-  transform: translateX(${(props) => props.slideIndex * -100}vw);
+  transform: translateX(${(props) => props.slideIndex * -100}vw);  
 `;
+
+
 
 export const Slide = styled.div`
   width: 100vw;
