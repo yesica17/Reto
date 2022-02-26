@@ -1,4 +1,4 @@
-import { Modal, SelectPicker, InputNumber, Whisper, Tooltip, Table, Alert, Button, InputGroup, Icon, Input} from 'rsuite';
+import { Modal, SelectPicker, InputNumber, Alert, Button, InputGroup, Icon, Input} from 'rsuite';
 import 'rsuite/dist/styles/rsuite-default.css';
 
 
@@ -23,17 +23,17 @@ const UpdateProduct = (props) => {
 
     const product_init = {
     id: props.value.id_product,
-    desc: "",
-    img: "",
-    price: null,
+    desc: props.value.desc,
+    img: props.value.img,
+    price: props.value.price,
     categories: [{
-        id: null    
+        id: props.value.id_cat[0]  
     }],
     styles: [{
-        id: null   
+        id: props.value.id_style[0]   
     }],
     brands: [{
-        id: null  
+        id: props.value.id_brand[0]  
     }]
     }
 
@@ -42,7 +42,7 @@ const UpdateProduct = (props) => {
 
   return (
     <div>
-    <Modal size= "sm" show={props.open} overflow={true} onHide={() => props.setOpen(false)}>  
+    <Modal size= "xs" show={props.open} overflow={true} onHide={() => props.setOpen(false)}>  
         <Modal.Header>
           <Modal.Title><h5>Actualizar producto</h5></Modal.Title>
         </Modal.Header>  
@@ -64,7 +64,7 @@ const UpdateProduct = (props) => {
                                         });
                                 }}
                                 />
-
+        <div style={{marginTop: 10}}>
             <SelectPicker
                                 style={{width: 250}}
                                 data={props.styles}
@@ -81,7 +81,8 @@ const UpdateProduct = (props) => {
                                     });
                             }}
                                 />
-                
+        </div>
+        <div style={{marginTop: 10}}> 
             <SelectPicker
                                 style={{width: 250}}
                                 data={props.brands}
@@ -98,38 +99,30 @@ const UpdateProduct = (props) => {
                                     });
                             }}
                                 />
-
+            </div>    
+            <div style={{marginTop: 10, width: 250}}> 
             <InputNumber  size= "md" prefix="$"  min={0} onChange={(value) => setProduct({ ...product, price: value})
-                    }/>
-            </div><div style={{width: 200}}></div>
-            <div style={{display: "flex", flexDirection: "column", justifyContent: "space-around"}}>
-                <div style={{display: "flex", flexDirection: "row"}}>
+                    }/></div> 
+            </div> 
+            <div style={{marginTop: 10, width: 250}}>            
             <InputGroup>
                 <InputGroup.Addon>
                     <Icon icon="image" />
                 </InputGroup.Addon>
                 <Input onChange={(value) => setProduct({ ...product, img: value})}/>
-            </InputGroup>
-            <Whisper
-                trigger="hover"
-                placement= "rightTop"
-                speaker={
-            <Tooltip>Introduzca la url de la imagen</Tooltip>}><Help/></Whisper>
-            </div>
-            <Input size = "md" componentClass="textarea" rows={8} style={{ width: 300 }} placeholder="Escriba la descripción del producto" 
-            onChange={(value) => setProduct({ ...product, desc: value})}/> 
-            
-            </div>
-                       
+            </InputGroup>   </div>
+            <div style={{marginTop: 10, width: 250}}>                     
+            <Input size = "md" componentClass="textarea" rows={8} placeholder="Escriba la descripción del producto" 
+            onChange={(value) => setProduct({ ...product, desc: value})}/>   </div>                    
         </ModalBody>
-        <ModalFooter><Button onClick={async()=>{
-                if(product.desc !== "" || product.img !== "" || product.price !== null || product.categories[0].id !== null || product.styles[0].id !== null || product.brands[0].id !== null){
-                    console.log(product);
+        <ModalFooter><Button appearance='primary' onClick={async()=>{                          
+                if(product.desc !== props.value.desc || product.img !== props.value.img || product.price !== props.value.price || product.categories[0].id !== props.value.id_cat[0]   || product.styles[0].id !== props.value.id_style[0]   || product.brands[0].id !== props.value.id_brand[0]  ){
                     await props.updateProduct(product);
                     await props.loadProductsDto();
-                    } else {Alert.warning("Edite al menos un campo")}
+                    props.setOpen(false);
+                    } else {Alert.warning("Edite al menos un campo", 3000)}
             }}>Actualizar</Button>  
-             <Button onClick={()=>props.setOpen(false)}>Cancelar</Button>  </ModalFooter>      
+             <Button appearance='primary' onClick={()=>props.setOpen(false)}>Cancelar</Button>  </ModalFooter>      
     </Modal>    
     </div>
   );

@@ -27,7 +27,7 @@ const Contact = (props) => {
 
         return (
             <div>
-                <Modal show={props.open} overflow={true} onHide={() => props.setOpen(false)}>  
+                <Modal show={props.open} overflow={true} onHide={() => props.setOpen(false)} onExit={async()=>props.loadCart()}>  
                     <Modal.Header> <Modal.Title>Dirección de contacto</Modal.Title> </Modal.Header>                 
                     <FormLogin>
                         <InputLogin  placeholder="Departamento" 

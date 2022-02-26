@@ -17,8 +17,9 @@ const Navbar = (props) => {
         }        
     }, []);  
 
-    const len = props.cart.length;
+    let len = props.cart.length;
     const history=useHistory()
+    console.log("navbar", props.cart.length)
   
     return (
         <ContainerNavbar>
@@ -44,10 +45,10 @@ const Navbar = (props) => {
                                 </Dropdown>
                             :<Dropdown title="Ingresar" onClick={()=>{history.push("/login")}}/>                      
                             }
-                            {props.user ?
+                            {props.user && props.cart.length ?
                                 <Link to="/cart">
                                     <MenuItemNavbar>
-                                    <Badge badgeContent={props.cart.length} color="primary">
+                                    <Badge badgeContent={len} color="primary">
                                         <ShoppingCartOutlined style={{color:"CornflowerBlue"}}/>
                                     </Badge>
                                     </MenuItemNavbar>

@@ -183,7 +183,7 @@ export const Amount = styled.span`
 
 export const AmountContainer = styled.div`
   display: flex;
-  align-items: center;
+  flex-direction: column;
   font-weight: 700;
 `;
 
@@ -207,6 +207,8 @@ export const ImgContainerProd = styled.div`
 
 export const InfoContainer = styled.div`
   flex: 1;
+  
+  flex-direction: column;
   padding: 0px 50px;
   ${mobile({ padding: "10px" })}
 `;

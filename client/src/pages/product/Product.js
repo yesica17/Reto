@@ -60,7 +60,7 @@ const Product = (props) => {
                         <ImageProd src={props.product.img} />
                     </ImgContainerProd>
                     <InfoContainer>
-                        <TitleProd> {props.product.styles[0].name} {props.product.brands[0].name}{" "}{props.product.categories[0].name} </TitleProd>
+                        <TitleProd><p style={{textTransform:"capitalize"}}> {props.product.styles[0].name} {props.product.brands[0].name}{" "}{props.product.categories[0].name} </p></TitleProd>
                         <DescProd>{props.product.desc}</DescProd>
                         <Price> <b>$</b> {(props.product.price / 1000).toFixed(3)} </Price>
                     <FilterContainer>
@@ -108,7 +108,7 @@ const Product = (props) => {
                         <AddContainer>             
                             <AmountContainer>
                                 <div style={{ width: 150, padding: 15 }}>
-                                    <InputNumber  max={stock} min={1} 
+                                    <InputNumber style={{borderWidth: 1, borderStyle: "solid", borderColor: "black"}} max={stock} min={1} 
                                         onChange={(value)=>{ setCart({ ...cart, req_quantity: value})}}/>
                                 </div>                                
                             </AmountContainer>

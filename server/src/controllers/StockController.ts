@@ -130,7 +130,7 @@ class StockController {
 
   //--------Get all color--------------
   public async getAllColor(req: express.Request, res: express.Response) {
-    const colors = await Color.find();
+    const colors = await Color.find({order:{color_spa: "ASC"}   });
     return res.send(colors);
   }
 

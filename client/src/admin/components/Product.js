@@ -1,5 +1,5 @@
 import {Edit, Delete, RemoveRedEye} from "@material-ui/icons";
-import { Modal, Button } from 'rsuite';
+import { Modal, Button, Alert } from 'rsuite';
 import 'rsuite/dist/styles/rsuite-default.css';
 import ModalBody from 'rsuite/lib/Modal/ModalBody';
 import ModalFooter from 'rsuite/lib/Modal/ModalFooter';
@@ -26,7 +26,11 @@ const ProductAdmin = (props) => {
         <ImageProduct src={props.value.img} /><br/>     
         <InfoProduct>  
                      
-        <IconProduct onClick={()=>{ setOpenDel(true)}}>          
+        <IconProduct onClick={()=>{ 
+            if(props.value.available_quantity.filter(value=>value > 0).length){
+                Alert.warning("El producto tiene aún inventario disponible.")
+            }else{setOpenDel(true)}            
+            }}>          
             <Delete style={{color: "LightSlateGray", fontSize: 20}}/>          
         </IconProduct> 
         <IconProduct onClick={()=>setOpenEdit(true)}>          
@@ -42,7 +46,10 @@ const ProductAdmin = (props) => {
             <Modal.Header> <Modal.Title>Eliminar producto</Modal.Title> </Modal.Header>
                 <ModalBody>¿Estas seguro que quieres eliminar este producto?</ModalBody>
                 <ModalFooter>
-                    <Button onClick={async()=>{ await props.updateProductStatus(props.value.id_product); setOpenDel(false)}}>Eliminar</Button>
+                    <Button onClick={async()=>{                         
+                        await props.updateProductStatus(props.value.id_product); 
+                        setOpenDel(false);
+                    }}>Eliminar</Button>
                     <Button>Cancelar</Button>
                 </ModalFooter>
         </Modal> 

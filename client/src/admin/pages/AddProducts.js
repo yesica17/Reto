@@ -112,7 +112,7 @@ const AddProducts = (props)=>{
             </div>
                 <div style={{display: "flex", justifyContent: "center"}}><ButtonRegister onClick={async()=>{if(product.desc !== "" && product.img !== "" && product.price !== null && product.categories[0].id !== null && product.styles[0].id !== null && product.brands[0].id !== null){
                         await props.createProduct(product); 
-                        await props.loadProductsDto();
+                        await props.loadProductsDtoAdmin();
                         } else {Alert.warning("Todos los campos son requeridos")}}}>Agregar producto</ButtonRegister></div>        
             <Table height={400} data={newProducts} sortType='asc'>
             <Column width={70} align="center" resizable>

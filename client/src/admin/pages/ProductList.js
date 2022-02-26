@@ -69,7 +69,7 @@ const ProductListAdmin = (props) => {
                             <CheckPicker                                    
                                 style={{width: 150}}
                                 data={props.colors}
-                                labelKey="color"
+                                labelKey="color_spa"
                                 valueKey="id"
                                 size="sm"
                                 searchable={false}

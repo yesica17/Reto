@@ -42,22 +42,19 @@ export class Product extends BaseEntity {
   views: number;
 
   @ManyToMany(() => Category, {
-    eager: true,
-    //cascade: true,
+    eager: true,    
   })
   @JoinTable()
   categories: Category[];
 
   @ManyToMany(() => Style, {
-    eager: true,
-    //cascade: true,
+    eager: true,    
   })
   @JoinTable()
   styles: Style[];
 
   @ManyToMany(() => Brand, {
-    eager: true,
-    //cascade: true,
+    eager: true,    
   })
   @JoinTable()
   brands: Brand[];

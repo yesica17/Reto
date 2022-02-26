@@ -6,6 +6,8 @@ import Cart from "./pages/cart/Cart";
 import ProductListAdmin from "./admin/pages/ProductList";
 import AddProducts from "./admin/pages/AddProducts"
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import PrivateRoute from "./pages/login/privateRoute";
+
 
 
 const App = () => {
@@ -26,13 +28,9 @@ const App = () => {
         </Route>
         <Route path="/register">
           <Register />
-        </Route>    
-        <Route path="/admin">
-          <ProductListAdmin />
-        </Route>
-        <Route path="/addproduct">
-          <AddProducts/>
         </Route>       
+        <PrivateRoute exact path="/admin" component={ProductListAdmin }/> 
+        <PrivateRoute exact path="/addproduct" component={AddProducts }/>           
       </Switch>
     </Router>
   );

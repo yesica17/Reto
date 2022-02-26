@@ -14,7 +14,7 @@ const Products = (props) => {
         const [filteredData, setFilteredData] = useState([]); 
         const [pageNumber, setPageNumber] = useState(0);
 
-        const productsPerPage = 3;
+        const productsPerPage = 12;
         const pagesVisited = pageNumber * productsPerPage;        
         
         useEffect(() => {            

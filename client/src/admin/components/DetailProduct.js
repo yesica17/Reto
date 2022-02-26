@@ -47,8 +47,10 @@ const DetailProduct = (props) => {
                             <Sidenav style={{background: "transparent", color: "red"}} activeKey="1" expanded={true} appearance='default'>
                                 <Sidenav.Body>
                                     <Nav>            
+                                        <Nav.Item eventKey="2"><b>Id: </b>{props.value.id_product}
+                                        </Nav.Item> 
                                         <Nav.Item eventKey="2"><b>Tipo de prenda: </b>{props.value.style}
-                                        </Nav.Item>  
+                                        </Nav.Item>   
                                         <Nav.Item eventKey="3"><b>Género: </b>{props.value.category}
                                         </Nav.Item> 
                                         <Nav.Item eventKey="4"><b>Marca: </b>{props.value.brand}

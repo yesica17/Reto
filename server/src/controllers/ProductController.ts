@@ -4,6 +4,7 @@ import { Category } from "../models/Categories";
 import { Style } from "../models/Styles";
 import { Brand } from "../models/Brands";
 import { ProductsDto } from "../dto/productsDto";
+import {getRepository} from "typeorm";
 import { Stock } from "../models/Stock";
 import {
   verifyToken,
@@ -32,7 +33,7 @@ class ProductController {
     this.router.get(this.path + "/dtoAdmin", this.getProductDtoAdmin);  
     this.router.get(this.path + "/category", this.getAllCategory);
     this.router.get(this.path + "/style", this.getAllStyle);
-    this.router.get(this.path + "/brand", this.getAllBrand, verifyToken);
+    this.router.get(this.path + "/brand", this.getAllBrand );
     this.router.get(this.path + "/:id", this.getProduct);
     this.router.put(this.path + "/:id", this.updateProduct);        
     this.router.delete(this.path + "/:id", this.deleteProduct);
@@ -112,16 +113,32 @@ class ProductController {
 
     //--------DTO Products Client--------------
   public async getProductDto(req: express.Request, res: express.Response) {   
-    
-    const products = await Product.find({     
-      relations: ["stock"],   
-      where: [
-        { status_product: true },
-      ],
-      order:{views: "DESC"}    
-    });      
 
-    const dtos: ProductsDto[] = products.map( p => {
+    const product = await getRepository(Product)
+    .createQueryBuilder("product")  
+    .leftJoinAndSelect("product.stock", "stock")  
+    .leftJoinAndSelect("product.categories", "categories")  
+    .leftJoinAndSelect("product.styles", "styles")  
+    .leftJoinAndSelect("product.brands", "brands")  
+    .leftJoinAndSelect("stock.color", "color")  
+    .leftJoinAndSelect("stock.size", "size")  
+    .where("product.status_product= :status", { status: true })     
+    .andWhere("stock.status_stock = :status", { status: true }) 
+    .orderBy('product.views', 'DESC')
+    .getMany();    
+ 
+    // const products = await Product.find({     
+    //     relations: ["stock"],   
+    //     where: [
+    //     { status_product: true},
+    //   ],
+    // //   where: (qb) => {        
+    // //   qb.where(' stock.stock_status = : status',{status});
+    // // },
+    //   order:{views: "DESC"}    
+    // });      
+
+    const dtos: ProductsDto[] = product.map( p => {
         return {
         id_product: p.id,
         desc: p.desc,
@@ -189,14 +206,13 @@ class ProductController {
 
   //--------Get all style--------------
   public async getAllStyle(req: express.Request, res: express.Response) {
-    const styles = await Style.find();
+    const styles = await Style.find({order:{name: "ASC"}   });
     return res.send(styles);
   }
 
   //--------Get all brand--------------
-  public async getAllBrand(req: express.Request, res: express.Response, next: express.NextFunction) {
-    const brands = await Brand.find();
-    next();
+  public async getAllBrand(req: express.Request, res: express.Response) {
+    const brands = await Brand.find({order:{name: "ASC"}   });    
     return res.send(brands);
   }
 
@@ -210,14 +226,23 @@ class ProductController {
   } 
 
   //------------------Update product------------------
+
   public async updateProduct(req: express.Request, res: express.Response) {
-    const product = await Product.findOne(req.params.id);
-    console.log(req.body)
+    const productRepository = getRepository(Product);
+    let product = await Product.findOne(req.params.id);
+    req.body.id= req.params.id;
+    product.categories =req.body.categories;
+    product.desc =req.body.desc;
+    product.img =req.body.img;
+    product.styles =req.body.styles;
+    product.brands =req.body.brands;
+    product.views =req.body.views;
+    product.status_product = req.body.status_product;
+    //console.log(req.body)
     if (product !== undefined) {
-      await Product.update(req.params.id, req.body);
+      await productRepository.save(product);
       return res.status(200).send({ message: "Product updated correctly" });
     }
-
     return res.status(404).send({ message: "Product not found" });
   }
 

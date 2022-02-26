@@ -2,10 +2,9 @@ import { Modal, Input } from 'rsuite';
 import 'rsuite/dist/styles/rsuite-default.css';
 import { FormLogin, ButtonLogin, LinkLogin } from "./style";
 import Register from "../register/Register";
-import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import * as loginActions from "../../store/actions/login";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ModalBody from "rsuite/lib/Modal/ModalBody";
 import ModalFooter from "rsuite/lib/Modal/ModalFooter";
 
@@ -17,6 +16,12 @@ const LoginModal = (props) => {
         };
         const [user, setUser] = useState(userInit);        
         const [open, setOpen] = useState(false);     
+
+        useEffect(() => {            
+            if(props.user){
+                props.setOpen(false);
+            }         
+        }, [props.user]);  
 
         return (
             <div>
@@ -32,9 +37,9 @@ const LoginModal = (props) => {
                             </div>                        
                             <ButtonLogin onClick={async () => {
                                     await props.loginUser(user);  
-                                    if(props.user){
-                                        props.setOpen(false);   
-                                    }                                                                               
+                                    // if(props.user){
+                                    //     props.setOpen(false);   
+                                    // }                                                                               
                             }}> INGRESAR </ButtonLogin>  
                             <h5>¿No tienes una cuenta?</h5>      
                             <LinkLogin onClick={()=>{setOpen(true)}}>CREAR UNA CUENTA NUEVA</LinkLogin>                        

@@ -1,17 +1,50 @@
 import { ProductOrder, ButtonOrder, InfoOrder, ProductDetailOrder, ImageOrder, ProductTitle, PriceOrder, DetailsOrder } from "./style";
 
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
 
 import * as orderActions from "../../store/actions/order";
+import * as cartActions from "../../store/actions/cart";
 
 import { useState, useEffect } from "react";
-import { Modal, Button} from 'rsuite';
+import { useHistory  } from "react-router-dom";
+import { Modal, Button, Alert} from 'rsuite';
 import 'rsuite/dist/styles/rsuite-default.css';
+import AlertOrder from "./alert";
+import ModalBody from "rsuite/lib/Modal/ModalBody";
 
-const Order = (props) => {  
+
+let stateCart = [];
+
+const Order = (props) => {      
     
-    
+    // useEffect(() => {            
+    //     props.loadCart();                        
+    // }, []);  
+
+    //const firstUpdate = useRef(true);
+
+    const createOrder=async()=>{
+            await props.createOrder();
+            await props.cart.map((value) => props.updateStock(value.id));
+            await props.setOpen(false);    
+            await props.sendEmail(infoEmail);                        
+    }
+
+    const [firstUpdate, setFirstUpdate] = useState(false);     
+    const history=useHistory();       
+
+    useEffect(() => {   
+
+        if(props.open && firstUpdate){               
+        stateCart=props.cart.filter( value=>value.req_quantity > value.stocks.available_quantity);
+        if(stateCart.length){
+            Alert.warning("Lo sentimos. Alguno(s) de los productos seleccionados ya no se encuentran disponibles", 5000);
+            props.setOpen(false)         
+        }else{
+            createOrder();                            
+            history.push("/");
+        }}                 
+    }, [props.cart]);   
 
     const data = {
             email: "",
@@ -22,10 +55,12 @@ const Order = (props) => {
             products: []    
         };   
 
-    const [infoEmail, setInfoEmail] = useState(data);
+    const [infoEmail, setInfoEmail] = useState(data);   
+    const [openNotification, setOpenNotification] = useState(false); 
+    
+    
+    useEffect(() => {    
 
-    useEffect(() => {     
-        console.log("orden cambia")   
             if(props.cart && props.contact && props.user && props.amount){
                 const title = props.cart.map(value=>value.stocks.product.styles[0].name+" "+ value.stocks.product.brands[0].name + " " + value.stocks.product.categories[0].name + " " +"x" + " " + value.req_quantity + " " + "ud.");             
                 const name = props.user.name;
@@ -37,8 +72,10 @@ const Order = (props) => {
     }, [props.contact, props.amount])  
 
     return (
-        <Modal show={props.open} overflow={(true)} size ="sm" onHide={() => props.setOpen(false)}>  
-            <Modal.Header> <Modal.Title>Resumen del pedido</Modal.Title> </Modal.Header><br/>   
+        <Modal show={props.open} overflow={(true)} size ="sm" onHide={() => props.setOpen(false)} onExit={async()=>await props.loadCart()}>  
+            <Modal.Header> <Modal.Title>Resumen del pedido</Modal.Title> </Modal.Header><br/>
+            {props.cart.length ? 
+                <ModalBody>
                 <InfoOrder>
                     { props.cart.map((value) =>                     
                         <ProductOrder >
@@ -57,17 +94,16 @@ const Order = (props) => {
                                     </DetailsOrder>   
                                 </PriceOrder >
                         </ProductOrder>)}                           
-                </InfoOrder>
-                <div style={{margin: 20}}>
-                    
-                    <ButtonOrder onClick={async () => {                        
-                        await props.createOrder();
-                        await props.cart.map((value) => props.updateStock(value.id));
-                        await props.setOpen(false);    
-                        await props.sendEmail(infoEmail);                        
-                     }}> Confirmar compra </ButtonOrder>{" "}
+                </InfoOrder>               
+                <div style={{margin: 20}}>                    
+                    <ButtonOrder onClick={ async () => {  
+                        setFirstUpdate(true);                       
+                        await props.loadCart();                                                                         
+                     }}> Confirmar compra</ButtonOrder>{" "}
                     <Button onClick={() => props.setOpen(false)} appearance="subtle"> <b>Cancelar</b> </Button>
-                </div>        
+                </div>
+                </ModalBody>: null}                 
+            <AlertOrder open={openNotification} setOpen={setOpenNotification}></AlertOrder>     
         </Modal>);  
 };
 
@@ -84,6 +120,7 @@ const mapDispatchToProps = (dispatch) => ({
   createOrder: () => dispatch(orderActions.createOrder()),  
   updateStock: (payload) => dispatch(orderActions.updateStock(payload)),    
   sendEmail: (payload) => dispatch(orderActions.sendEmail(payload)),  
+  loadCart: () => dispatch(cartActions.loadCart()),       
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Order);

@@ -32,6 +32,7 @@ export const TitleProd = styled.h3`
 
 export const DescProd = styled.p`
   margin: 20px 0px;
+  text-align: justify;
 `;
 
 export const Price = styled.span`

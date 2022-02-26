@@ -6,11 +6,13 @@ import 'rsuite/dist/styles/rsuite-default.css';
 import { connect } from "react-redux";
 import * as loginActions from "../../store/actions/login";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import Register from "../register/Register";
 
 const Login = (props) => {
+        
+
         const userInit = {
             email: "",
             password: "",
@@ -18,6 +20,12 @@ const Login = (props) => {
         const [user, setUser] = useState(userInit);
         const history=useHistory();
         const [open, setOpen] = useState(false);    
+
+        useEffect(() => {            
+            if(props.user){
+                history.push("/")
+            }         
+        }, [props.user]);   
         
         return (
             <div>
@@ -33,8 +41,7 @@ const Login = (props) => {
                             <Input type="password" placeholder="password"  onChange={(value) =>  setUser({ ...user, password: value })}/>
                             </div>                        
                             <ButtonLogin onClick={async () => {
-                                    await props.loginUser(user);
-                                    if(props.user){ history.push("/");}                
+                                    await props.loginUser(user);                                                 
                             }}> INGRESAR </ButtonLogin>  
                             <h5>¿No tienes una cuenta?</h5>      
                             <LinkLogin onClick={()=>{setOpen(true)}}>CREAR UNA CUENTA NUEVA</LinkLogin>                        

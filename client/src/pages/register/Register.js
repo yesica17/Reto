@@ -1,5 +1,5 @@
 import { FormRegister, InputRegister, AgreementRegister, ButtonRegister, FilterID, FilterIDOption, Error } from "./style";
-import { Drawer, Tooltip, Whisper} from 'rsuite';
+import { Drawer, Tooltip, Whisper, Alert} from 'rsuite';
 import 'rsuite/dist/styles/rsuite-default.css';
 
 import { connect } from "react-redux";
@@ -36,7 +36,7 @@ const Register = (props) => {
                 <Drawer.Header><Drawer.Title><h3><b>Crear una cuenta</b></h3></Drawer.Title></Drawer.Header>
                 <Drawer.Body>
                     <FormRegister onSubmit={handleSubmit}>
-                        <FilterID onChange={(value) => setUser({ ...user, type_document: { id: value.target.value } })}>
+                        <FilterID   onChange={(value) => setUser({ ...user, type_document: { id: value.target.value } })}>
                         <FilterIDOption value={0} disabled selected>Tipo de documento</FilterIDOption>
                         {props.typeDocument.length
                         ? props.typeDocument.map((value) => (
@@ -49,29 +49,33 @@ const Register = (props) => {
                                 type="number"
                                 placeholder="número documento"
                                 onChange={(value) => setUser({ ...user, document: value.target.value })}
-                                required={true}/>
+                                />
                         </Whisper>                 
-                        <InputRegister type="text" placeholder="escribe tu nombre" required={true}
-                             onChange={(value) => setUser({ ...user, name: value.target.value })}/>
+                        <InputRegister type="text" placeholder="escribe tu nombre"  pattern="^[A-Za-z]+$"
+                            onChange={(value) => setUser({ ...user, name: value.target.value })}/>
                         <Error>Introduzca sólo caracteres alfabéticos.</Error>
-                        <InputRegister type="text" placeholder="escribe tus apellidos" required={true}
+                        <InputRegister type="text" placeholder="escribe tus apellidos" pattern="^[A-Za-z]+$"
                             onChange={(value) => setUser({ ...user, lastname: value.target.value })}/>
                         <Error>Introduzca sólo caracteres alfabéticos.</Error>
-                        <InputRegister type="email" placeholder="email" required={true}
+                        <InputRegister type="email" placeholder="email" 
                             onChange={(value) => setUser({ ...user, email: value.target.value })}/>
                         <Error>Introduzca una dirección de email válida.</Error>
-                        <InputRegister type="password" placeholder="password" required={true}
+                        <InputRegister type="password" placeholder="password" 
                             onChange={(value) => setUser({ ...user, password: value.target.value })}
                             pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9^&*]{5,20}$"/>
                         <Error> La contraseña debe ser de longitud mínima 5, y debe contener letras mayúsculas, letras minúsculas y números. </Error>
-                        <InputRegister type="password" placeholder="confirmar password" pattern={user.password} required={true} />
+                        <InputRegister type="password" placeholder="confirmar password" pattern={user.password} />
                         <Error>Las contraseñas no coinciden.</Error>
                         <AgreementRegister>
                             Al crear esta cuenta, acepto el procesamiento de mis datos
                             personales de acuerdo con los términos y condiciones de las{" "}
                             <b>POLÍTICAS PRIVADAS</b>
                         </AgreementRegister>
-                        <ButtonRegister onClick={async () => {  await props.createUser(user);}}> CREAR </ButtonRegister>
+                        <ButtonRegister onClick={async () => { if(user.type_document.id !== null && user.document !== "" && user.name !== "" && user.lastname !=="" && user.email !== "" && user.password !=="" && user.confirmPassword !=="") {
+                                await props.createUser(user)}else{
+                                Alert.warning("Todos los campos son requeridos", 4000)
+
+                            }}}> CREAR </ButtonRegister>
                     </FormRegister>
                 </Drawer.Body>
             </Drawer>            

@@ -14,14 +14,16 @@ export const setCart = (payload) => {
 export const loadCart = () => {
   return async (dispatch, getState) => {
     const data = {      
-      user: { id: getState().login.user.id },    
-      state_cart: true,
+      user: { id: getState().login.user.id },          
     };
     
     await SETData(`cart/load`, "POST", data)
-      .then((response) => {          
+      .then((response) => {     
+        console.log("response", response)     
         if (response !== null) {
           dispatch(setCart(response));
+        }else{
+            dispatch(setCart([]));
         }
       })
       .catch((response) => console.error(response));

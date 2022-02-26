@@ -3,7 +3,9 @@ import { InfoProduct, ContainerProduct, ImageProduct, IconProduct, ColorOption, 
 import { Link } from "react-router-dom";
 
 const Product = (props) => {     
-  
+
+    const title = (props.value.style + " " + props.value.brand + " " + props.value.category )
+    
   return (
         <ContainerProduct>          
                 <ImageProduct src={props.value.img} />     
@@ -18,7 +20,7 @@ const Product = (props) => {
                          { [...new Set(props.value.color)].map((value) => (
                             <ColorOption color={value}></ColorOption> ))} 
                 </FilterList><br/>        
-                <div style={{ fontSize: 14 }} > <b>{props.value.style} {" "}{props.value.brand}{" "} {props.value.category}</b></div>                
+                <div style={{ fontSize: 14 }} > <p style={{textTransform:"capitalize"}}><b>{title}</b></p></div>                
                 <div style={{ fontSize: 20 }} ><b>$</b> {(props.value.price / 1000).toFixed(3)}</div>        
         </ContainerProduct>
   );

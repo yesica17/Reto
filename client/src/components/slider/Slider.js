@@ -24,8 +24,7 @@ const Slider = () => {
                         <InfoContainerSlider>              
                         <TitleSlider>{item.title}</TitleSlider>
                         <DescCollection>{item.collection}</DescCollection>
-                        <DescSlider>{item.desc}</DescSlider>
-                        <ButtonSlider>VER AHORA</ButtonSlider>
+                        <DescSlider>{item.desc}</DescSlider>                        
                         </InfoContainerSlider>
                     </Slide>
                     ))}

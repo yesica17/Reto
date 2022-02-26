@@ -17,9 +17,9 @@ const ModalDelete = (props) => {
         return (
             <Modal show={props.openDel} overflow={true} onHide={() => props.setOpenDel(false)} onEnter={()=>setStock(props.rowData.id_stock)} onExit={async()=> await props.loadStockDto()}>  
                 <Modal.Header> <Modal.Title>Eliminar producto</Modal.Title> </Modal.Header>
-                <ModalBody>¿Estas seguro que quieres eliminar este producto?</ModalBody>
+                <ModalBody>¿Estas seguro que quieres eliminar este inventario?</ModalBody>
                 <ModalFooter>
-                    <Button onClick={async()=>{ await props.deleteStock(stock); props.setOpenDel(false)}}>Eliminar</Button>
+                    <Button onClick={async()=>{ await props.deleteStock(stock);  await props.loadStockDto(); props.setOpenDel(false)}}>Eliminar</Button>
                     <Button>Cancelar</Button>
                 </ModalFooter>
             </Modal>

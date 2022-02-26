@@ -1,5 +1,5 @@
-import {Add, Remove, Edit, WarningSharp, AssignmentLateSharp } from "@material-ui/icons";
-import { Drawer, Modal, Button} from 'rsuite';
+import { Edit, WarningSharp, AssignmentLateSharp } from "@material-ui/icons";
+import { Drawer, Modal, Button, InputNumber, Alert} from 'rsuite';
 import 'rsuite/dist/styles/rsuite-default.css';
 import Announcement from "../../components/announcement/Announcement";
 import Footer from "../../components/footer/Footer";
@@ -17,6 +17,8 @@ import * as contactActions from "../../store/actions/contact";
 import ModalBody from "rsuite/lib/Modal/ModalBody";
 import ModalFooter from "rsuite/lib/Modal/ModalFooter";
 
+let stateCart = [];
+
 const Cart = (props) => {       
 
     const [cart, setCart] = useState(null);
@@ -25,12 +27,15 @@ const Cart = (props) => {
     const [quantity, setQuantity] = useState(1);  
     const [openModal, setOpenModal] = useState(false);    
     const [openNotification, setOpenNotification] = useState(false);    
-    const [idCart, setIdCart] = useState(null);      
-    const stateCart=props.cart.filter( value=>value.req_quantity > value.stocks.available_quantity);      
-    
+    const [idCart, setIdCart] = useState(null);     
+
     useEffect(() => {            
-        props.loadCart();              
-    }, [stateCart]);      
+        props.loadCart();                      
+    }, []);     
+
+    useEffect(() => {                  
+        stateCart=props.cart.filter( value=>value.req_quantity > value.stocks.available_quantity);                  
+    }, [props.cart]);         
 
     const amount = props.cart.filter(value=>value.stocks.available_quantity!==0 
         && value.req_quantity<= value.stocks.available_quantity).map((value) => value.req_quantity * value.stocks.product.price).reduce((a, b) => a + b, 0);
@@ -55,12 +60,16 @@ const Cart = (props) => {
                         <InfoContainer>
                                 {cart.stocks.available_quantity>0
                                 ?(<AmountContainer>
-                                        <Remove onClick={async() => {await quantity > 1 && setQuantity(quantity - 1); setCart({...cart, req_quantity: quantity-1,}); }}/>
+                                    <div style={{ width: 120}}>
+                                    <InputNumber style={{borderWidth: 1, borderStyle: "solid", borderColor: "black"}} max={cart.stocks.available_quantity} min={1} 
+                                        onChange={(value)=>{ setCart({ ...cart, req_quantity: value})}}/>
+                                </div>  
+                                        {/* <Remove onClick={async() => {await quantity > 1 && setQuantity(quantity - 1); setCart({...cart, req_quantity: quantity-1,}); }}/>
                                         {cart.req_quantity<cart.stocks.available_quantity 
                                         ?( <Amount>{quantity}</Amount>):<Amount>{ cart.stocks.available_quantity}</Amount>}
                                         <Add onClick={async() => {
                                                 if (quantity < cart.stocks.available_quantity) { await setQuantity(quantity + 1)};
-                                                setCart({ ...cart, req_quantity: quantity+1, }); }} />
+                                                setCart({ ...cart, req_quantity: quantity+1, }); }} /> */}
                                     </AmountContainer>):null} <br/>
                                     <ProductId> <b>Cantidad disponible:</b> {cart.stocks.available_quantity} </ProductId>
                                     <br/><br/>
@@ -126,19 +135,26 @@ const Cart = (props) => {
                                     <SummaryItem type="total">
                                         <SummaryItemText>Total</SummaryItemText>
                                     <SummaryItemPrice> $ {(amount / 1000).toFixed(3)} </SummaryItemPrice>
-                                    </SummaryItem>                            
-                                    <ButtonCart onClick={async()=>{                    
-                                            
-                                        if(stateCart.length === props.cart.length){
-                                            setOpenNotification(true)
-                                            await stateCart.map(async value=> await props.updateStateCart(value.id));
-                                        } else{
+                                    </SummaryItem>   
+                                                            
+                                    <ButtonCart onClick={async()=>{
+                                        await props.loadCart();
+                                        //console.log("onLick", stateCart,)
+                                        
+                                        if(stateCart.length === props.cart.length){                                                                                
+                                            // await stateCart.map(async value=> await props.updateStateCart(value.id));
+                                            Alert.warning("Los productos seleccionados ya no se encuentran disponibles!", 5000)
+                                        } 
+                                        else if(stateCart.length){
+                                            setOpenNotification(true);
+                                        }                                        
+                                        else{                                            
                                             await props.cart.map(async value=> await props.updateAmount(value.id));                  
                                             await stateCart.map(async value=> await props.updateStateCart(value.id));
-                                            await props.loadCart();                                    
+                                            // await props.loadCart();                                    
                                             setOpenModal(true); 
                                         }                                                                
-                                    }}>COMPRAR AHORA </ButtonCart>                            
+                                    }}>COMPRAR AHORA </ButtonCart>                           
                                 </Summary>
                                 </BottomCart>                            
                         </WrapperCart>

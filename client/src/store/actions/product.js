@@ -148,10 +148,12 @@ export const updateProduct = (payload) => {
        desc: payload.desc, 
        img: payload.img,
        price: payload.price,
-    //    categories: [{id: payload.categories[0].id}],
-    //     styles: [{id: payload.styles[0].id}],
-    //     brands: [{id: payload.brands[0].id}]   
+       categories: [{id: payload.categories[0].id}],
+        styles: [{id: payload.styles[0].id}],
+        brands: [{id: payload.brands[0].id}]   
     };
+
+    console.log("data update", data)
 
     await SETData(`product/${payload.id}`, "PUT", data)
       .then((response) => {
@@ -168,8 +170,11 @@ export const updateProduct = (payload) => {
 
 export const deleteStock= (payload) => {
   return async (dispatch, getState) => {
-   
-    await SETData(`stock/${payload}`, "DELETE")
+   const data = {
+      status_stock: false,    
+      available_quantity: 0  
+    };
+    await SETData(`stock/${payload}`, "PUT", data)
       .then((response) => {
         if (response !== null) {
           console.log(response); 
