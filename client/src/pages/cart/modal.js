@@ -40,7 +40,7 @@ const Notification = (props) => {
                                 await props.cart.map(async value=> await props.updateAmount(value.id));                  
                                 await stateCart.map(async value=> await props.updateStateCart(value.id));                                                                  
                                 setOpenModal(true); 
-                                props.setOpen(false);
+                                //props.setOpen(false);
                             }} style={{color: "black", background: "transparent", fontSize: 14, textDecorationLine: "none", borderWidth: 1, borderStyle:"solid", borderColor: "black", borderRadius: 5, padding: 5}}>
                                 <b>Continuar con la compra</b>
                             </button>                                                           

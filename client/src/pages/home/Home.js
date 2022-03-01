@@ -102,21 +102,7 @@ const Home = (props) => {
                             </Filter>        
                         </FilterContainer>      
                 </Container>                
-                <Products wordEntered={wordEntered} filters={filters}/> 
-                {/* <Pagination                    
-                    size= 'md'
-                    prev= {true}
-                    next= {true}
-                    first= {true}
-                    last= {true}
-                    ellipsis= {true}
-                    boundaryLinks= {true}
-                    total= {200}                    
-                    pages= {10}                   
-                    maxButtons= {5}
-                    activePage={activePage}
-                    onChangePage={setActivePage}                   
-                /> */}
+                <Products wordEntered={wordEntered} filters={filters}/>               
                 <div style={{textAlign: "center"}}><h3 ><b>Los más buscados</b></h3></div>
                 <PopularProducts/>                      
                 <Footer />

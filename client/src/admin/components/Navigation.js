@@ -10,7 +10,7 @@ const Navigation = ()=>{
                 <Sidenav defaultOpenKeys={['2']} activeKey="1" expanded={false} appearance='inverse'>
                     <Sidenav.Body>
                         <Nav>            
-                        <Nav.Item eventKey="1" icon={<Icon icon="dashboard" />}> Inicio </Nav.Item>                      
+                        {/* <Nav.Item eventKey="1" icon={<Icon icon="dashboard" />}> Inicio </Nav.Item>                       */}
                         <Dropdown eventKey="2" title="Productos" icon={<Icon icon="edit" />}>
                             <Link to={`/addproduct`} style={{textDecoration: "none"}}>
                                 <Dropdown.Item eventKey="2-1">Agregar productos</Dropdown.Item>

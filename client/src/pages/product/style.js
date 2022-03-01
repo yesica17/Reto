@@ -10,7 +10,8 @@ export const WrapperProd = styled.div`
 `;
 
 export const ImgContainerProd = styled.div`
-  flex: 1;
+  display: flex
+  height: 75%;
 `;
 
 export const ImageProd = styled.img`

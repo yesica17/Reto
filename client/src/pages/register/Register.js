@@ -36,7 +36,7 @@ const Register = (props) => {
                 <Drawer.Header><Drawer.Title><h3><b>Crear una cuenta</b></h3></Drawer.Title></Drawer.Header>
                 <Drawer.Body>
                     <FormRegister onSubmit={handleSubmit}>
-                        <FilterID   onChange={(value) => setUser({ ...user, type_document: { id: value.target.value } })}>
+                        <FilterID  required={true} onChange={(value) => setUser({ ...user, type_document: { id: value.target.value } })}>
                         <FilterIDOption value={0} disabled selected>Tipo de documento</FilterIDOption>
                         {props.typeDocument.length
                         ? props.typeDocument.map((value) => (
@@ -46,36 +46,38 @@ const Register = (props) => {
                         <Whisper trigger="hover" placement= "bottom"
                             speaker={<Tooltip>Introduzca sólo caracteres númericos </Tooltip>}>
                             <InputRegister
-                                type="number"
+                                type="number" required={true}
                                 placeholder="número documento"
                                 onChange={(value) => setUser({ ...user, document: value.target.value })}
                                 />
                         </Whisper>                 
-                        <InputRegister type="text" placeholder="escribe tu nombre"  pattern="^[A-Za-z]+$"
+                        <InputRegister type="text"  required={true} placeholder="escribe tu nombre"  pattern="^[A-Za-z]+$"
                             onChange={(value) => setUser({ ...user, name: value.target.value })}/>
                         <Error>Introduzca sólo caracteres alfabéticos.</Error>
-                        <InputRegister type="text" placeholder="escribe tus apellidos" pattern="^[A-Za-z]+$"
+                        <InputRegister type="text"  required={true} placeholder="escribe tus apellidos" pattern="^[A-Za-z]+$"
                             onChange={(value) => setUser({ ...user, lastname: value.target.value })}/>
                         <Error>Introduzca sólo caracteres alfabéticos.</Error>
-                        <InputRegister type="email" placeholder="email" 
+                        <InputRegister type="email" required={true} placeholder="email" 
                             onChange={(value) => setUser({ ...user, email: value.target.value })}/>
                         <Error>Introduzca una dirección de email válida.</Error>
-                        <InputRegister type="password" placeholder="password" 
+                        <InputRegister type="password" required={true} placeholder="password" 
                             onChange={(value) => setUser({ ...user, password: value.target.value })}
                             pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9^&*]{5,20}$"/>
                         <Error> La contraseña debe ser de longitud mínima 5, y debe contener letras mayúsculas, letras minúsculas y números. </Error>
-                        <InputRegister type="password" placeholder="confirmar password" pattern={user.password} />
+                        <InputRegister type="password" required={true} placeholder="confirmar password" pattern={user.password} />
                         <Error>Las contraseñas no coinciden.</Error>
                         <AgreementRegister>
                             Al crear esta cuenta, acepto el procesamiento de mis datos
                             personales de acuerdo con los términos y condiciones de las{" "}
                             <b>POLÍTICAS PRIVADAS</b>
                         </AgreementRegister>
-                        <ButtonRegister onClick={async () => { if(user.type_document.id !== null && user.document !== "" && user.name !== "" && user.lastname !=="" && user.email !== "" && user.password !=="" && user.confirmPassword !=="") {
-                                await props.createUser(user)}else{
+                        <ButtonRegister onClick={async () =>                         
+                        { if(user.type_document.id !== null ) {
+                                await props.createUser(user); props.setOpen(false)}else{
                                 Alert.warning("Todos los campos son requeridos", 4000)
 
-                            }}}> CREAR </ButtonRegister>
+                            }}
+                        }> CREAR </ButtonRegister>
                     </FormRegister>
                 </Drawer.Body>
             </Drawer>            
