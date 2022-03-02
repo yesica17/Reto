@@ -1,6 +1,26 @@
 import * as express from "express";
+import cors = require("cors");
 import * as dotenv from "dotenv";
 import { createConnection, Connection } from "typeorm";
+// swagger
+const swaggerUI = require("swagger-ui-express");
+const swaggerJsDoc = require("swagger-jsdoc");
+const path = require ("path")
+const swaggerSpec = {
+    definition: {
+        openapi: "3.0.0",
+        info: {
+            title: "Node TypeScript API",
+            version: "1.0.0"
+        },
+        servers: [
+            {
+                url: "http://localhost:8000"
+            }
+        ]
+    },
+    apis: [`${path.join(__dirname, ".controllers/*.js")}`]
+}
 
 dotenv.config();
 class App {
@@ -11,6 +31,7 @@ class App {
   // The constructor receives an array with instances of the controllers for the application and an integer to designate the port number.
   constructor(controllers: any[], port: number) {
     this.app = express();
+
     this.port = port;
     this.initializeModels();
     this.initializeMiddlewares();
@@ -27,8 +48,11 @@ class App {
   }
 
   // Here we can add all the global middlewares for our application. (Those that will work across every contoller)
+
   private initializeMiddlewares() {
     this.app.use(express.json());
+    this.app.use(cors());
+    this.app.use("/api-doc", swaggerUI.serve, swaggerUI.setup(swaggerJsDoc(swaggerSpec)))
   }
 
   private initializeControllers(controllers: any[]) {

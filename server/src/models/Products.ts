@@ -5,6 +5,10 @@ import {
   BaseEntity,
   ManyToMany,
   JoinTable,
+  CreateDateColumn,
+  UpdateDateColumn,
+  OneToMany,
+  JoinColumn,
 } from "typeorm";
 import { Category } from "./Categories";
 import { Style } from "./Styles";
@@ -16,31 +20,46 @@ export class Product extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  title: string;
+  @Column({ type: "varchar", length: 300 })
+  desc: string;
+
+  @Column({ type: "varchar", length: 250 })
+  img: string;
+
+  @Column({ type: "int", nullable: false })
+  price: number;
+
+  @Column({ type: "boolean", default: false })
+  status_product: boolean;
+
+  @CreateDateColumn()
+  created_at: "string";
+
+  @UpdateDateColumn()
+  updated_at: "string";
+
+  @Column({ type: "int", nullable: true})
+  views: number;
 
   @ManyToMany(() => Category, {
-    eager: true,
-    cascade: true,
+    eager: true,    
   })
   @JoinTable()
   categories: Category[];
 
   @ManyToMany(() => Style, {
-    eager: true,
-    cascade: true,
+    eager: true,    
   })
   @JoinTable()
   styles: Style[];
 
   @ManyToMany(() => Brand, {
-    eager: true,
-    cascade: true,
+    eager: true,    
   })
   @JoinTable()
   brands: Brand[];
 
-  @ManyToMany(() => Stock, (stock) => stock.products, {})
-  @JoinTable()
-  stocks: Stock[];
+  @OneToMany(() => Stock, (stock) => stock.product, {})
+  @JoinColumn()
+  stock: Stock[];
 }

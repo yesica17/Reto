@@ -3,6 +3,7 @@ import { Stock } from "../models/Stock";
 import { Size } from "../models/Sizes";
 import { Color } from "../models/Colors";
 import { Product } from "../models/Products";
+import { StockDto } from "../dto/stockDto";
 import {
   verifyToken,
   verifyTokenAndAuthorization,
@@ -23,8 +24,11 @@ class StockController {
 
     // Controller endpoints
     this.router.post(this.path, this.createStock);
-    this.router.get(this.path, this.getAllStock);
+    this.router.get(this.path + "/load", this.getStockDto);
+    this.router.get(this.path + "/size", this.getAllSize);
+    this.router.get(this.path + "/color", this.getAllColor);
     this.router.get(this.path + "/:id", this.getStock);
+    
 
     this.router.put(this.path + "/:id", this.updateStock);
 
@@ -71,35 +75,63 @@ class StockController {
     const stockData = req.body;
     const stock = new Stock();
     stock.available_quantity = stockData.available_quantity;
-    const sizes = await Size.findByIds(
-      stockData.sizes.map((value) => value.id)
-    );
-    stock.sizes = sizes;
+    const size = await Size.findOne(stockData.size.id);
+    stock.size = size;
+    const color = await Color.findOne(stockData.color.id);
+    stock.color = color;
+    const product = await Product.findOne(stockData.product.id);
+    stock.product = product;
+    
+    const findStock = await Stock.find({where: [{colorId: stockData.color.id, sizeId: stockData.size.id, productId: stockData.product.id}]});  
 
-    const colors = await Color.findByIds(
-      stockData.colors.map((value) => value.id)
-    );
-    stock.colors = colors;
-
-    const products = await Product.findByIds(
-      stockData.products.map((value) => value.id)
-    );
-    stock.products = products;
+    console.log(findStock.length)
 
     try {
-      const savedStock = await stock.save();
-      res.status(200).json(savedStock);
+        if (findStock.length === 1){ res.send(true)}else{
+            const savedStock = await    stock.save();
+            res.status(200).json(savedStock);
+           }    
     } catch (err) {
       res.status(500).json(err);
     }
   }
 
-  //--------Get all stock--------------
-  public async getAllStock(req: express.Request, res: express.Response) {
-    const stock = await Stock.find({
-      relations: ["products"],
-    });
-    return res.send(stock);
+  //--------DTO Stock--------------
+  public async getStockDto(req: express.Request, res: express.Response) {       
+    const stock = await Stock.find({     
+      relations: ["product"],  
+      where: [
+        { status_stock: true },
+      ],    
+      order:{ id: "DESC" }        
+    });      
+
+    const dtoStock: StockDto[] = stock.map( s => {
+        return {
+        id_product: s.product.id,        
+        id_stock: s.id,
+        available_quantity: s.available_quantity,
+        id_color: s.colorId,
+        color: s.color.color,
+        color_spa: s.color.color_spa,
+        id_size: s.sizeId,
+        size: s.size.size,
+        }
+        });
+        
+        return res.send(dtoStock);    
+  } 
+
+  //--------Get all size--------------
+  public async getAllSize(req: express.Request, res: express.Response) {
+    const sizes = await Size.find();
+    return res.send(sizes);
+  }
+
+  //--------Get all color--------------
+  public async getAllColor(req: express.Request, res: express.Response) {
+    const colors = await Color.find({order:{color_spa: "ASC"}   });
+    return res.send(colors);
   }
 
   //---------------Get stock---------------

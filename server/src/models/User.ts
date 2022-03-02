@@ -8,8 +8,10 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  OneToOne,
 } from "typeorm";
 import { Document } from "./Documents";
+import { UserContact } from "./UserContact";
 
 @Entity()
 export class User extends BaseEntity {
@@ -42,6 +44,9 @@ export class User extends BaseEntity {
 
   @UpdateDateColumn()
   updated_at: "string";
+
+   @Column({ type: "varchar", nullable: true })
+  token: string;
 
   @ManyToOne(() => Document)
   @JoinColumn()

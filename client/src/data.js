@@ -1,61 +1,39 @@
 export const sliderItems = [
   {
     id: 1,
-    img: "https://i.ibb.co/SsjqNMP/Maglietta-cotone-biologico-messaggio-Donna-Mango-Italia.jpg",
-    title: "CAMISETAS MUJER",
-    desc: "Incrementa tu sentido del estilo.",
-    bg: "f5fafd",
-    cat: "mujer",
+    img: "https://i.ibb.co/1sZpVLH/pexels-tim-douglas-6567244.jpg",
+    title: "Más diversión, más libertad",
+    collection: "Nueva collección 2022. Moda femenina",
+    desc: "Incrementa tu sentido del estilo. Aprópiate de tu identidad usando lo que quieres sin temer por el qué dirán. Vístete para ti y tu felicidad.",
+    bg: "CC33FF",
+    
   },
   {
     id: 2,
-    img: "https://i.ibb.co/XDH5NV2/Colcci-Compre-Cal-a-Jeans-Bolsas-Vestidos-e-outros-Dafiti.jpg",
-    title: "CAMISETAS HOMBRE",
-    desc: "Usa y marca tendencias.",
+    img: "https://i.ibb.co/zVTZ5r3/pexels-max-fischer-5868722.jpg",
+    title: "Viste tu actitud",
+    collection: "Nueva collección 2022. Moda masculina",
+    desc: "Usa y marca tendencias. No conocerás tu valentía, hasta que asumas el reto de usar esa prenda, que crees que nunca te va a quedar bien. Atrevete.",
     bg: "fcf1ed",
-    cat: "hombre",
+    
   },
-  {
-    id: 3,
-    img: "https://i.ibb.co/Tb9kF83/Comunidad-de-j-venes-felices-juntos-Foto-Gratis.jpg",
-    title: "ESCOJA EL MEJOR. ELÍJANOS",
-    desc: "Mejora tu apariencia. Sea elegante, sea nuestro cliente.",
-    bg: "fbf0f4",
-    cat: "camiseta",
-  },
+
 ];
 
-export const popularProducts = [
-  {
-    id: 1,
-    img: "https://d3o2e4jr3mxnm3.cloudfront.net/Mens-Jake-Guitar-Vintage-Crusher-Tee_68382_1_lg.png",
-  },
-  {
-    id: 2,
-    img: "https://cdn.shopify.com/s/files/1/0101/4832/products/Angela_Natural_Tee.png?v=1606780388",
-  },
-  {
-    id: 3,
-    img: "https://www.prada.com/content/dam/pradanux_products/U/UCS/UCS319/1YOTF010O/UCS319_1YOT_F010O_S_182_SLF.png",
-  },
-  {
-    id: 4,
-    img: "https://www.burdastyle.com/pub/media/catalog/product/cache/7bd3727382ce0a860b68816435d76e26/107/BUS-PAT-BURTE-1320516/1170x1470_BS_2016_05_132_front.png",
-  },
-  {
-    id: 5,
-    img: "https://images.ctfassets.net/5gvckmvm9289/3BlDoZxSSjqAvv1jBJP7TH/65f9a95484117730ace42abf64e89572/Noissue-x-Creatsy-Tote-Bag-Mockup-Bundle-_4_-2.png",
-  },
-  {
-    id: 6,
-    img: "https://d3o2e4jr3mxnm3.cloudfront.net/Rocket-Vintage-Chill-Cap_66374_1_lg.png",
-  },
-  {
-    id: 7,
-    img: "https://www.vintageindustries.nl/download_front/qympzk1762/2217_Arrow_Jacket_Forest.png",
-  },
-  {
-    id: 8,
-    img: "https://www.pngarts.com/files/3/Women-Jacket-PNG-High-Quality-Image.png",
-  },
-];
+export const categories = [
+    {
+      id: 1,
+      img: "https://i.ibb.co/7W39wfR/pexels-maria-10770944.jpg",
+      title: "MUJER",
+      cat:"Mujer"
+    },
+    {
+      id: 2,
+      img: "https://i.ibb.co/b33wcdJ/pexels-thomas-nguka-7562643.jpg"
+,
+      title: "HOMBRE",
+      cat:"Hombre"
+    },
+   
+  ];
+

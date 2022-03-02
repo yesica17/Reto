@@ -1,6 +1,7 @@
 import * as express from "express";
 import { User } from "../models/User";
 import { Document } from "../models/Documents";
+
 import * as bcrypt from "bcrypt";
 import * as jwt from "jsonwebtoken";
 import {
@@ -8,6 +9,21 @@ import {
   verifyTokenAndAuthorization,
   verifyTokenAndAdmin,
 } from "../controllers/token";
+
+/**
+ *  @swagger
+ *  components:
+ *      schemas:
+ *          User:
+ *              type: object
+ *              properties:
+ *                  name:
+ *                      type: string
+ *                      description: the user name
+ *              required:
+ *                - name
+ *              
+ */
 
 class UserController {
   public path = "/user";
@@ -25,11 +41,12 @@ class UserController {
     this.router.post(this.path + "/login", this.login);
     this.router.post(this.path, this.createUser);
     this.router.get(this.path, this.getAllUsers);
+    this.router.get(this.path + "/document", this.getAllDocument);
     this.router.get(this.path + "/:id", this.getUser);
 
     this.router.put(this.path + "/:id", this.updateUser);
 
-    this.router.delete(this.path + "/:id", verifyToken, this.deleteUser);
+    this.router.delete(this.path + "/:id", this.deleteUser);
   }
 
   public validateInput(
@@ -75,27 +92,40 @@ class UserController {
       const user = await User.findOne({
         email: loginData.email,
       });
-      !user && res.status(401).json("Wrong email");
+      !user && res.send(true);
       const isPasswordMatching = await bcrypt.compare(
         loginData.password,
         user.password
       );
-      !isPasswordMatching && res.status(401).json("Wrong Password");
+      !isPasswordMatching && res.send(false);
 
       const accessToken = jwt.sign(
         {
-          id: user.id,
-          isAdmin: user.isAdmin,
+          user: {
+            id: user.id,
+            isAdmin: user.isAdmin,
+            name: user.name,
+            lastname: user.lastname,
+            email: user.email,
+          }
         },
-        "lacile000",
+        process.env.JWT_SEC,
         { expiresIn: "15d" }
       );
-      res.status(200).json(accessToken);
+      user.token=accessToken;
+      
+      res.status(200).json(user);
     } catch (err) {
       res.status(500).json(err);
     }
   }
-
+  /**
+   * @swagger
+   * /user:
+   *    post:
+   *        summary: create a new user
+   * 
+   */
   //------------Create User-----------------
   public async createUser(req: express.Request, res: express.Response) {
     const userData = req.body;
@@ -112,6 +142,8 @@ class UserController {
       user.password = await bcrypt.hash(userData.password, 10);
       document.id = userData.type_document.id;
       user.type_document = document;
+
+      //contact.users = user;
     }
 
     try {
@@ -126,6 +158,12 @@ class UserController {
   public async getAllUsers(req: express.Request, res: express.Response) {
     const clients = await User.find();
     return res.send(clients);
+  }
+
+  //--------Get all documents--------------
+  public async getAllDocument(req: express.Request, res: express.Response) {
+    const documents = await Document.find();
+    return res.send(documents);
   }
 
   //---------------Get user---------------

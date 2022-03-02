@@ -3,12 +3,16 @@ import { Product } from "../models/Products";
 import { Category } from "../models/Categories";
 import { Style } from "../models/Styles";
 import { Brand } from "../models/Brands";
+import { ProductsDto } from "../dto/productsDto";
+import {getRepository} from "typeorm";
 import { Stock } from "../models/Stock";
 import {
   verifyToken,
   verifyTokenAndAuthorization,
   verifyTokenAndAdmin,
 } from "../controllers/token";
+import { createSecureContext } from "tls";
+import { hasUncaughtExceptionCaptureCallback } from "process";
 
 class ProductController {
   public path = "/product";
@@ -25,10 +29,13 @@ class ProductController {
     // Controller endpoints
     this.router.post(this.path, this.createProduct);
     this.router.get(this.path, this.getAllProduct);
+    this.router.get(this.path + "/dto", this.getProductDto);    
+    this.router.get(this.path + "/dtoAdmin", this.getProductDtoAdmin);  
+    this.router.get(this.path + "/category", this.getAllCategory);
+    this.router.get(this.path + "/style", this.getAllStyle);
+    this.router.get(this.path + "/brand", this.getAllBrand );
     this.router.get(this.path + "/:id", this.getProduct);
-
-    this.router.put(this.path + "/:id", this.updateProduct);
-
+    this.router.put(this.path + "/:id", this.updateProduct);        
     this.router.delete(this.path + "/:id", this.deleteProduct);
   }
 
@@ -71,7 +78,9 @@ class ProductController {
   public async createProduct(req: express.Request, res: express.Response) {
     const productData = req.body;
     const product = new Product();
-    product.title = productData.title;
+    product.desc = productData.desc;
+    product.img = productData.img;
+    product.price = productData.price;
     const categories = await Category.findByIds(
       productData.categories.map((value) => value.id)
     );
@@ -85,11 +94,6 @@ class ProductController {
     );
     product.brands = brands;
 
-    // const stocks = await Stock.findByIds(
-    //   productData.stocks.map((value) => value.id)
-    // );
-    // product.stocks = stocks;
-
     try {
       const savedProduct = await product.save();
       res.status(200).json(savedProduct);
@@ -99,33 +103,159 @@ class ProductController {
   }
 
   //--------Get all products--------------
-  public async getAllProduct(req: express.Request, res: express.Response) {
-    const products = await Product.find();
+  public async getAllProduct(req: express.Request, res: express.Response) {       
+    const products = await Product.find({
+      relations: ["stock"],  
+      order:{views: "DESC"}    
+    });    
     return res.send(products);
+  }
+
+    //--------DTO Products Client--------------
+  public async getProductDto(req: express.Request, res: express.Response) {   
+
+    const product = await getRepository(Product)
+    .createQueryBuilder("product")  
+    .leftJoinAndSelect("product.stock", "stock")  
+    .leftJoinAndSelect("product.categories", "categories")  
+    .leftJoinAndSelect("product.styles", "styles")  
+    .leftJoinAndSelect("product.brands", "brands")  
+    .leftJoinAndSelect("stock.color", "color")  
+    .leftJoinAndSelect("stock.size", "size")  
+    .where("product.status_product= :status", { status: true })     
+    .andWhere("stock.status_stock = :status", { status: true }) 
+    .orderBy('product.views', 'DESC')
+    .getMany();    
+ 
+    // const products = await Product.find({     
+    //     relations: ["stock"],   
+    //     where: [
+    //     { status_product: true},
+    //   ],
+    // //   where: (qb) => {        
+    // //   qb.where(' stock.stock_status = : status',{status});
+    // // },
+    //   order:{views: "DESC"}    
+    // });      
+
+    const dtos: ProductsDto[] = product.map( p => {
+        return {
+        id_product: p.id,
+        desc: p.desc,
+        img: p.img,
+        price: p.price,
+        id_cat: p.categories.map(c=>c.id),
+        category: p.categories.map(c=>c.name.toLowerCase()),
+        id_brand: p.brands.map(b=>b.id),
+        brand: p.brands.map(b=>b.name.toLowerCase()),
+        id_style: p.styles.map(s=>s.id),
+        style: p.styles.map(s=>s.name.toLowerCase()),
+        id_stock: p.stock.map(i=>i.id),
+        available_quantity: p.stock.map(q=>q.available_quantity),
+        id_color: p.stock.map(c=>c.colorId),
+        color: p.stock.map(c=>c.color.color.toLowerCase()),
+        color_spa: p.stock.map(c=>c.color.color_spa.toLowerCase()),
+        id_size: p.stock.map(s=>s.sizeId),
+        size: p.stock.map(s=>s.size.size.toLowerCase())
+        }
+        });
+        return res.send(dtos);    
+  } 
+
+  //--------DTO Products Admin--------------
+  public async getProductDtoAdmin(req: express.Request, res: express.Response) {   
+    
+    const products = await Product.find({     
+      relations: ["stock"],         
+      order:{id: "DESC"}    
+    });      
+
+    const dtos: ProductsDto[] = products.map( p => {
+        return {
+        id_product: p.id,
+        desc: p.desc,
+        img: p.img,
+        price: p.price,
+        id_cat: p.categories.map(c=>c.id),
+        category: p.categories.map(c=>c.name.toLowerCase()),
+        id_brand: p.brands.map(b=>b.id),
+        brand: p.brands.map(b=>b.name.toLowerCase()),
+        id_style: p.styles.map(s=>s.id),
+        style: p.styles.map(s=>s.name.toLowerCase()),
+        id_stock: p.stock.map(i=>i.id),
+        available_quantity: p.stock.map(q=>q.available_quantity),
+        id_color: p.stock.map(c=>c.colorId),
+        color: p.stock.map(c=>c.color.color.toLowerCase()),
+        color_spa: p.stock.map(c=>c.color.color_spa.toLowerCase()),
+        id_size: p.stock.map(s=>s.sizeId),
+        size: p.stock.map(s=>s.size.size.toLowerCase())
+        }
+        });
+        return res.send(dtos);    
+  } 
+
+
+  //--------Get all category--------------
+  public async getAllCategory(req: express.Request, res: express.Response) {
+    const categorys = await Category.find();   
+    
+    return res.send(categorys);
+    
+    
+  }
+
+  //--------Get all style--------------
+  public async getAllStyle(req: express.Request, res: express.Response) {
+    const styles = await Style.find({order:{name: "ASC"}   });
+    return res.send(styles);
+  }
+
+  //--------Get all brand--------------
+  public async getAllBrand(req: express.Request, res: express.Response) {
+    const brands = await Brand.find({order:{name: "ASC"}   });    
+    return res.send(brands);
   }
 
   //---------------Get product---------------
   public async getProduct(req: express.Request, res: express.Response) {
-    const client = await Product.findOne(req.params.id);
+    
+    const client = await Product.findOne(req.params.id, {
+      relations: ["stock"],
+    });
     return res.send(client);
-  }
+  } 
 
   //------------------Update product------------------
+
   public async updateProduct(req: express.Request, res: express.Response) {
-    const product = await Product.findOne(req.params.id);
+    const productRepository = getRepository(Product);
+    let product = await Product.findOne(req.params.id);
+    req.body.id= req.params.id;
+    product.categories =req.body.categories;
+    product.desc =req.body.desc;
+    product.img =req.body.img;
+    product.styles =req.body.styles;
+    product.brands =req.body.brands;
+    product.views =req.body.views;
+    product.status_product = req.body.status_product;
+    //console.log(req.body)
     if (product !== undefined) {
-      await Product.update(req.params.id, req.body);
+      await productRepository.save(product);
       return res.status(200).send({ message: "Product updated correctly" });
     }
-
     return res.status(404).send({ message: "Product not found" });
   }
+
+  
 
   //-------------------Delete product---------------------
   public async deleteProduct(req: express.Request, res: express.Response) {
     Product.delete(req.params.id);
     return res.status(200).send({ message: "Product deleted successfully" });
   }
+
+
+
 }
 
 export default ProductController;

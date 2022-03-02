@@ -6,5 +6,8 @@ export class Color extends BaseEntity {
   id: number;
 
   @Column()
-  name: string;
+  color: string;
+
+  @Column({ type: "varchar", length: 250, nullable: true  })
+  color_spa: string;
 }

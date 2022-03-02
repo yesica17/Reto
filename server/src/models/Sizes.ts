@@ -6,5 +6,5 @@ export class Size extends BaseEntity {
   id: number;
 
   @Column()
-  name: string;
+  size: string;
 }
